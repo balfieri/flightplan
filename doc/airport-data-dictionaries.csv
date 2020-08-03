@@ -1,0 +1,104 @@
+Field,Number,Description
+SiteNumber,DLID,"Landing facility site number - a unique identifying number which, together with the landing facility type code, forms the key to the airport record. (ex. 04508.*A)"
+Type,DLID,"Landing facility type. (ex. Airport, Balloonport, Seaplane Base, Gliderport, Heliport, Stolport, Ultralight)"
+LocationID,E7,Location identifier unique 3-4 character alphanumeric identifier assigned to the landing facility. (ex. 'ORD' for Chicago O'Hare)
+EffectiveDate,N/A,Information effective date (mm/dd/yyyy). This date coincides with the 56-day charting and publication cycle date.
+Region,A6,"FAA region code. (ex. AAL - Alaska, ACE - Central, AEA - Eastern, AGL - Great Lakes, AIN - International, ANE - New England, ANM - Northwest Mountain, ASO - Southern, ASW - Southwest, AWP - Western-Pacific)"
+DistrictOffice,A6A,FAA district or field office code. (ex. CHI)
+State,A4,"Associated state post office code standard two letter abbreviation for u.s. states and territories. (ex. IL, PR, CQ)"
+StateName,A4,Associated state name. (ex. Illinois)
+County,A5,Associated county (or parish) name. (ex. Cook)
+CountyState,A5,Associated county's state (post office code) state where the associated county is located; may not be the same as the associated city's state code. (ex. IL)
+City,A1,Associated city name. (ex. Chicago)
+FacilityName,A2,Official facility name. (ex. Chicago O'Hare Intl)
+Ownership,A10,"Airport ownership type. (ex. PU - publicly owned, PR - privately owned, MA - air force owned, MN - navy owned, MR - army owned)"
+Use,A18,"Facility use. (ex. PU - open to the public, PR - private)"
+Owner,A11,Facility owner's name.
+OwnerAddress,A12,Owner's address.
+OwnerCSZ,A12A,"Owner's city, state and zip code."
+OwnerPhone,A13,"Owner's phone number. (data formats: nnn-nnn-nnnn (area code + phone number), 1-nnn-nnnn (dial 1-800 then number), 8-nnn-nnnn (dial 800 then number)"
+Manager,A14,Facility manager's name.
+ManagerAddress,A15,Manager's address.
+ManagerCSZ,A15A,"Manager's city, state and zip code."
+ManagerPhone,A16,"Manager's phone number. (data formats: nnn-nnn-nnnn (area code + phone number), 1-nnn-nnnn (dial 1-800 then number), 8-nnn-nnnn (dial 800 then number)"
+ARPLatitude,A19,Airport reference point latitude (formatted).
+ARPLatitudeS,A19S,Airport reference point latitude (seconds).
+ARPLongitude,A20,Airport reference point longitude (formatted).
+ARPLongitudeS,A20S,Airport reference point longitude (seconds).
+ARPMethod,A19A,"Airport reference point determination method. (ex. E - estimated, S - surveyed)"
+ARPElevation,A21,Airport elevation (nearest foot MSL). Elevation is measured at the highest point on the centerline of the usable landing surface. (ex. 1200; -10 for 10 feet below sea level)
+ARPElevationMethod,A21,"Airport elevation determination method. (ex. E - estimated, S - surveyed)"
+MagneticVariation,E28,Magnetic variation and direction magnetic variation to nearest degree. (ex. 03W)
+MagneticVariationYear,E28,Magnetic variation epoch year. (ex. 1985)
+TrafficPatternAltitude,E147,Traffic pattern altitude (whole feet AGL). (ex. 1000)
+ChartName,A7,Aeronautical sectional chart on which facility appears. (ex. Washington)
+DistanceFromCBD,A3,Distance from central business district of the associated city to the airport (nearest nautical mile - ex. 08).
+DirectionFromCBD,A3,Direction of airport from central business district of associated city (nearest 1/8 compass point - ex. NE).
+LandAreaCoveredByAirport,A22,Amount of land owned by the airport in acres.
+BoundaryARTCCID,E146A,Boundary ARTCC Identifier.  The boundary ARTCC is the FAA air route traffic control center within whose published boundaries the airport lies. It may not be the controlling ARTCC for the airport if a letter of agreement exists between the boundary ARTCC and another ARTCC. (ex. ZDC for Washington ARTCC)
+BoundaryARTCCComputerID,E146B,Boundary ARTCC (FAA) computer identifier. (ex. ZCW for Washington ARTCC)
+BoundaryARTCCName,E146C,Boundary ARTCC name. (ex. Washington)
+ResponsibleARTCCID,E156A,Responsible ARTCC identifier the responsible ARTCC is the FAA air route traffic control center who has assumed control over the airport through a letter of agreement with the boundary ARTCC. (ex. ZDC for Washington ARTCC)
+ResponsibleARTCCComputerID,E156B,Responsible ARTCC (FAA) computer identifier. (ex. ZCW for Washington ARTCC)
+ResponsibleARTCCName,E156C,Responsible ARTCC name. (ex. Washington)
+TieInFSS,A87,"Tie-in FSS physically located on facility. (ex. Y - tie-in FSS is on the airport, n - tie-in FSS is not on the airport)"
+TieInFSSID,A86,Tie-in flight service station (FSS) identifier. (ex. DCA for Washington FSS)
+TieInFSSName,A86,Tie-in FSS name. (ex. Washington)
+AirportToFSSPhoneNumber,A88,Local phone number from airport to FSS for adminstrative services
+TieInFSSTollFreeNumber,A89,"Toll free phone number from airport to FSS for pilot briefing services the data describes the type of toll-free communications and the number to dial. The data formats and their meanings are: 1-nnn-nnnn, dial 1-800- then nnn-nnnn; 8-nnn-nnnn, dial 800 then nnn-nnnn; e-nnnnnnnn, enterprise number dial 0 & ask for enterprise nnnnnnnn; lcnnn-nnnn, local call - dial nnn-nnnn; dl, direct line telephone at the airport - no dialing required; z-nnnnnnnn, zenith number - dial 0 and ask for zenith nnnnnnnn; w-nnnnnnnn, dial 0 and ask for wx nnnnnnnn; c-nnnnnnnn, dial 0 and ask for commerce nnnnnnnn; ld-nnnnnnnn, long distance call - dial (area code) then nnnnnnn; lt-nnnnnnnn, long distal call dial 1-nnnnnnn; 1-wx-brief, dial 1-800-wx-brief; 8-wx-brief, dial 800-wx-brief"
+AlternateFSSID,A86,Alternate FSS identifier provides the identifier of a full-time flight service station that assumes responsibility for the airport during the off hours of a part-time primary FSS. (ex. 'DCA' for Washington FSS)
+AlternateFSSName,A86A,Alternate FSS name. (ex. 'Washington' for Washington FSS)
+AlternateFSSTollFreeNumber,E3A,"Toll free phone number from airport to FSS for pilot briefing services the data describes the type of toll-free communications and the number to dial. The data formats and their meanings are: 1-nnn-nnnn, dial 1-800- then nnn-nnnn; 8-nnn-nnnn, dial 800 then nnn-nnnn; e-nnnnnnnn, enterprise number dial 0 & ask for enterprise nnnnnnnn; lcnnn-nnnn, local call - dial nnn-nnnn; dl, direct line telephone at the airport - no dialing required; z-nnnnnnnn, zenith number - dial 0 and ask for zenith nnnnnnnn; w-nnnnnnnn, dial 0 and ask for wx nnnnnnnn; c-nnnnnnnn, dial 0 and ask for commerce nnnnnnnn; ld-nnnnnnnn, long distance call - dial (area code) then nnnnnnn; lt-nnnnnnnn, long distal call dial 1-nnnnnnn; 1-wx-brief, dial 1-800-wx-brief; 8-wx-brief, dial 800-wx-brief."
+NOTAMFacilityID,E2B,Identifier of the facility responsible for issuing notices to airmen (NOTAMS) and weather information for the airport. (ex. ORD)
+NOTAMService,E139,"Availability of NOTAM 'd' service at airport. (ex. Y - yes, N - no)"
+ActiviationDate,E157,Airport activation date (mm/yyyy). Provides the month and year that the facility was added to the NFDC airport database. Note: this information is only available for those facilities opened since 1981. (ex. 06/1981)
+AirportStatusCode,N/A,Airport status code: CI - closed indefinitely; CP - closed permanently; O - operational
+CertificationTypeDate,A26,"Airport certification type and date. Format is the class code ('I', 'II', 'III' or 'IV') followed by a one characther code A, B, C, D, E, or L, followed by a one character code S or U, followed by the month and year of certification. (ex. 'I A S 07/1980', 'I C S 01/1983' or 'I A U 09/1983').  Codes A, B, C, D, and E are for airports having a full certificate under CFR Part 139, and receiving scheduled air carrier service from carriers certificated by the Civil Aeronautics Board.  The A, B, C, D, and E identify the aircraft rescue and firefighting index for the airport.  Code L is for airports having limited certification under CFR Part 139.  Code S is for Airports receiving scheduled air carrier service from carriers certificated by the Civil Aeronautics Board.  Code U is for airports not receiving this scheduled service."
+FederalAgreements,A25,"NPIAS/Federal Agreement Code.  A combination of 1 to 7 codes that indicate the type of federal agreements existing at the airport. (ex. NGH). N - national plan of integrated airport systems (NPIAS); B - installation of navigational facilities on privately owned airports under F&E program; G - grant agreements under FAAP/ADAP/AIP; H - compliance with accessibility to the handicapped; P - surplus property agreement under Public Law 289; R - surplus property agreement under Regulation 16-WAA; S - conveyance under section 16, Federal Airport Act of 1946 or Section 23, Airport and Airway Development Act of 1970; V - advance planning agreement under FAAP; X - obligations assumed by transfer; Y - assurances pursuant to Title VI, Civil Rights Act of 1964; Z - conveyance under Section 303(C), Federal Aviation Act of 1958; 1 - grant agreement has expired, however, agreement remains in effect for this facility as long as it is public use."
+AirspaceDetermination,E111,"Airport airspace analysis determination. (ex. CONDL (conditional), NOT ANALYZED, NO OBJECTION, OBJECTIONABLE)"
+CustomsAirportOfEntry,E79,"Facility has been designated by the U.S. Treasury as an international airport of entry for customs (ex. Y - yes, N - no)"
+CustomsLandingRights,E80,"Facility has been designated by the U.S. Treasury as a customs landing rights airport (ex. Y - yes, N - no)"
+MilitaryJointUse,E115,"Facility has military/civil joint use agreement that allows civil operations at a military airport or military operations at a civil airport (ex. Y - yes, N - no)"
+MilitaryLandingRights,E116,"Airport has entered into an agreement that grants landing rights to the military (ex. Y - yes, N - no)"
+InspectionMethod,E155,"Airport inspection method. (ex. F - federal, S - state, C - contractor, 1 - 5010-1 public use mail out program, 2 - 5010-2 private use mail out program)"
+InspectionGroup,A111,"Agency/group performing physical inspection (ex. F - faa airports field personnel, s - state aeronautical personnel, c - private contract personnel, n - owner)"
+LastInspectionDate,A112,Last physical inspection date (mmddyyyy)
+LastOwnerInformationDate,A113,Last date information request was completed by facility owner or manager (mmddyyyy)
+FuelTypes,A70,"Fuel types available for public use at the airport. There can be up to 8 occurrences of a fixed 5 character field (ex. 80___100__100LL115__). 80 - grade 80 gasoline (red), 100 - grade 100 gasoline (green), 100LL - grade 100LL gasoline (low lead blue), 115 - grade 115 gasoline, A - jet A - kerosene, freeze point -40C, A1 - jet A-1 - kerosene, freeze point -50C, A1+ - jet A-1 - kerosene, with icing inhibitor freeze point -50C, B - jet B - wide-cut turbine fuel, freeze point -50C, B+ - jet B - wide-cut turbine fuel with icing inhibitor, freeze point -50C, MOGAS - automotive gasoline."
+AirframeRepair,A71,"Airframe repair service availability/type. (ex. MAJOR, MINOR, NONE)"
+PowerPlantRepair,A72,"Power plant (engine) repair availability/type. (ex. MAJOR, MINOR, NONE)"
+BottledOxygenType,A73,"Type of bottled oxygen available (value represents high and/or low pressure replacement bottle). (ex. HIGH, LOW, HIGH/LOW, NONE)"
+BulkOxygenType,A74,"Type of bulk oxygen available (value represents high and/or low pressure cylinders). (ex. HIGH, LOW, HIGH/LOW, NONE)"
+LightingSchedule,A81,"Airport lighting schedule value is the beginning-ending times (local time) that lights are operated. Format can be 1900-2300, DUSK-0100, ALL, DUSK-DAWN, NONE, etc."
+BeaconSchedule,A81,"Beacon lighting schedule value is the beginning-ending times (local time) that the rotating airport beacon light is operated. Value can be ""SS-SR"" (indicating sunset-sunrise), blank, or ""SEE RMK"", indicating that the details are in a facility remark data entry."
+ATCT,A85,"Air traffic control tower located on airport. (ex. Y - yes, N - no)"
+UNICOMFrequencies,A82,Unicom frequencies available at the airport there can be up to 6 occurrences of a fixed 7 character field. (ex. 122.700 or 122.700122.800 or NONE)
+CTAFFrequency,E100,Common traffic advisory frequency. (CTAF) (ex. 122.800)
+SegmentedCircle,A84,"Segmented circle airport marker system on the airport. (ex. Y - yes, N - no, none)"
+BeaconColor,A80,Lens color of operable beacon located on the airport. (ex. CG - clear-green (lighted land airport); CY - clear-yellow (lighted seaplane base); CGY - clear-green-yellow (heliport); SCG - split-clear-green (lighted military airport); C - clear (unlighted la
+NonCommercialLandingFee,A24,"Landing fee charged to non-commercial users of airport. (ex. Y - yes, N - no)"
+MedicalUse,NONE,"Landing facility is used for medical purposes. (ex. Y - yes, N - no)"
+SingleEngineGA,A90,Number of single engine general aviation aircraft.
+MultiEngineGA,A92,Number of multi engine general aviation aircraft.
+JetEngineGA,A92,Number of jet engine general aviation aircraft.
+HelicoptersGA,A93,Number of general aviation helicopter.
+GlidersOperational,A94,Number of operational gliders.
+MilitaryOperational,A95,Number operational military aircraft (includingg helicopters).
+Ultralights,A96,Number of ultralight aircraft.
+OperationsCommercial,A100,Commercial services. Scheduled operations by cab-certificated carriers or intrastate carriers.
+OperationsCommuter,A101,Commuter services. Scheduled commuter and cargo carriers.
+OperationsAirTaxi,A102,"Air taxi. Air taxi operators carrying passengers, mail, or mail for revenue."
+OperationsGALocal,A103,General aviation local operations. Those operating in the local traffic pattern or within a 20-mile radius of the airport.
+OperationsGAItin,A104,General aviation itinerant operations. Those general aviation operations (excluding commuter or air taxi) not qualifying as local.
+OperationsMilitary,A105,Military aircraft operations.
+OperationsDate,NONE,12-month ending date on which annual operations data in above six field is based (mm/dd/yyyy).
+AirportPositionSource,NONE,Airport position source.
+AirportPositionSourceDate,NONE,Airport position source date (mm/dd/yyyy).
+AirportElevationSource,NONE,Airport elevation source.
+AirportElevationSourceDate,NONE,Airport elevation source date (mm/dd/yyyy).
+ContractFuelAvailable,NONE,"Contract fuel available. (ex. Y - yes, N - no)"
+TransientStorage,A75,"Transient storage. (ex. Y - yes, N - no, none)"
+OtherServices,A76,"Other services. (ex. Y - yes, N - no, none)"
+WindIndicator,A83,"Wind direction indicator. (ex. Y - yes, N - no, none)"
+IcaoIdentifier,NONE,International coding for airport.
+MinimumOperationalNetwork,NONE,"Minimum Operational Network (ex. Y - yes, N - no, none)"

@@ -1,0 +1,51 @@
+Airports:
+
+https://www.faa.gov/airports/airport_safety/airportdata_5010/menu/                      - airport facilities, runways, remarks files
+https://www.faa.gov/air_traffic/flight_info/aeronav/aero_data/Airport_Data/             - seems easiest to parse
+https://airnav.com
+https://openflights.org/data.html                                                       - not useful, just major airports
+
+
+Get fixes/waypoints from (not download):
+
+https://www.faa.gov/air_traffic/flight_info/aeronav/aero_data/Loc_ID_Search/Fixes_Waypoints/
+
+
+Get obstacles from FAA (download):
+
+https://www.faa.gov/air_traffic/flight_info/aeronav/digital_products/dailydof/          - DDOF.csv
+https://www.faa.gov/air_traffic/flight_info/aeronav/digital_products/dof/               - different format, ignore
+
+
+
+Elevation Finders:
+
+http://geospatialtraining.com/using-the-google-maps-elevation-service/       (javascript)
+https://www.randymajors.com/p/elevation-on-google-maps.html
+https://www.advancedconverter.com/map-tools/find-altitude-by-coordinates
+https://www.freemaptools.com/elevation-finder.htm
+
+
+GPS points, great-circle distance, initial bearing:
+
+http://www.movable-type.co.uk/scripts/latlong.html - shows formulas
+https://www.gpsvisualizer.com/calculators
+https://www.fcc.gov/media/radio/find-terminal-coordinates
+
+
+Magnetic Variation:
+
+https://github.com/dpyeates/magvar                                                      - JS code in ../magvar, port it here
+https://www.ngdc.noaa.gov/geomag/WMM/
+https://github.com/space-physics/WMM2015
+
+
+How to get winds/temps aloft:
+
+wget https://www.aviationweather.gov/windtemp/data?region=mia
+
+
+How to get METARs, TAFs, etc.
+
+https://www.aviationweather.gov/dataserver
+https://www.aviationweather.gov/adds/dataserver_current/httpparam?dataSource=metars&requestType=retrieve&format=xml&stationString=PHTO&hoursBeforeNow=4
