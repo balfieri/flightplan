@@ -7,8 +7,8 @@ ATC flight following, Foreflight+iPad+Stratux, and obviously the onboard navigat
 
 The program is divided into the following files:
 * fp.py - the main program
-* Aircraft.py - performance characteristics of various types of aircraft and overrides for specific tail numbers
-* Geodisic.py - computes great-circle distance and course between any two points on earth (among other things)
-* MagneticVariation.py - computes magnetic variation at any point on earth
+* Aircraft.py - performance characteristics of various types of aircraft and overrides for specific tail numbers (feel free to add yours)
+* Geodisic.py - computes great-circle distance and course between any two points on earth (and related things)
+* MagneticVariation.py - computes magnetic variation at any point on earth for the current date
 
 I will show run lines later once this is done.
