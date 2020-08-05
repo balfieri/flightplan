@@ -1,9 +1,8 @@
-This repository contains a Python script that can create a textual flight plan from a set of way points.  The textual flight plan is compact and can be printed on a single sheet of paper in the same format that my flight club uses, then printed off and placed on my kneeboard.  The script can also run on a phone (using the Pyto app) and can monitor GPS location in-flight.  It can then give you simple alerts when you are reaching way points, deviating from them, deviating from planned altitude, deviate from planned fuel burn, need to start descending, or should be made aware of a nearby aircraft or obstacle.
+This repository contains a Python script that can create a textual flight plan from a set of way points.  The textual flight plan is compact and can be printed on a single sheet of paper in a format that should be familiar to most pilots.  The script also shows other information including radio frequencies, runways, and FBOs.
 
-This is NOT a replacement for an onboard navigation system!
+The same script can also run on a phone (using the Pyto app) and can monitor GPS location in-flight using the phone's 3D GPS location.  It will give you simple alerts when you are reaching way points, deviating from them, deviating from planned altitude, exceeding planned fuel burn, needing to start descending, or getting close to nearby aircraft or obstacles.  It will also show the heading and distance to the nearest airport and whether you are within gliding distance. 
 
-The intention is to assist in flight planning and to act as another eyeball for in-flight situational awareness.  It's like a poor man's Foreflight that has been scaled down and optimized to perform the kinds of tasks that I feel are important to me and in the format that I prefer to look at them.  I use this in conjunction with other mechanisms such as looking out the window(!), having a copilot/helper, 
-ATC flight following, Foreflight+iPad+Stratux, and obviously the onboard navigation system.
+This is NOT a replacement for an onboard navigation system! This is more about situational awareness and having a compact representation of data.  You should use this in conjunction with other mechanisms such as looking out the window (duh!), having a copilot/helper, ATC flight following, Foreflight+iPad+Stratux, and obviously the onboard navigation and monitoring system.
 
 The program is divided into the following files:
 * fp.py - the main program
