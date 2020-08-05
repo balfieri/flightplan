@@ -4,16 +4,12 @@
 #
 import sys
 import pickle
+import Aircraft
 import Geodesic
 
 def die( msg ):
     print( f'ERROR: {msg}' )
     sys.exit( 1 )
-
-#--------------------------------------------------------------
-# Known Aircraft Types and Their Characteristics
-#--------------------------------------------------------------
-types = { 'C172S': {} }
 
 #--------------------------------------------------------------
 # Read in rawdata which is indexed by airport/waypoint id
@@ -26,6 +22,7 @@ f.close()
 # Parse Arguments
 #--------------------------------------------------------------
 type       = 'C172S'
+tail       = ''
 altitude   = 3000
 wind_dir   = 0
 wind_speed = 0
@@ -45,8 +42,13 @@ while i < len( sys.argv ):
     elif arg == '-t':
         type = sys.argv[i].upper()
         i += 1
-        if type not in types: die( f'unknown aircraft type: {type}' ) 
+        if type not in Aircraft.types: die( f'unknown aircraft type: {type}' ) 
         if len(route) > 0: die( '-t <aircraft type> option must occur before first -p option' )
+    elif arg == '-tail':
+        tail = sys.argv[i].upper()
+        i += 1
+        if tail not in Aircraft.tails : die( f'unknown aircraft tail number: {tail}' ) 
+        if len(route) > 0: die( '-tail <tail number> option must occur before first -p option' )
     elif arg == '-a':
         altitude = float(sys.argv[i])
         i += 1

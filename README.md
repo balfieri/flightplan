@@ -6,7 +6,9 @@ The intention here is to assist in flight planning and to act as another eyeball
 ATC flight following, Foreflight+iPad+Stratux, and whatever your onboard navigation system can do.
 
 The files are divided into the following:
-* Geodisic.py - computations involving great circles
 * fp.py - the main program
+* Aircraft.py - performance characteristics of various types of aircraft and overrides for specific tail numbers
+* Geodisic.py - computes great-circle distance and course between any two points on earth (among other things)
+* MagneticVariation.py - computes magnetic variation at any point on earth
 
 I will show run lines later once this is done.
