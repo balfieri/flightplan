@@ -3,7 +3,7 @@ This repository contains a Python script that can create a textual flight plan f
 This is NOT a replacement for an onboard navigation system!
 
 The intention here is to assist in flight planning and to act as another eyeball for in-flight situational awareness.  It's like a poor man's Foreflight that has been scaled down and optimized to perform the kinds of tasks that I feel are important to me and in the format that I prefer to look at them.  I use this in conjunction with other mechanisms such as looking out the window(!), having a copilot/helper, 
-ATC flight following, Foreflight+iPad+Stratux, and an onboard navigation system can do.
+ATC flight following, Foreflight+iPad+Stratux, and an onboard navigation system.
 
 The program is divided into the following files:
 * fp.py - the main program
