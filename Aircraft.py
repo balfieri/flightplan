@@ -69,23 +69,26 @@ types = {
 }
 
 tails = { 
-    # Wings of Carolina
+    # Wings of Carolina Flying Club (WCFC, out of KTTA in Sanford, NC)
     #
     'N53587': {
         'type':                 'C172S',
         'empty_weight':         1700.9,
-        'empty_arm':            41.1
+        'empty_arm':            41.1,
+        'home':                 'KTTA'
     },
 
     'N72675': {
         'type':                 'C172S',
         'empty_weight':         1679.0,
-        'empty_arm':            40.4
+        'empty_arm':            40.4,
+        'home':                 'KTTA'
     },
 
     'N972WW': {
         'type':                 'C172S',
         'empty_weight':         1665.4,
-        'empty_arm':            40.88
+        'empty_arm':            40.88,
+        'home':                 'KTTA'
     }
 } 
