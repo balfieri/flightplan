@@ -1,4 +1,4 @@
-#!/usr/local/bin/python3 
+#!#!/usr/bin/env python3
 #
 # fp.py - flight planning main program 
 #
