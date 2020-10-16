@@ -1,4 +1,4 @@
-#!#!/usr/bin/env python3
+#!/usr/bin/env python3
 #
 # fp.py - flight planning main program 
 #
@@ -6,6 +6,7 @@ import sys
 import pickle
 import Aircraft
 import Geodesic
+import re
 
 def die( msg ):
     print( f'ERROR: {msg}' )
@@ -36,9 +37,14 @@ while i < len( sys.argv ):
         id = sys.argv[i].upper()
         i += 1
         if id in rawdata:
-            route.append( { 'id': id, 'lat': rawdata[id]['lat'], 'lon': rawdata[id]['lon'], 'altitude': altitude, 'wind_dir': wind_dir, 'wind_speed': wind_speed } )
+            lat = rawdata[id]['lat']
+            lon = rawdata[id]['lon']
         else:
-            die( f'unknown airport/waypoint: {id}' )
+            matches = re.match( r'^(-?\d+\.\d+),(-?\d+\.\d+)$', id );
+            if not matches: die( f'unknown airport/waypoint and not a proper lat/lon: {id}' )
+            lat = float(matches.group(1))
+            lon = float(matches.group(2))
+        route.append( { 'id': id, 'lat': lat, 'lon': lon, 'altitude': altitude, 'wind_dir': wind_dir, 'wind_speed': wind_speed } )
     elif arg == '-t':
         type = sys.argv[i].upper()
         i += 1
