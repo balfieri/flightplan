@@ -13,8 +13,9 @@ The program is divided into the following files:
     fp.py               -- the main program
     Aircraft.py         -- performance characteristics of various types of aircraft and 
                            overrides for specific tail numbers (feel free to augment this file)
-    Geodisic.py         -- computes great-circle distance and course between any two points on earth (and related things)
-    MagVar.py           -- computes magnetic variation at any point on Earth on a given date
+    Geodisic.py         -- computes great-circle distance and course 
+                           between any two points on earth (and related things)
+    MagVar.py           -- computes magnetic variation at any point on Earth for a given date
 
 I will show run lines later once this is done.
 
