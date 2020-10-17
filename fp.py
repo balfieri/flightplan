@@ -156,8 +156,8 @@ def calc_DEV( MH, table ):
 
 MagVar.reinit()
 if len( route ) < 2: die( 'route must contain at least two points' )
-print( f'CHECKPOINT       TC IAS CAS WCA   IA   ALT  OAT    PA    DA TAS  TH   MV  MH DEV  CH       D   DTOT GS ETE ETA   GAL   REM' )
-print( f'---------------------------------------------------------------------------------------------------------------------------' )
+print( f'CHECKPOINT       TC   IA   ALT  WD  WS  OAT    PA    DA  IAS CAS TAS   WCA  TH MV  MH DEV  CH       D  DTOT  GS ETE ETA   GAL   REM' )
+print( f'-----------------------------------------------------------------------------------------------------------------------------------' )
 DTOT = 0
 ETA = 0
 for i in range( 0, len(route) ):
@@ -194,7 +194,8 @@ for i in range( 0, len(route) ):
     FLAPS= (FM_FLAPS + TO_FLAPS) / 2.0
     CAS  = calc_CAS( IAS, FLAPS, type_info['airspeed_calibration'] )
     WS   = (FM_WS + TO_WS) / 2.0
-    WA   = (FM_WD + TO_WD)/2.0 + 180
+    WD   = (FM_WD + TO_WD)/2.0
+    WA   = WD + 180
     while WA > 360: WA -= 360
     WTA  = TC - WA
     IA   = (FM_IA + TO_IA) / 2.0
@@ -216,5 +217,5 @@ for i in range( 0, len(route) ):
     GAL  = (ETE / 60.0 * GPH) if i != 0 else fuel_gal_taxi
     fuel_gal -= GAL
 
-    print( f'{to_id:15s} {TC:3.0f} {IAS:3.0f} {CAS:3.0f} {WCA:3.0f} {IA:4.0f} {ALT:5.2f} {OAT:4.1f} {PA:5.0f} {DA:5.0f} {TAS:3.0f} {TH:3.0f}  {MV:3.0f} {MH:3.0f} {DEV:3.0f} {CH:3.0f}   {D:5.0f} {DTOT:5.0f} {GS:3.0f} {ETE:3.0f} {ETA:3.0f} {GAL:5.1f} {fuel_gal:5.1f}' )
+    print( f'{to_id:15s} {TC:3.0f} {IA:4.0f} {ALT:5.2f} {WD:3.0f} {WS:3.0f} {OAT:4.1f} {PA:5.0f} {DA:5.0f}  {IAS:3.0f} {CAS:3.0f} {TAS:3.0f}   {WCA:3.0f} {TH:3.0f} {MV:2.0f} {MH:3.0f} {DEV:3.0f} {CH:3.0f}   {D:5.0f} {DTOT:5.0f} {GS:3.0f} {ETE:3.0f} {ETA:3.0f} {GAL:5.1f} {fuel_gal:5.1f}' )
 
