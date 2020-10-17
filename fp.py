@@ -8,7 +8,7 @@ import Aircraft
 import Geodesic
 import MagVar
 import re
-from math import sin,asin,cos
+from math import sin,asin,cos,pow
 
 def die( msg ):
     print( f'ERROR: {msg}' )
@@ -27,8 +27,8 @@ f.close()
 type       = 'C172S'
 tail       = ''
 ias        = 110
-altitude   = 3000
-altimeter  = 29.92
+ia         = 3000               # indicated altitude
+alt        = 29.92              # altimeter setting
 wind_dir   = 0
 wind_speed = 0
 oat        = 15
@@ -48,11 +48,12 @@ while i < len( sys.argv ):
             lat = rawdata[id]['lat']
             lon = rawdata[id]['lon']
         else:
+            # might be lat,lon 
             matches = re.match( r'^(-?\d+\.\d+),(-?\d+\.\d+)$', id );
             if not matches: die( f'unknown airport/waypoint and not a proper lat/lon: {id}' )
             lat = float(matches.group(1))
             lon = float(matches.group(2))
-        route.append( { 'id': id, 'lat': lat, 'lon': lon, 'ias': ias, 'altitude': altitude, 'altimeter': altimeter, 
+        route.append( { 'id': id, 'lat': lat, 'lon': lon, 'ias': ias, 'ia': ia, 'alt': alt, 
                         'wind_dir': wind_dir, 'wind_speed': wind_speed, 'oat': oat,
                         'fuel_gph': fuel_gph } )
     elif arg == '-t':
@@ -68,11 +69,11 @@ while i < len( sys.argv ):
     elif arg == '-ias':
         ias = float(sys.argv[i])
         i += 1
-    elif arg == '-altitude':
-        altitude = float(sys.argv[i])
+    elif arg == '-altitude' or arg == '-ia':
+        ia = float(sys.argv[i])
         i += 1
-    elif arg == '-altimeter':
-        altimeter = float(sys.argv[i])
+    elif arg == '-altimeter' or arg == '-alt':
+        alt = float(sys.argv[i])
         i += 1
     elif arg == '-wd': 
         wind_dir = float(sys.argv[i])
@@ -107,6 +108,37 @@ if fuel_gph <= 0: fuel_gph = aircraft['fuel_gph']         # TODO: need to look a
 #--------------------------------------------------------------
 # Analyze Route
 #--------------------------------------------------------------
+lapserate = 0.0019812		        # degrees / foot std. lapse rate C° in to K° result
+tempcorr = 273.15			# Kelvin
+stdtemp0 = 288.15			# Kelvin
+
+# next 3 functions transcribed from http://indoavis.co.id/main/tas.html Javascript code:
+#
+def calc_PA( IA, ALT ):
+    #std_ALT = 29.92
+    #xx = std_ALT / 29.92126
+    #PA = IA + 145442.2*(1 - pow(xx, 0.190261))
+    PA = IA + 1000*(29.92 - ALT)
+    return PA
+
+def calc_DA( PA, OAT ):
+    stdtemp = stdtemp0 - PA*lapserate
+    Tratio = stdtemp / lapserate
+    xx = stdtemp / (OAT + tempcorr)	
+    DA = PA + Tratio*(1 - pow(xx, 0.234969))
+    return DA
+
+def calc_TAS( CAS, DA ):
+    aa = DA * lapserate                 # Calculate DA temperature
+    bb = stdtemp0 - aa			# Correct DA temp to Kelvin
+    cc = bb / stdtemp0			# Temperature ratio
+    cc1 = 1 / 0.234969			# Used to find .235 root next
+    dd = pow(cc, cc1)			# Establishes Density Ratio
+    dd = pow(dd, .5)			# For TAS, square root of DR
+    ee = 1 / dd				# For TAS; 1 divided by above
+    TAS = ee * CAS
+    return TAS
+
 print( f'Fuel gal before starting engine: {fuel_gal:.1f}' )
 print( f'Fuel gal for startup and taxi:   {fuel_gal_taxi:.1f}' )
 fuel_gal -= fuel_gal_taxi
@@ -120,26 +152,50 @@ for i in range( 1, len(route) ):
     fm_id = fm['id']
     to_id = to['id']
 
-    D    = Geodesic.distance( fm['lat'], fm['lon'], to['lat'], to['lon'] )
-    TC   = Geodesic.initial_bearing( fm['lat'], fm['lon'], to['lat'], to['lon'] )
-    IAS  = to['ias']
+    FM_LAT = fm['lat']
+    FM_LON = fm['lon']
+    TO_LAT = to['lat']
+    TO_LON = to['lon']
+    FM_IAS = fm['ias']
+    TO_IAS = to['ias']
+    FM_WS  = fm['wind_speed']
+    TO_WS  = to['wind_speed']
+    FM_WD  = fm['wind_dir']
+    TO_WD  = to['wind_dir']
+    FM_IA  = fm['ia']
+    TO_IA  = to['ia']
+    FM_ALT = fm['alt']
+    TO_ALT = to['alt']
+    FM_OAT = fm['oat']
+    TO_OAT = to['oat']
+    FM_GPH = fm['fuel_gph'] if fm['fuel_gph'] > 0 else fuel_gph
+    TO_GPH = to['fuel_gph'] if to['fuel_gph'] > 0 else fuel_gph
+
+    D    = Geodesic.distance( FM_LAT, FM_LON, TO_LAT, TO_LON )
+    TC   = Geodesic.initial_bearing( FM_LAT, FM_LON, TO_LAT, TO_LON )
+    IAS  = (FM_IAS + TO_IAS) / 2.0
     CAS  = IAS  # TODO: from type table
-    WS   = to['wind_speed']
-    WA   = to['wind_dir'] + 180
-    WTA  = TC - WA
+    WS   = (FM_WS + TO_WS) / 2.0
+    WA   = (FM_WD + TO_WD)/2.0 + 180
     while WA > 360: WA -= 360
-    TAS  = CAS  # TODO: use equation
+    WTA  = TC - WA
+    IA   = (FM_IA + TO_IA) / 2.0
+    ALT  = (FM_ALT + TO_ALT) / 2.0
+    OAT  = (FM_OAT + TO_OAT) / 2.0
+    PA   = calc_PA( IA, ALT )
+    DA   = calc_DA( PA, OAT )
+    TAS  = calc_TAS( CAS, DA )
     WCA  = asin( WS * sin( WTA ) / TAS )
     TH   = TC + WCA
-    MV   = -MagVar.today_magvar( to['lat'], to['lon'] )
+    MV   = (-MagVar.today_magvar( FM_LAT, FM_LON ) + -MagVar.today_magvar( TO_LAT, TO_LON )) / 2.0 
     MH   = TH + MV
     DEV  = 0     # TODO: from tail table
     CH   = MH + DEV
     GS   = TAS*cos( WCA ) + WS*cos( WTA )
     ETE  = D/GS * 60.0
-    GPH  = to['fuel_gph'] if to['fuel_gph'] > 0 else fuel_gph
+    GPH  = (FM_GPH + TO_GPH) / 2.0
     GAL  = ETE / 60.0 * GPH
     fuel_gal -= GAL
 
-    print( f'{fm_id} to {to_id}: D={D:.0f} TC={TC:.0f} IAS={IAS:.0f} CAS={CAS:.0f} WCA={WCA:.0f} TAS={TAS:.0f} TH={TH:.0f} MV={MV:.0f} MH={MH:.0f} DEV={DEV:.0f} CH={CH:.0f} GS={GS:.0f} ETE={ETE:.0f} GAL={GAL:.1f} GAL_REM={fuel_gal:.1f}' )
+    print( f'{fm_id} to {to_id}: D={D:.0f} TC={TC:.0f} IAS={IAS:.0f} CAS={CAS:.0f} WCA={WCA:.0f} IA={IA:.0f} ALT={ALT:.2f} OAT={OAT:.1f} PA={PA:.0f} DA={DA:.0f} TAS={TAS:.0f} TH={TH:.0f} MV={MV:.0f} MH={MH:.0f} DEV={DEV:.0f} CH={CH:.0f} GS={GS:.0f} ETE={ETE:.0f} GAL={GAL:.1f} GAL_REM={fuel_gal:.1f}' )
 
