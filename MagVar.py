@@ -10,7 +10,7 @@ def yymmdd_to_julian_days( yy, mm, dd ):
     secs = 0
     return secs / 86400000 - getTimezoneOffset() / 1440 + 2440587.5
 
-def createArray(len0, len1=0, len2=0):
+def createArray( len0, len1=0, len2=0 ):
     a = []
     for i in range(len0):
         if len1 == 0:
@@ -27,13 +27,11 @@ def createArray(len0, len1=0, len2=0):
     return a
 
 def reinit():
-    global julian_days_now, julian_days_2020
+    global julian_days_2020
     global nmax, a, f, b, r_0
     global gnm_wmm2020, hnm_wmm2020, gtnm_wmm2020, htnm_wm2020
     global P, DP, gnm, hnm, sm, cm, root, roots
 
-    d = datetime.date.today()
-    julian_days_now = yymmdd_to_julian_days( d.year, d.month, d.day )
     nmax = 12
     a = 6378.137                        # semi-major axis [equatorial radius] of WGS84 ellipsoid 
     f = 1.0 / 298.257223563             # inverse flattening IAU66 ellipsoid
@@ -254,9 +252,9 @@ def calculateMagVar( julian_days, latIn, lonIn, h ):
             sinlat * \
             sinlat) / \
         (a * a - (a * a - b * b) * sinlat * sinlat) 
-    r = sqrt(r)
-    c = cos(theta)
-    s = sin(theta)
+    r = sqrt( r )
+    c = cos( theta )
+    s = sin( theta )
 
     # protect against zero divide at geographic poles 
     inv_s = 1.0e8 if s == 0 else 1.0 / s
@@ -339,14 +337,9 @@ def calculateMagVar( julian_days, latIn, lonIn, h ):
     # E is positive 
     return RAD_TO_DEG*atan2(Y, X) if X != 0.0 or Y != 0.0 else 0.0
 
-# get
-# Given a latitude and longitude position and optional height in metres above mean sea level,
-# return magnetic variation in degrees for the current date.
-# N and E latitude and longitude are positive values, S and W negative.
-# @param {number} lat: the latitude in degrees of the point we want to obtain the magnetic variation.
-# @param {number} lon: the longitude in degrees of the point we want to obtain the magnetic variation.
-# @param {number} h: the height in km above mean sea level of the point we want to obtain the magnetic variation.
-# @returns {number} magnetic variation at the given coordinates and height for the current date.
-#
-def get( lat, lon, h=0 ):
-    return calculateMagVar( julian_days_now, lat, lon, h / 100 )
+def yymmdd_get( yy, mm, dd, lat, lon, h=0 ):
+    return calculateMagVar( yymmdd_to_julian_days( yy, mm, dd ), lat, lon, h )
+
+def today_get( lat, lon, h=0 ):
+    d = datetime.date.today()
+    return yymmdd_get( d.year, d.month, d.day, lat, lon, h )
