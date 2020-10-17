@@ -71,6 +71,7 @@ while i < len( sys.argv ):
 #--------------------------------------------------------------
 # Analyze Route
 #--------------------------------------------------------------
+MagVar.reinit()
 if len( route ) < 2: die( 'route must contain at least two points' )
 for i in range( 1, len(route) ):
     fm = route[i-1]

@@ -1,29 +1,28 @@
-# MagVar.py - computes magnetic variation for a given lat/lon and date
+# MagVar.py - computes magnetic variation for a given lat/lon and yy/mm/dd
 # 
-# This is a Python port of JS code from https://github.com/dpyeates/magvar
+# This Python port is based strictly on the JS code at https://github.com/dpyeates/magvar
 #
-from datetime import date
+import time
+from datetime import datetime,date
+import pytz
 from math import pi,sqrt,sin,cos,tan,asin,acos,atan2
 from Geodesic import DEG_TO_RAD, RAD_TO_DEG
 
+def getTimezoneOffsetSeconds():
+    ts = time.time()
+    return (datetime.fromtimestamp(ts) - datetime.utcfromtimestamp(ts)).total_seconds()
+
 def yymmdd_to_julian_days( yy, mm, dd ):
-    secs = 0
-    return secs / 86400000 - getTimezoneOffset() / 1440 + 2440587.5
+    return 2440587.5 + (datetime(yy, mm, dd).total_seconds() - getTimezoneOffsetSeconds()) / (24*60*60)
 
 def createArray( len0, len1=0, len2=0 ):
-    a = []
-    for i in range(len0):
-        if len1 == 0:
-            a[i] = 0.0
-        else:
-            a[i] = []
-            for j in range(len1):
-                a[i][j] = []
-                if len2 == 0:
-                    a[i][j] = 0.0
-                else:
-                    for k in range(len2):
-                        a[i][j][k] = 0.0
+    a = [ 0.0 for i in range(len0) ]
+    if len1 != 0:
+        for i in range(len0):
+            a[i] = [ 0.0 for i in range(len1) ]
+            if len2 != 0:
+                for j in range(len1):
+                    a[i][j] = [ 0.0 for j in range(len2) ]
     return a
 
 def reinit():
@@ -32,12 +31,12 @@ def reinit():
     global gnm_wmm2020, hnm_wmm2020, gtnm_wmm2020, htnm_wm2020
     global P, DP, gnm, hnm, sm, cm, root, roots
 
+    julian_days_2020 = 2458850
     nmax = 12
     a = 6378.137                        # semi-major axis [equatorial radius] of WGS84 ellipsoid 
     f = 1.0 / 298.257223563             # inverse flattening IAU66 ellipsoid
     b = 6356.7523142                    # semi-minor axis referenced to the WGS84 ellipsoid
     r_0 = 6371.2                        # "mean radius" for spherical harmonic expansion 
-    julian_days_2020 = 2458850
     gnm_wmm2020 = [
         [
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 # 0
@@ -81,43 +80,43 @@ def reinit():
     ]
     hnm_wmm2020 = [
         [
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 // 0
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 # 0
         ], 
         [
-            0, 4652.9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 // 1
+            0, 4652.9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 # 1
         ], 
         [
-            0, -2991.6, -734.8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 // 2
+            0, -2991.6, -734.8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 # 2
         ], 
         [
-            0, -82.2, 241.8, -542.9, 0, 0, 0, 0, 0, 0, 0, 0, 0 // 3
+            0, -82.2, 241.8, -542.9, 0, 0, 0, 0, 0, 0, 0, 0, 0 # 3
         ], 
         [
-            0, 282.0, -158.4, 199.8, -350.1, 0, 0, 0, 0, 0, 0, 0, 0 // 4
+            0, 282.0, -158.4, 199.8, -350.1, 0, 0, 0, 0, 0, 0, 0, 0 # 4
         ], 
         [
-            0, 47.7, 208.4, -121.3, 32.2, 99.1, 0, 0, 0, 0, 0, 0, 0 // 5
+            0, 47.7, 208.4, -121.3, 32.2, 99.1, 0, 0, 0, 0, 0, 0, 0 # 5
         ], 
         [
-            0, -19.1, 25.0, 52.7, -64.4, 9.0, 68.1, 0, 0, 0, 0, 0, 0 // 6
+            0, -19.1, 25.0, 52.7, -64.4, 9.0, 68.1, 0, 0, 0, 0, 0, 0 # 6
         ], 
         [
-            0, -51.4, -16.8, 2.3, 23.5, -2.2, -27.2, -1.9, 0, 0, 0, 0, 0 // 7
+            0, -51.4, -16.8, 2.3, 23.5, -2.2, -27.2, -1.9, 0, 0, 0, 0, 0 # 7
         ], 
         [
-            0, 8.4, -15.3, 12.8, -11.8, 14.9, 3.6, -6.9, 2.8, 0, 0, 0, 0 // 8
+            0, 8.4, -15.3, 12.8, -11.8, 14.9, 3.6, -6.9, 2.8, 0, 0, 0, 0 # 8
         ], 
         [
-            0, -23.3, 11.1, 9.8, -5.1, -6.2, 7.8, 0.4, -1.5, 9.7, 0, 0, 0 // 9
+            0, -23.3, 11.1, 9.8, -5.1, -6.2, 7.8, 0.4, -1.5, 9.7, 0, 0, 0 # 9
         ], 
         [
-            0, 3.4, -0.2, 3.5, 4.8, -8.6, -0.1, -4.2, -3.4, -0.1, -8.8, 0, 0 // 10
+            0, 3.4, -0.2, 3.5, 4.8, -8.6, -0.1, -4.2, -3.4, -0.1, -8.8, 0, 0 # 10
         ], 
         [
-            0, -0, 2.6, -0.5, -0.4, 0.6, -0.2, -1.7, -1.6, -3.0, -2.0, -2.6, 0 // 11
+            0, -0, 2.6, -0.5, -0.4, 0.6, -0.2, -1.7, -1.6, -3.0, -2.0, -2.6, 0 # 11
         ], 
         [
-            0, -1.2, 0.5, 1.3, -1.8, 0.1, 0.7, -0.1, 0.6, 0.2, -0.9, -0.0, 0.5 // 12
+            0, -1.2, 0.5, 1.3, -1.8, 0.1, 0.7, -0.1, 0.6, 0.2, -0.9, -0.0, 0.5 # 12
         ]
     ]
     gtnm_wmm2020 = [
@@ -337,9 +336,9 @@ def calculateMagVar( julian_days, latIn, lonIn, h ):
     # E is positive 
     return RAD_TO_DEG*atan2(Y, X) if X != 0.0 or Y != 0.0 else 0.0
 
-def yymmdd_get( yy, mm, dd, lat, lon, h=0 ):
+def yymmdd_magvar( yy, mm, dd, lat, lon, h=0 ):
     return calculateMagVar( yymmdd_to_julian_days( yy, mm, dd ), lat, lon, h )
 
-def today_get( lat, lon, h=0 ):
+def today_magvar( lat, lon, h=0 ):
     d = datetime.date.today()
-    return yymmdd_get( d.year, d.month, d.day, lat, lon, h )
+    return yymmdd_magvar( d.year, d.month, d.day, lat, lon, h )
