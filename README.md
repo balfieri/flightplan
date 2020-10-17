@@ -1,4 +1,4 @@
-NOTE: this is a work-in-progress, most of these features are fully functional yet
+NOTE: this is a work-in-progress, most of these features are NOT functional yet
 
 This repository contains a Python3 script that can create a textual flight plan from a set of checkpoints.  The textual flight plan is compact and can be printed on a single sheet of paper in a navlog format that should be familiar to most pilots.  The script shows other information such as radio frequencies, runways, and FBOs.
 
