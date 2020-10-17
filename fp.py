@@ -136,10 +136,10 @@ for i in range( 1, len(route) ):
     DEV  = 0     # TODO: from tail table
     CH   = MH + DEV
     GS   = TAS*cos( WCA ) + WS*cos( WTA )
-    MIN  = D/GS * 60.0
+    ETE  = D/GS * 60.0
     GPH  = to['fuel_gph'] if to['fuel_gph'] > 0 else fuel_gph
-    GAL  = MIN / 60.0 * GPH
+    GAL  = ETE / 60.0 * GPH
     fuel_gal -= GAL
 
-    print( f'{fm_id} to {to_id}: D={D:.0f} TC={TC:.0f} IAS={IAS:.0f} CAS={CAS:.0f} WCA={WCA:.0f} TAS={TAS:.0f} TH={TH:.0f} MV={MV:.0f} MH={MH:.0f} DEV={DEV:.0f} CH={CH:.0f} GS={GS:.0f} MIN={MIN:.0f} GAL={GAL:.1f} GAL_REM={fuel_gal:.1f}' )
+    print( f'{fm_id} to {to_id}: D={D:.0f} TC={TC:.0f} IAS={IAS:.0f} CAS={CAS:.0f} WCA={WCA:.0f} TAS={TAS:.0f} TH={TH:.0f} MV={MV:.0f} MH={MH:.0f} DEV={DEV:.0f} CH={CH:.0f} GS={GS:.0f} ETE={ETE:.0f} GAL={GAL:.1f} GAL_REM={fuel_gal:.1f}' )
 
