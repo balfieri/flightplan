@@ -1,7 +1,5 @@
-# MagVar.py - computes magnetic variation for a given lat/lon and yy/mm/dd
+# Python translation of https://github.com/dpyeates/magvar
 # 
-# This Python3 port is a transcription of the JS code at https://github.com/dpyeates/magvar
-#
 import time
 from datetime import datetime,date
 from math import pi,sqrt,sin,cos,tan,asin,acos,atan2
@@ -216,15 +214,6 @@ def reinit():
             roots[m][n][0] = sqrt((n - 1.0) * (n - 1.0) - mm)
             roots[m][n][1] = 1.0 / sqrt(n * n - mm)
 
-# calculateMagVar
-# Given a date in julian days, latitude, longitude and height, return variation (in degrees)
-# N and E latitude and longitude are positive values, South and West negative.
-# @param {number} julian_days: the current number of days since epoch 0h Jan 1, 1950.
-# @param {number} latIn: the latitude in degrees of the point we want to obtain the magnetic variation.
-# @param {number} lonIn: the longitude in degrees of the point we want to obtain the magnetic variation.
-# @param {number} h: the height in km above mean sea level of the point we want to obtain the magnetic variation.
-# @returns {number} magnetic variation at the given coordinates and height.
-#
 def calculateMagVar( julian_days, latIn, lonIn, h ):
     lat = DEG_TO_RAD*latIn
     lon = DEG_TO_RAD*lonIn
