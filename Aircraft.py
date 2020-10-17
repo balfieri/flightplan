@@ -49,6 +49,9 @@ types = {
 
         # Performance 
         #
+        'fuel_gal_taxi':        1.4,
+        'fuel_gph':             10,         # temporary
+
         'airspeed_calibration': [  # normal static port
             # flaps
             0, [
