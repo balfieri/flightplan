@@ -17,7 +17,7 @@ The program is divided into the following files:
 
 Example run scripts:
 
-    doit.kbuy_kclt      -- trip from KBUY to KCLT with a few checkpoints at airports and lat,lon locations
+    doit.kbuy_kclt      -- KBUY to KCLT with checkpoints at various airports and lat,lon locations
 
 This is all open-source.  Refer to the LICENSE.md for licensing details.  
 
