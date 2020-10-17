@@ -156,8 +156,8 @@ def calc_DEV( MH, table ):
 
 MagVar.reinit()
 if len( route ) < 2: die( 'route must contain at least two points' )
-print( f'CHECKPOINT         D   DTOT  TC IAS CAS WCA   IA   ALT   OAT   PA    DA TAS  TH  MV  MH DEV  CH    GS  ETE ETA  GAL   REM' )
-print( f'-------------------------------------------------------------------------------------------------------------------------' )
+print( f'CHECKPOINT       TC IAS CAS WCA   IA   ALT  OAT    PA    DA TAS  TH   MV  MH DEV  CH       D   DTOT GS ETE ETA   GAL   REM' )
+print( f'---------------------------------------------------------------------------------------------------------------------------' )
 DTOT = 0
 ETA = 0
 for i in range( 0, len(route) ):
@@ -216,5 +216,5 @@ for i in range( 0, len(route) ):
     GAL  = (ETE / 60.0 * GPH) if i != 0 else fuel_gal_taxi
     fuel_gal -= GAL
 
-    print( f'{to_id:15s} {D:5.0f} {DTOT:5.0f} {TC:3.0f} {IAS:3.0f} {CAS:3.0f} {WCA:3.0f} {IA:4.0f} {ALT:5.2f} {OAT:4.1f} {PA:5.0f} {DA:5.0f} {TAS:3.0f} {TH:3.0f} {MV:3.0f} {MH:3.0f} {DEV:3.0f} {CH:3.0f}   {GS:3.0f} {ETE:3.0f} {ETA:3.0f} {GAL:5.1f} {fuel_gal:5.1f}' )
+    print( f'{to_id:15s} {TC:3.0f} {IAS:3.0f} {CAS:3.0f} {WCA:3.0f} {IA:4.0f} {ALT:5.2f} {OAT:4.1f} {PA:5.0f} {DA:5.0f} {TAS:3.0f} {TH:3.0f}  {MV:3.0f} {MH:3.0f} {DEV:3.0f} {CH:3.0f}   {D:5.0f} {DTOT:5.0f} {GS:3.0f} {ETE:3.0f} {ETA:3.0f} {GAL:5.1f} {fuel_gal:5.1f}' )
 
