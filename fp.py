@@ -29,6 +29,7 @@ tail       = ''
 ias        = 110
 ia         = 3000               # indicated altitude
 alt        = 29.92              # altimeter setting
+flaps      = 0                  # flaps setting in degrees
 wind_dir   = 0
 wind_speed = 0
 oat        = 15
@@ -53,7 +54,7 @@ while i < len( sys.argv ):
             if not matches: die( f'unknown airport/waypoint and not a proper lat/lon: {id}' )
             lat = float(matches.group(1))
             lon = float(matches.group(2))
-        route.append( { 'id': id, 'lat': lat, 'lon': lon, 'ias': ias, 'ia': ia, 'alt': alt, 
+        route.append( { 'id': id, 'lat': lat, 'lon': lon, 'ias': ias, 'ia': ia, 'alt': alt, 'flaps': flaps,
                         'wind_dir': wind_dir, 'wind_speed': wind_speed, 'oat': oat,
                         'fuel_gph': fuel_gph } )
     elif arg == '-t':
@@ -74,6 +75,9 @@ while i < len( sys.argv ):
         i += 1
     elif arg == '-altimeter' or arg == '-alt':
         alt = float(sys.argv[i])
+        i += 1
+    elif arg == '-flaps': 
+        flaps = float(sys.argv[i])
         i += 1
     elif arg == '-wd': 
         wind_dir = float(sys.argv[i])
@@ -100,10 +104,15 @@ while i < len( sys.argv ):
 # Defaults Based on Aircraft Type
 #--------------------------------------------------------------
 if type not in Aircraft.types: die( f'unknown aircraft type: {type}' )
-aircraft = Aircraft.types[type]
-if fuel_gal <= 0: fuel_gal = aircraft['fuel_gal_max']
-if fuel_gal_taxi <= 0: fuel_gal_taxi = aircraft['fuel_gal_taxi']
-if fuel_gph <= 0: fuel_gph = aircraft['fuel_gph']         # TODO: need to look at tables for this
+type_info = Aircraft.types[type]
+if tail != "":
+    if tail not in Aircraft.tails: die( f'unknown tail number: {tail}' )
+    tail_info = Aircraft.tails[tail]
+else:
+    tail_info = None
+if fuel_gal <= 0: fuel_gal = type_info['fuel_gal_max']
+if fuel_gal_taxi <= 0: fuel_gal_taxi = type_info['fuel_gal_taxi']
+if fuel_gph <= 0: fuel_gph = type_info['fuel_gph']         # TODO: need to look at tables for this
 
 #--------------------------------------------------------------
 # Analyze Route
@@ -139,6 +148,12 @@ def calc_TAS( CAS, DA ):
     TAS = ee * CAS
     return TAS
 
+def calc_CAS( IAS, FLAPS, table ):
+    return IAS  # TODO
+
+def calc_DEV( MH, table ):
+    return MH   # TODO
+
 print( f'Fuel gal before starting engine: {fuel_gal:.1f}' )
 print( f'Fuel gal for startup and taxi:   {fuel_gal_taxi:.1f}' )
 fuel_gal -= fuel_gal_taxi
@@ -166,6 +181,8 @@ for i in range( 1, len(route) ):
     TO_IA  = to['ia']
     FM_ALT = fm['alt']
     TO_ALT = to['alt']
+    FM_FLAPS = fm['flaps']
+    TO_FLAPS = to['flaps']
     FM_OAT = fm['oat']
     TO_OAT = to['oat']
     FM_GPH = fm['fuel_gph'] if fm['fuel_gph'] > 0 else fuel_gph
@@ -174,7 +191,8 @@ for i in range( 1, len(route) ):
     D    = Geodesic.distance( FM_LAT, FM_LON, TO_LAT, TO_LON )
     TC   = Geodesic.initial_bearing( FM_LAT, FM_LON, TO_LAT, TO_LON )
     IAS  = (FM_IAS + TO_IAS) / 2.0
-    CAS  = IAS  # TODO: from type table
+    FLAPS= (FM_FLAPS + TO_FLAPS) / 2.0
+    CAS  = calc_CAS( IAS, FLAPS, type_info['airspeed_calibration'] )
     WS   = (FM_WS + TO_WS) / 2.0
     WA   = (FM_WD + TO_WD)/2.0 + 180
     while WA > 360: WA -= 360
@@ -189,7 +207,7 @@ for i in range( 1, len(route) ):
     TH   = TC + WCA
     MV   = (-MagVar.today_magvar( FM_LAT, FM_LON ) + -MagVar.today_magvar( TO_LAT, TO_LON )) / 2.0 
     MH   = TH + MV
-    DEV  = 0     # TODO: from tail table
+    DEV  = calc_DEV( MH, tail_info['magnetic_deviation'] ) if tail_info else 0
     CH   = MH + DEV
     GS   = TAS*cos( WCA ) + WS*cos( WTA )
     ETE  = D/GS * 60.0
