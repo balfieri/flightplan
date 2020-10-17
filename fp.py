@@ -8,6 +8,7 @@ import Aircraft
 import Geodesic
 import MagVar
 import re
+from math import sin,asin,cos
 
 def die( msg ):
     print( f'ERROR: {msg}' )
@@ -25,7 +26,7 @@ f.close()
 #--------------------------------------------------------------
 type       = 'C172S'
 tail       = ''
-kias       = 110
+ias        = 110
 altitude   = 3000
 altimeter  = 29.92
 wind_dir   = 0
@@ -51,7 +52,7 @@ while i < len( sys.argv ):
             if not matches: die( f'unknown airport/waypoint and not a proper lat/lon: {id}' )
             lat = float(matches.group(1))
             lon = float(matches.group(2))
-        route.append( { 'id': id, 'lat': lat, 'lon': lon, 'kias': kias, 'altitude': altitude, 'altimeter': altimeter, 
+        route.append( { 'id': id, 'lat': lat, 'lon': lon, 'ias': ias, 'altitude': altitude, 'altimeter': altimeter, 
                         'wind_dir': wind_dir, 'wind_speed': wind_speed, 'oat': oat,
                         'fuel_gph': fuel_gph } )
     elif arg == '-t':
@@ -64,8 +65,8 @@ while i < len( sys.argv ):
         i += 1
         if tail not in Aircraft.tails : die( f'unknown aircraft tail number: {tail}' ) 
         if len(route) > 0: die( '-tail <tail number> option must occur before first -p option' )
-    elif arg == '-kias':
-        kias = float(sys.argv[i])
+    elif arg == '-ias':
+        ias = float(sys.argv[i])
         i += 1
     elif arg == '-altitude':
         altitude = float(sys.argv[i])
@@ -121,20 +122,24 @@ for i in range( 1, len(route) ):
 
     D    = Geodesic.distance( fm['lat'], fm['lon'], to['lat'], to['lon'] )
     TC   = Geodesic.initial_bearing( fm['lat'], fm['lon'], to['lat'], to['lon'] )
-    KIAS = to['kias']
-    KCAS = KIAS  # TODO
-    WCA  = 0     # TODO
-    KTAS = KCAS  # TODO
+    IAS  = to['ias']
+    CAS  = IAS  # TODO: from type table
+    WS   = to['wind_speed']
+    WA   = to['wind_dir'] + 180
+    WTA  = TC - WA
+    while WA > 360: WA -= 360
+    TAS  = CAS  # TODO: use equation
+    WCA  = asin( WS * sin( WTA ) / TAS )
     TH   = TC + WCA
     MV   = -MagVar.today_magvar( to['lat'], to['lon'] )
     MH   = TH + MV
-    DEV  = 0     # TODO
+    DEV  = 0     # TODO: from tail table
     CH   = MH + DEV
-    GS   = KTAS  # TODO
+    GS   = TAS*cos( WCA ) + WS*cos( WTA )
     MIN  = D/GS * 60.0
     GPH  = to['fuel_gph'] if to['fuel_gph'] > 0 else fuel_gph
     GAL  = MIN / 60.0 * GPH
     fuel_gal -= GAL
 
-    print( f'{fm_id} to {to_id}: D={D:.0f} TC={TC:.0f} KIAS={KIAS:.0f} KCAS={KCAS:.0f} WCA={WCA:.0f} KTAS={KTAS:.0f} TH={TH:.0f} MV={MV:.0f} MH={MH:.0f} DEV={DEV:.0f} CH={CH:.0f} GS={GS:.0f} MIN={MIN:.0f} GAL={GAL:.1f} GAL_REM={fuel_gal:.1f}' )
+    print( f'{fm_id} to {to_id}: D={D:.0f} TC={TC:.0f} IAS={IAS:.0f} CAS={CAS:.0f} WCA={WCA:.0f} TAS={TAS:.0f} TH={TH:.0f} MV={MV:.0f} MH={MH:.0f} DEV={DEV:.0f} CH={CH:.0f} GS={GS:.0f} MIN={MIN:.0f} GAL={GAL:.1f} GAL_REM={fuel_gal:.1f}' )
 
