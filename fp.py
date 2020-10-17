@@ -154,13 +154,16 @@ def calc_CAS( IAS, FLAPS, table ):
 def calc_DEV( MH, table ):
     return MH   # TODO
 
-print( f'Fuel gal before starting engine: {fuel_gal:.1f}' )
-print( f'Fuel gal for startup and taxi:   {fuel_gal_taxi:.1f}' )
 fuel_gal -= fuel_gal_taxi
-print( f'Fuel gal after taxi:             {fuel_gal:.1f}' )
 
 MagVar.reinit()
 if len( route ) < 2: die( 'route must contain at least two points' )
+print( f'CHECKPOINT         D   DTOT  TC IAS CAS WCA   IA   ALT   OAT   PA    DA  TAS  TH  MV  MH DEV  CH    GS ETE ETA   GAL  REM' )
+print( f'--------------------------------------------------------------------------------------------------------------------------' )
+fm_id = route[0]['id']
+print( f'{id:15s}                                                                                                {fuel_gal_taxi:5.1f} {fuel_gal:5.1f}' )
+DTOT = 0
+ETA = 0
 for i in range( 1, len(route) ):
     fm = route[i-1]
     to = route[i]
@@ -189,6 +192,7 @@ for i in range( 1, len(route) ):
     TO_GPH = to['fuel_gph'] if to['fuel_gph'] > 0 else fuel_gph
 
     D    = Geodesic.distance( FM_LAT, FM_LON, TO_LAT, TO_LON )
+    DTOT+= D
     TC   = Geodesic.initial_bearing( FM_LAT, FM_LON, TO_LAT, TO_LON )
     IAS  = (FM_IAS + TO_IAS) / 2.0
     FLAPS= (FM_FLAPS + TO_FLAPS) / 2.0
@@ -211,9 +215,10 @@ for i in range( 1, len(route) ):
     CH   = MH + DEV
     GS   = TAS*cos( WCA ) + WS*cos( WTA )
     ETE  = D/GS * 60.0
+    ETA += ETE
     GPH  = (FM_GPH + TO_GPH) / 2.0
     GAL  = ETE / 60.0 * GPH
     fuel_gal -= GAL
 
-    print( f'{fm_id} to {to_id}: D={D:.0f} TC={TC:.0f} IAS={IAS:.0f} CAS={CAS:.0f} WCA={WCA:.0f} IA={IA:.0f} ALT={ALT:.2f} OAT={OAT:.1f} PA={PA:.0f} DA={DA:.0f} TAS={TAS:.0f} TH={TH:.0f} MV={MV:.0f} MH={MH:.0f} DEV={DEV:.0f} CH={CH:.0f} GS={GS:.0f} ETE={ETE:.0f} GAL={GAL:.1f} GAL_REM={fuel_gal:.1f}' )
+    print( f'{to_id:15s} {D:5.0f} {DTOT:5.0f} {TC:3.0f} {IAS:3.0f} {CAS:3.0f} {WCA:3.0f}  {IA:3.0f} {ALT:5.2f} {OAT:4.1f} {PA:5.0f} {DA:5.0f} {TAS:3.0f} {TH:3.0f} {MV:3.0f} {MH:3.0f} {DEV:3.0f} {CH:3.0f}   {GS:3.0f} {ETE:3.0f} {ETA:3.0f} {GAL:5.1f} {fuel_gal:5.1f}' )
 
