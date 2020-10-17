@@ -6,6 +6,7 @@ import sys
 import pickle
 import Aircraft
 import Geodesic
+import MagVar
 import re
 
 def die( msg ):
