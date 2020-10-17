@@ -1,4 +1,4 @@
-NOTE: this is a work-in-progress
+NOTE: this is a work-in-progress, most of these features are fully functional yet
 
 This repository contains a Python3 script that can create a textual flight plan from a set of way points.  The textual flight plan is compact and can be printed on a single sheet of paper in a format that should be familiar to most pilots.  The script also shows other information including radio frequencies, runways, and FBOs.
 
@@ -9,10 +9,11 @@ This is NOT a replacement for an onboard navigation system! This is more about s
 This is all open-source.  Refer to the LICENSE.md for licensing details.  
 
 The program is divided into the following files:
-* fp.py - the main program
-* Aircraft.py - performance characteristics of various types of aircraft and overrides for specific tail numbers (feel free to augment this file)
-* Geodisic.py - computes great-circle distance and course between any two points on earth (and related things)
-* MagneticVariation.py - computes magnetic variation at any point on earth for the current date
+    fp.py               -- the main program
+    Aircraft.py         -- performance characteristics of various types of aircraft and 
+                           overrides for specific tail numbers (feel free to augment this file)
+    Geodisic.py         -- computes great-circle distance and course between any two points on earth (and related things)
+    MagVar.py           -- computes magnetic variation at any point on Earth on a given date
 
 I will show run lines later once this is done.
 
