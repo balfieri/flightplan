@@ -27,7 +27,7 @@ f.close()
 type       = 'C172S'
 tail       = ''
 ias        = 110
-ia         = 3000               # indicated altitude
+ia         = 0                  # indicated altitude (start on ground)
 alt        = 29.92              # altimeter setting
 flaps      = 0                  # flaps setting in degrees
 wind_dir   = 0
