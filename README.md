@@ -15,7 +15,9 @@ The program is divided into the following files:
                            between any two points on Earth (and related things)
     MagVar.py           -- computes magnetic variation at any point on Earth for a given date
 
-I will show run lines later once this is done.
+Example run scripts:
+
+    doit.kbuy_kclt      -- trip from KBUY to KCLT with a few checkpoints at airports and lat,lon locations
 
 This is all open-source.  Refer to the LICENSE.md for licensing details.  
 
