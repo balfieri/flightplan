@@ -1,10 +1,9 @@
 # MagVar.py - computes magnetic variation for a given lat/lon and yy/mm/dd
 # 
-# This Python port is based strictly on the JS code at https://github.com/dpyeates/magvar
+# This Python3 port is a transcription of the JS code at https://github.com/dpyeates/magvar
 #
 import time
 from datetime import datetime,date
-import pytz
 from math import pi,sqrt,sin,cos,tan,asin,acos,atan2
 from Geodesic import DEG_TO_RAD, RAD_TO_DEG
 
@@ -13,7 +12,7 @@ def getTimezoneOffsetSeconds():
     return (datetime.fromtimestamp(ts) - datetime.utcfromtimestamp(ts)).total_seconds()
 
 def yymmdd_to_julian_days( yy, mm, dd ):
-    return 2440587.5 + (datetime(yy, mm, dd).total_seconds() - getTimezoneOffsetSeconds()) / (24*60*60)
+    return 2440587.5 + ((datetime(yy, mm, dd) - datetime(1970,1,1)).total_seconds() - getTimezoneOffsetSeconds()) / (24*60*60)
 
 def createArray( len0, len1=0, len2=0 ):
     a = [ 0.0 for i in range(len0) ]
@@ -28,7 +27,7 @@ def createArray( len0, len1=0, len2=0 ):
 def reinit():
     global julian_days_2020
     global nmax, a, f, b, r_0
-    global gnm_wmm2020, hnm_wmm2020, gtnm_wmm2020, htnm_wm2020
+    global gnm_wmm2020, hnm_wmm2020, gtnm_wmm2020, htnm_wmm2020
     global P, DP, gnm, hnm, sm, cm, root, roots
 
     julian_days_2020 = 2458850
@@ -340,5 +339,5 @@ def yymmdd_magvar( yy, mm, dd, lat, lon, h=0 ):
     return calculateMagVar( yymmdd_to_julian_days( yy, mm, dd ), lat, lon, h )
 
 def today_magvar( lat, lon, h=0 ):
-    d = datetime.date.today()
+    d = date.today()
     return yymmdd_magvar( d.year, d.month, d.day, lat, lon, h )
