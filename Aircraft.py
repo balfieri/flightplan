@@ -49,7 +49,7 @@ types = {
 
         # Performance 
         #
-        'airspeed_calibration_normal_static': [
+        'airspeed_calibration': [  # normal static port
             # flaps
             0, [
                 # KIAS    KCAS
@@ -93,8 +93,8 @@ types = {
         'short_field_takeoff': [
             # weight
             2550, [
-                # temp  MSL     ground  feet to clear
-                #       ft      roll    50ft obstacle
+                # temp  press   ground  feet to clear
+                #       alt     roll    50ft obstacle
                 [ 0,    0,      860,    1465 ],
                 [ 0,    1000,   940,    1600 ],        
                 [ 0,    2000,   1025,   1755 ],        
