@@ -156,8 +156,8 @@ def calc_DEV( MH, table ):
 
 MagVar.reinit()
 if len( route ) < 2: die( 'route must contain at least two points' )
-print( f'CHECKPOINT         D   DTOT  TC IAS CAS WCA   IA   ALT   OAT   PA    DA  TAS  TH  MV  MH DEV  CH   GS  ETE ETA   GAL  REM' )
-print( f'--------------------------------------------------------------------------------------------------------------------------' )
+print( f'CHECKPOINT         D   DTOT  TC IAS CAS WCA   IA   ALT   OAT   PA    DA TAS  TH  MV  MH DEV  CH    GS  ETE ETA  GAL   REM' )
+print( f'-------------------------------------------------------------------------------------------------------------------------' )
 DTOT = 0
 ETA = 0
 for i in range( 0, len(route) ):
