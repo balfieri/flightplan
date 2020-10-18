@@ -6,6 +6,7 @@ import sys
 import pickle
 import Aircraft
 import Geodesic
+from Geodesic import DEG_TO_RAD, RAD_TO_DEG
 import MagVar
 import re
 from math import sin,asin,cos,pow
@@ -260,13 +261,13 @@ for i in range( 0, len(route) ):
     PA   = calc_PA( IA, ALT )
     DA   = calc_DA( PA, OAT )
     TAS  = calc_TAS( CAS, DA )
-    WCA  = asin( WS * sin( WTA ) / TAS )
+    WCA  = RAD_TO_DEG*asin( WS * sin( DEG_TO_RAD*WTA ) / TAS )
     TH   = TC + WCA
     MV   = (-MagVar.today_magvar( FM_LAT, FM_LON ) + -MagVar.today_magvar( TO_LAT, TO_LON )) / 2.0 
     MH   = TH + MV
     DEV  = calc_DEV( MH, tail_info['magnetic_deviation'] ) if tail_info else 0
     CH   = MH + DEV
-    GS   = TAS*cos( WCA ) + WS*cos( WTA )
+    GS   = TAS*cos( DEG_TO_RAD*WCA ) + WS*cos( DEG_TO_RAD*WTA )
     ETE  = D/GS * 60.0
     ETA += ETE
     GPH  = (FM_GPH + TO_GPH) / 2.0
