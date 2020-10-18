@@ -212,8 +212,8 @@ def calc_DEV( MH, table ):
 
 MagVar.reinit()
 if len( route ) < 2: die( 'route must contain at least two points' )
-print( f'CHECKPOINT       TC  DIA   IA   ALT  WD  WS  OAT    PA    DA  IAS CAS TAS   WCA  TH MV  MH DEV  CH       D  DTOT  GS ETE ETA   GAL   REM' )
-print( f'----------------------------------------------------------------------------------------------------------------------------------------' )
+print( f'CHECKPOINT       TC   IA   ALT  WD  WS  OAT    PA    DA  IAS CAS TAS WCA  TH MV  MH DEV  CH       D  DTOT  GS ETE ETA   GPH  GAL  REM' )
+print( f'-------------------------------------------------------------------------------------------------------------------------------------' )
 DTOT = 0
 ETA = 0
 for i in range( 0, len(route) ):
@@ -246,33 +246,33 @@ for i in range( 0, len(route) ):
     D    = Geodesic.distance( FM_LAT, FM_LON, TO_LAT, TO_LON )
     DTOT+= D
     TC   = (runway * 10) if i == 0 else Geodesic.initial_bearing( FM_LAT, FM_LON, TO_LAT, TO_LON )
-    IAS  = (FM_IAS + TO_IAS) / 2.0
-    FLAPS= (FM_FLAPS + TO_FLAPS) / 2.0
+    IAS  = TO_IAS 
+    FLAPS= TO_FLAPS
     CAS  = calc_CAS( IAS, FLAPS, type_info['airspeed_calibration'] )
-    WS   = (FM_WS + TO_WS) / 2.0
-    WD   = (FM_WD + TO_WD)/2.0
+    WS   = TO_WS
+    WD   = TO_WD
     WA   = WD + 180
     while WA > 360: WA -= 360
     WTA  = TC - WA
     DIA  = TO_IA
-    IA   = (FM_IA + TO_IA) / 2.0
-    ALT  = (FM_ALT + TO_ALT) / 2.0
-    OAT  = (FM_OAT + TO_OAT) / 2.0
+    IA   = TO_IA
+    ALT  = TO_ALT
+    OAT  = TO_OAT
     PA   = calc_PA( IA, ALT )
     DA   = calc_DA( PA, OAT )
     TAS  = calc_TAS( CAS, DA )
     WCA  = RAD_TO_DEG*asin( WS * sin( DEG_TO_RAD*WTA ) / TAS )
     TH   = TC + WCA
-    MV   = (-MagVar.today_magvar( FM_LAT, FM_LON ) + -MagVar.today_magvar( TO_LAT, TO_LON )) / 2.0 
+    MV   = -MagVar.today_magvar( TO_LAT, TO_LON )
     MH   = TH + MV
     DEV  = calc_DEV( MH, tail_info['magnetic_deviation'] ) if tail_info else 0
     CH   = MH + DEV
     GS   = TAS*cos( DEG_TO_RAD*WCA ) + WS*cos( DEG_TO_RAD*WTA )
     ETE  = D/GS * 60.0
     ETA += ETE
-    GPH  = (FM_GPH + TO_GPH) / 2.0
+    GPH  = TO_GPH
     GAL  = (ETE / 60.0 * GPH) if i != 0 else fuel_gal_taxi
     fuel_gal -= GAL
 
-    print( f'{to_id:15s} {TC:3.0f} {DIA:4.0f} {IA:4.0f} {ALT:5.2f} {WD:3.0f} {WS:3.0f} {OAT:4.1f} {PA:5.0f} {DA:5.0f}  {IAS:3.0f} {CAS:3.0f} {TAS:3.0f}   {WCA:3.0f} {TH:3.0f} {MV:2.0f} {MH:3.0f} {DEV:3.0f} {CH:3.0f}   {D:5.0f} {DTOT:5.0f} {GS:3.0f} {ETE:3.0f} {ETA:3.0f} {GAL:5.1f} {fuel_gal:5.1f}' )
+    print( f'{to_id:15s} {TC:3.0f} {IA:4.0f} {ALT:5.2f} {WD:3.0f} {WS:3.0f} {OAT:4.1f} {PA:5.0f} {DA:5.0f}  {IAS:3.0f} {CAS:3.0f} {TAS:3.0f} {WCA:3.0f} {TH:3.0f} {MV:2.0f} {MH:3.0f} {DEV:3.0f} {CH:3.0f}   {D:5.0f} {DTOT:5.0f} {GS:3.0f} {ETE:3.0f} {ETA:3.0f}  {GPH:4.1f} {GAL:4.1f} {fuel_gal:4.1f}' )
 
