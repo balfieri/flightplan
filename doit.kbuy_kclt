@@ -1,4 +1,4 @@
-./fp.py -alt 30.11 \
+./fp.py -tail N53587 -alt 30.11 \
         -ias 80                          -oat 18 -p kbuy \
         -ias 110 -ia 5500 -wd 274 -ws  4 -oat 11 -p 2a5 \
                  -ia 6500 -wd 271 -ws  8 -oat  9 -p khbi \

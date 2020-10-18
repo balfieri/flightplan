@@ -148,11 +148,61 @@ def calc_TAS( CAS, DA ):
     TAS = ee * CAS
     return TAS
 
+def lerp( f, v0, v1 ):
+    return (1-f)*v0 + f*v1
+
+def find_closest_row( a, table, except_row=-1, a_col=0, a_modulo=0 ):
+    if a_modulo != 0:
+        a = a % a_modulo
+    r = -1
+    rd = 1e20
+    for i in range(len(table)):
+        if i == except_row: continue
+        ai = table[i][a_col]
+        if a_modulo != 0:
+            ai = ai % a_modulo
+        d = abs(ai - a)
+        if r < 0 or d < rd:
+            rd = d
+            r = i
+    return r
+
+def interpolate( a, a0, a1, b0, b1, a_modulo=0, ab_modulo=0 ):
+    if a_modulo != 0:
+        a  = a  % a_modulo
+        if a0 >= a_modulo:
+            a0 -= a_modulo    
+            b0 -= ab_modulo 
+        if a1 >= a_modulo:
+            a1 -= a_modulo    
+            b1 -= ab_modulo 
+    if a0 == a1: return b0
+    if a0 < a1:
+        if a < a0: die( f'interpolate() a={a} < a0={a0}' )
+        f = (a - a0) / (a1 - a0)
+        return lerp( f, b0, b1 )
+    else:
+        if a < a1: die( f'interpolate() a={a} < a0={a0}' )
+        f = (a - a1) / (a0 - a1)
+        return lerp( f, b1, b0 )
+
+def interpolate_closest_rows( a, table, b_col=1, a_col=0, a_modulo=0, ab_modulo=0 ):
+    r0 = find_closest_row( a, table, -1, a_col, a_modulo )
+    r1 = find_closest_row( a, table, r0, a_col, a_modulo )
+    a0 = table[r0][a_col] 
+    a1 = table[r1][a_col]
+    b0 = table[r0][b_col]
+    b1 = table[r1][b_col]
+    return interpolate( a, a0, a1, b0, b1, a_modulo, ab_modulo )
+
 def calc_CAS( IAS, FLAPS, table ):
-    return IAS  # TODO
+    for i in range(len(table)>>1):
+        if table[i*2+0] >= FLAPS:
+            return interpolate_closest_rows( IAS, table[i*2+1] )
+    die( f'flaps={FLAPS} has no relevant entry in the CAS table' )
 
 def calc_DEV( MH, table ):
-    return MH   # TODO
+    return interpolate_closest_rows( MH, table, 1, 0, 360, 360 ) - MH
 
 MagVar.reinit()
 if len( route ) < 2: die( 'route must contain at least two points' )
