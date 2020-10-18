@@ -218,8 +218,8 @@ def calc_DEV( MH, table ):
 
 MagVar.reinit()
 if len( route ) < 2: die( 'route must contain at least two points' )
-print( f'CHECKPOINT         LAT    LON  TC   IA   ALT  WD WS  OAT   IAS CAS TAS   WCA  TH MV  MH DEV  CH       D  DTOT    GS   ETE   ETA   GPH  GAL  REM' )
-print( f'-----------------------------------------------------------------------------------------------------------------------------------------------' )
+print( f'CHECKPOINT         LAT    LON  TC   IA   ALT  WD WS OAT   IAS CAS TAS   WCA  TH MV  MH DEV  CH       D  DTOT    GS   ETE   ETA   GPH  GAL  REM' )
+print( f'----------------------------------------------------------------------------------------------------------------------------------------------' )
 DTOT = 0
 ETA = 0
 for i in range( 0, len(route) ):
@@ -279,7 +279,7 @@ for i in range( 0, len(route) ):
     GAL  = (ETE / 60.0 * GPH) if i != 0 else fuel_gal_taxi
     fuel_gal -= GAL
 
-    print( f'{TO_NAME:15s} {TO_LAT:6.2f} {TO_LON:6.2f} {TC:3.0f} {IA:4.0f} {ALT:5.2f} {WD:3.0f} {WS:2.0f} {OAT:4.1f}   {IAS:3.0f} {CAS:3.0f} {TAS:3.0f}   {WCA:3.0f} {TH:3.0f} {MV:2.0f} {MH:3.0f} {DEV:3.0f} {CH:3.0f}   {D:5.1f} {DTOT:5.1f} {GS:5.1f} {ETE:5.1f} {ETA:5.1f}  {GPH:4.1f} {GAL:4.1f} {fuel_gal:4.1f}' )
+    print( f'{TO_NAME:15s} {TO_LAT:6.2f} {TO_LON:6.2f} {TC:3.0f} {IA:4.0f} {ALT:5.2f} {WD:3.0f} {WS:2.0f} {OAT:3.0f}   {IAS:3.0f} {CAS:3.0f} {TAS:3.0f}   {WCA:3.0f} {TH:3.0f} {MV:2.0f} {MH:3.0f} {DEV:3.0f} {CH:3.0f}   {D:5.1f} {DTOT:5.1f} {GS:5.1f} {ETE:5.1f} {ETA:5.1f}  {GPH:4.1f} {GAL:4.1f} {fuel_gal:4.1f}' )
 
 print()
 print( 'Airport Elevations' )
