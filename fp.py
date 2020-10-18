@@ -27,6 +27,7 @@ f.close()
 #--------------------------------------------------------------
 type       = 'C172S'
 tail       = ''
+name       = '<lat,lon>'        # name of checkpoint for lat,lon only
 ias        = 110
 ia         = 0                  # indicated altitude (start on ground)
 alt        = 29.92              # altimeter setting
@@ -51,13 +52,15 @@ while i < len( sys.argv ):
             lat = rawdata[id]['lat']
             lon = rawdata[id]['lon']
             if ia == 0: ia = rawdata[id]['elevation']
+            name = id
         else:
             # might be lat,lon 
             matches = re.match( r'^(-?\d+\.\d+),(-?\d+\.\d+)$', id );
             if not matches: die( f'unknown airport/waypoint and not a proper lat/lon: {id}' )
             lat = float(matches.group(1))
             lon = float(matches.group(2))
-        route.append( { 'id': id, 'lat': lat, 'lon': lon, 'ias': ias, 'ia': ia, 'alt': alt, 'flaps': flaps,
+            id = ''
+        route.append( { 'id': id, 'name': name, 'lat': lat, 'lon': lon, 'ias': ias, 'ia': ia, 'alt': alt, 'flaps': flaps,
                         'wind_dir': wind_dir, 'wind_speed': wind_speed, 'oat': oat,
                         'fuel_gph': fuel_gph } )
     elif arg == '-t':
@@ -70,6 +73,9 @@ while i < len( sys.argv ):
         i += 1
         if tail not in Aircraft.tails : die( f'unknown aircraft tail number: {tail}' ) 
         if len(route) > 0: die( '-tail <tail number> option must occur before first -p option' )
+    elif arg == '-name':
+        name = sys.argv[i]
+        i += 1
     elif arg == '-ias':
         ias = float(sys.argv[i])
         i += 1
@@ -212,15 +218,14 @@ def calc_DEV( MH, table ):
 
 MagVar.reinit()
 if len( route ) < 2: die( 'route must contain at least two points' )
-print( f'CHECKPOINT       TC   IA   ALT  WD WS  OAT   IAS CAS TAS   WCA  TH MV  MH DEV  CH       D  DTOT  GS ETE ETA   GPH  GAL  REM' )
-print( f'---------------------------------------------------------------------------------------------------------------------------' )
+print( f'CHECKPOINT         LAT    LON  TC   IA   ALT  WD WS  OAT   IAS CAS TAS   WCA  TH MV  MH DEV  CH       D  DTOT    GS   ETE   ETA   GPH  GAL  REM' )
+print( f'-----------------------------------------------------------------------------------------------------------------------------------------------' )
 DTOT = 0
 ETA = 0
 for i in range( 0, len(route) ):
     fm = route[0] if i == 0 else route[i-1]
     to = route[i]
-    fm_id = fm['id']
-    to_id = to['id']
+    TO_NAME = to['name']
 
     FM_LAT = fm['lat']
     FM_LON = fm['lon']
@@ -263,7 +268,7 @@ for i in range( 0, len(route) ):
     TAS  = calc_TAS( CAS, DA )
     WCA  = RAD_TO_DEG*asin( WS * sin( DEG_TO_RAD*WTA ) / TAS )
     TH   = TC + WCA
-    MV   = -MagVar.today_magvar( TO_LAT, TO_LON )
+    MV   = (-MagVar.today_magvar( FM_LAT, FM_LON ) + -MagVar.today_magvar( TO_LAT, TO_LON )) / 2.0
     MH   = TH + MV
     DEV  = calc_DEV( MH, tail_info['magnetic_deviation'] ) if tail_info else 0
     CH   = MH + DEV
@@ -274,5 +279,13 @@ for i in range( 0, len(route) ):
     GAL  = (ETE / 60.0 * GPH) if i != 0 else fuel_gal_taxi
     fuel_gal -= GAL
 
-    print( f'{to_id:15s} {TC:3.0f} {IA:4.0f} {ALT:5.2f} {WD:3.0f} {WS:2.0f} {OAT:4.1f}   {IAS:3.0f} {CAS:3.0f} {TAS:3.0f}   {WCA:3.0f} {TH:3.0f} {MV:2.0f} {MH:3.0f} {DEV:3.0f} {CH:3.0f}   {D:5.0f} {DTOT:5.0f} {GS:3.0f} {ETE:3.0f} {ETA:3.0f}  {GPH:4.1f} {GAL:4.1f} {fuel_gal:4.1f}' )
+    print( f'{TO_NAME:15s} {TO_LAT:6.2f} {TO_LON:6.2f} {TC:3.0f} {IA:4.0f} {ALT:5.2f} {WD:3.0f} {WS:2.0f} {OAT:4.1f}   {IAS:3.0f} {CAS:3.0f} {TAS:3.0f}   {WCA:3.0f} {TH:3.0f} {MV:2.0f} {MH:3.0f} {DEV:3.0f} {CH:3.0f}   {D:5.1f} {DTOT:5.1f} {GS:5.1f} {ETE:5.1f} {ETA:5.1f}  {GPH:4.1f} {GAL:4.1f} {fuel_gal:4.1f}' )
 
+print()
+print( 'Airport Elevations' )
+print( '------------------' )
+for i in range( 0, len(route) ):
+    id = route[i]['id']
+    if id != '':
+        elevation = rawdata[id]['elevation']
+        print( f'{id:5s} {elevation:4.0f}' )
