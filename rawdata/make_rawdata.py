@@ -32,13 +32,14 @@ def read():
                 continue
             id = row[len(row)-2]
             if id == '': id = row[2].replace( "'", "" )
-            rawdata[id] = { 'site':     row[0],
-                            'type ':    row[1],
-                            'state':    row[6],
-                            'city':     row[10],
-                            'name':     row[11],
-                            'lat':      latlon_to_decimal( row[23] ),
-                            'lon':      latlon_to_decimal( row[25] ) }
+            rawdata[id] = { 'site':      row[0],
+                            'type ':     row[1],
+                            'state':     row[6],
+                            'city':      row[10],
+                            'name':      row[11],
+                            'lat':       latlon_to_decimal( row[23] ),
+                            'lon':       latlon_to_decimal( row[25] ),
+                            'elevation': int(row[27]) }
             
         csv_file.close()
 

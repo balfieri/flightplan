@@ -36,6 +36,7 @@ oat        = 15
 fuel_gal   = 0                  # 0 = use fuel_gal_max for type
 fuel_gal_taxi = 0               # 0 = use default fuel for startup+taxi
 fuel_gph   = 0                  # 0 = use default GPH
+runway     = 36                 # takeoff runway heading
 route      = []
 
 i = 1
@@ -48,6 +49,7 @@ while i < len( sys.argv ):
         if id in rawdata:
             lat = rawdata[id]['lat']
             lon = rawdata[id]['lon']
+            if ia == 0: ia = rawdata[id]['elevation']
         else:
             # might be lat,lon 
             matches = re.match( r'^(-?\d+\.\d+),(-?\d+\.\d+)$', id );
@@ -96,6 +98,9 @@ while i < len( sys.argv ):
         i += 1
     elif arg == '-fuel_gph':
         fuel_gph = float(sys.argv[i])
+        i += 1
+    elif arg == '-runway':
+        runway = int(sys.argv[i])
         i += 1
     else:
         die( f'unknown option: {sys.argv[i]}' )
@@ -206,8 +211,8 @@ def calc_DEV( MH, table ):
 
 MagVar.reinit()
 if len( route ) < 2: die( 'route must contain at least two points' )
-print( f'CHECKPOINT       TC   IA   ALT  WD  WS  OAT    PA    DA  IAS CAS TAS   WCA  TH MV  MH DEV  CH       D  DTOT  GS ETE ETA   GAL   REM' )
-print( f'-----------------------------------------------------------------------------------------------------------------------------------' )
+print( f'CHECKPOINT       TC  DIA   IA   ALT  WD  WS  OAT    PA    DA  IAS CAS TAS   WCA  TH MV  MH DEV  CH       D  DTOT  GS ETE ETA   GAL   REM' )
+print( f'----------------------------------------------------------------------------------------------------------------------------------------' )
 DTOT = 0
 ETA = 0
 for i in range( 0, len(route) ):
@@ -239,7 +244,7 @@ for i in range( 0, len(route) ):
 
     D    = Geodesic.distance( FM_LAT, FM_LON, TO_LAT, TO_LON )
     DTOT+= D
-    TC   = Geodesic.initial_bearing( FM_LAT, FM_LON, TO_LAT, TO_LON )
+    TC   = (runway * 10) if i == 0 else Geodesic.initial_bearing( FM_LAT, FM_LON, TO_LAT, TO_LON )
     IAS  = (FM_IAS + TO_IAS) / 2.0
     FLAPS= (FM_FLAPS + TO_FLAPS) / 2.0
     CAS  = calc_CAS( IAS, FLAPS, type_info['airspeed_calibration'] )
@@ -248,6 +253,7 @@ for i in range( 0, len(route) ):
     WA   = WD + 180
     while WA > 360: WA -= 360
     WTA  = TC - WA
+    DIA  = TO_IA
     IA   = (FM_IA + TO_IA) / 2.0
     ALT  = (FM_ALT + TO_ALT) / 2.0
     OAT  = (FM_OAT + TO_OAT) / 2.0
@@ -267,5 +273,5 @@ for i in range( 0, len(route) ):
     GAL  = (ETE / 60.0 * GPH) if i != 0 else fuel_gal_taxi
     fuel_gal -= GAL
 
-    print( f'{to_id:15s} {TC:3.0f} {IA:4.0f} {ALT:5.2f} {WD:3.0f} {WS:3.0f} {OAT:4.1f} {PA:5.0f} {DA:5.0f}  {IAS:3.0f} {CAS:3.0f} {TAS:3.0f}   {WCA:3.0f} {TH:3.0f} {MV:2.0f} {MH:3.0f} {DEV:3.0f} {CH:3.0f}   {D:5.0f} {DTOT:5.0f} {GS:3.0f} {ETE:3.0f} {ETA:3.0f} {GAL:5.1f} {fuel_gal:5.1f}' )
+    print( f'{to_id:15s} {TC:3.0f} {DIA:4.0f} {IA:4.0f} {ALT:5.2f} {WD:3.0f} {WS:3.0f} {OAT:4.1f} {PA:5.0f} {DA:5.0f}  {IAS:3.0f} {CAS:3.0f} {TAS:3.0f}   {WCA:3.0f} {TH:3.0f} {MV:2.0f} {MH:3.0f} {DEV:3.0f} {CH:3.0f}   {D:5.0f} {DTOT:5.0f} {GS:3.0f} {ETE:3.0f} {ETA:3.0f} {GAL:5.1f} {fuel_gal:5.1f}' )
 
