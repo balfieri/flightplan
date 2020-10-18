@@ -32,8 +32,9 @@ The program is divided into the following files:
 
 Example run scripts:
 
-    doit.kbuy_kclt      -- KBUY to KCLT with checkpoints at various airports and lat,lon locations
-    doit.ktta_kgso      -- KTTA to KGSO with checkpoints at various airports and lat,lon locations
+    doit.kbuy_kclt      -- KBUY to KCLT with checkpoints 
+    doit.ktta_kgso      -- KTTA to KGSO with checkpoints
+    doit.kgso_ktta      -- KGSO to KTTA with checkpoints
 
 This is all open-source.  Refer to the LICENSE.md for licensing details.  
 
