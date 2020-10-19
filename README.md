@@ -33,8 +33,8 @@ The program is divided into the following files:
     MagVar.py           -- computes magnetic variation at any point on Earth for a given date
     rawdata/            -- airport/waypoint GPS coordinates and facility/runway information
                            that is filtered down by a script called rawdata/make_rawdata.py 
-                           and written to a pickle-format file called rawdata/rawdata.dat 
-                           that is easily sucked in fp.py
+                           and written to a checked-in pickle-format file called 
+                           rawdata/rawdata.dat that is easily sucked in fp.py
 
 Example run scripts:
 
