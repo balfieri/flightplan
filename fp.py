@@ -221,7 +221,6 @@ def calc_CAS( IAS, FLAPS, table ):
 def calc_DEV( MH, table ):
     return interpolate_closest_rows( MH, table, 1, 0, 360, 360 ) - MH
 
-if len( route ) < 2: die( 'route must contain at least two points' )
 print( f'CHECKPOINT         LAT    LON  TC   IA   ALT  WD WS OAT   IAS CAS TAS   WCA  TH MV  MH DEV  CH       D  DTOT    GS   ETE   ETA   GPH  GAL  REM' )
 print( f'----------------------------------------------------------------------------------------------------------------------------------------------' )
 DTOT = 0
