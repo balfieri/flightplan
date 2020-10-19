@@ -127,14 +127,17 @@ if fuel_gal_taxi <= 0: fuel_gal_taxi = type_info['fuel_gal_taxi']
 if fuel_gph <= 0: fuel_gph = type_info['fuel_gph']         # TODO: need to look at tables for this
 
 #--------------------------------------------------------------
-# Analyze Route
+# Analyze Route and Compute NavLog
 #--------------------------------------------------------------
+MagVar.reinit()
+
+# next 3 functions were transcribed from http://indoavis.co.id/main/tas.html Javascript code
+# (they produce answers that are pretty close to my E6B app):
+#
 lapserate = 0.0019812		        # degrees / foot std. lapse rate C° in to K° result
 tempcorr = 273.15			# Kelvin
 stdtemp0 = 288.15			# Kelvin
 
-# next 3 functions transcribed from http://indoavis.co.id/main/tas.html Javascript code:
-#
 def calc_PA( IA, ALT ):
     #std_ALT = 29.92
     #xx = std_ALT / 29.92126
@@ -160,6 +163,8 @@ def calc_TAS( CAS, DA ):
     TAS = ee * CAS
     return TAS
 
+# functions for interpolating tables in Aircraft.py
+#
 def lerp( f, v0, v1 ):
     return (1-f)*v0 + f*v1
 
@@ -216,7 +221,6 @@ def calc_CAS( IAS, FLAPS, table ):
 def calc_DEV( MH, table ):
     return interpolate_closest_rows( MH, table, 1, 0, 360, 360 ) - MH
 
-MagVar.reinit()
 if len( route ) < 2: die( 'route must contain at least two points' )
 print( f'CHECKPOINT         LAT    LON  TC   IA   ALT  WD WS OAT   IAS CAS TAS   WCA  TH MV  MH DEV  CH       D  DTOT    GS   ETE   ETA   GPH  GAL  REM' )
 print( f'----------------------------------------------------------------------------------------------------------------------------------------------' )
@@ -281,6 +285,9 @@ for i in range( 0, len(route) ):
 
     print( f'{TO_NAME:15s} {TO_LAT:6.2f} {TO_LON:6.2f} {TC:3.0f} {IA:4.0f} {ALT:5.2f} {WD:3.0f} {WS:2.0f} {OAT:3.0f}   {IAS:3.0f} {CAS:3.0f} {TAS:3.0f}   {WCA:3.0f} {TH:3.0f} {MV:2.0f} {MH:3.0f} {DEV:3.0f} {CH:3.0f}   {D:5.1f} {DTOT:5.1f} {GS:5.1f} {ETE:5.1f} {ETA:5.1f}  {GPH:4.1f} {GAL:4.1f} {fuel_gal:4.1f}' )
 
+#--------------------------------------------------------------
+# Print Useful Airport/Runway Information
+#--------------------------------------------------------------
 print()
 print( 'Airport Elevations' )
 print( '------------------' )
