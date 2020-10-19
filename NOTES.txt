@@ -1,8 +1,8 @@
 Airports:
 
 https://www.faa.gov/airports/airport_safety/airportdata_5010/menu/                      - airport facilities, runways, remarks files
-https://www.faa.gov/air_traffic/flight_info/aeronav/aero_data/Airport_Data/             - seems easiest to parse
-https://airnav.com
+https://www.faa.gov/air_traffic/flight_info/aeronav/aero_data/Airport_Data/             - seems easiest to parse, has a lot of info
+https://airnav.com                                                                      - ditto
 https://openflights.org/data.html                                                       - not useful, just major airports
 
 
@@ -35,7 +35,7 @@ https://www.fcc.gov/media/radio/find-terminal-coordinates
 
 Magnetic Variation:
 
-https://github.com/dpyeates/magvar                                                      - JS code in ../magvar, port it here
+https://github.com/dpyeates/magvar                                                      - JS code in ../magvar
 https://www.ngdc.noaa.gov/geomag/WMM/
 https://github.com/space-physics/WMM2015
 
