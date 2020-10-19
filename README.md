@@ -31,6 +31,9 @@ The program is divided into the following files:
     Geodesic.py         -- computes great-circle distance and course 
                            between any two points on Earth (and related things)
     MagVar.py           -- computes magnetic variation at any point on Earth for a given date
+    rawdata/            -- aiport/waypoint GPS coordinates and facility/runway information
+                           that is filtered down by a script called rawdata/make_rawdata.py 
+                           and written to a pickle-format file that can be easily sucked in fp.py
 
 Example run scripts:
 
