@@ -5,13 +5,6 @@ from datetime import datetime,date
 from math import pi,sqrt,sin,cos,tan,asin,acos,atan2
 from Geodesic import DEG_TO_RAD, RAD_TO_DEG
 
-def getTimezoneOffsetSeconds():
-    ts = time.time()
-    return (datetime.fromtimestamp(ts) - datetime.utcfromtimestamp(ts)).total_seconds()
-
-def yymmdd_to_julian_days( yy, mm, dd ):
-    return 2440587.5 + ((datetime(yy, mm, dd) - datetime(1970,1,1)).total_seconds() - getTimezoneOffsetSeconds()) / (24*60*60)
-
 def createArray( len0, len1=0, len2=0 ):
     a = [ 0.0 for i in range(len0) ]
     if len1 != 0:
@@ -323,6 +316,13 @@ def calculateMagVar( julian_days, latIn, lonIn, h ):
     # return zero variation at magnetic pole X=Y=0.
     # E is positive 
     return RAD_TO_DEG*atan2(Y, X) if X != 0.0 or Y != 0.0 else 0.0
+
+def getTimezoneOffsetSeconds():
+    ts = time.time()
+    return (datetime.fromtimestamp(ts) - datetime.utcfromtimestamp(ts)).total_seconds()
+
+def yymmdd_to_julian_days( yy, mm, dd ):
+    return 2440587.5 + ((datetime(yy, mm, dd) - datetime(1970,1,1)).total_seconds() - getTimezoneOffsetSeconds()) / (24*60*60)
 
 def yymmdd_magvar( yy, mm, dd, lat, lon, h=0 ):
     return calculateMagVar( yymmdd_to_julian_days( yy, mm, dd ), lat, lon, h )
