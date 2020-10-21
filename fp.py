@@ -128,117 +128,9 @@ while i < len( sys.argv ):
     else:
         die( f'unknown option: {sys.argv[i]}' )
 
-#--------------------------------------------------------------
-# Defaults Based on Aircraft Type
-#--------------------------------------------------------------
-if type not in Aircraft.types: die( f'unknown aircraft type: {type}' )
-type_info = Aircraft.types[type]
-if tail != "":
-    if tail not in Aircraft.tails: die( f'unknown tail number: {tail}' )
-    tail_info = Aircraft.tails[tail]
-else:
-    tail_info = None
-if fuel_gal <= 0: fuel_gal = type_info['fuel_gal_max']
-if fuel_gal_taxi <= 0: fuel_gal_taxi = type_info['fuel_gal_taxi']
-if fuel_gph <= 0: fuel_gph = type_info['fuel_gph']         # TODO: need to look at tables for this
-
-#--------------------------------------------------------------
-# Compute Weight and Balance
-#--------------------------------------------------------------
-weight_for   = tail if tail_info else type
-print()
-print( f'Weight and Balance for {weight_for}' )
-print()
-total_weight = 0
-total_moment = 0
-empty_weight = tail_info['empty_weight'] if tail_info else type_info['empty_weight'] 
-empty_arm    = tail_info['empty_arm']    if tail_info else type_info['empty_arm'] 
-empty_moment = empty_weight * empty_arm
-total_weight += empty_weight
-total_moment += empty_moment
-fuel_weight  = fuel_gal * type_info['fuel_gal_weight']
-fuel_arm     = type_info['fuel_arm']
-fuel_moment  = fuel_weight * fuel_arm
-total_weight += fuel_weight
-total_moment += fuel_moment
-row1_arm     = type_info['row1_arm']
-row1_moment  = row1_weight * row1_arm
-total_weight += row1_weight
-total_moment += row1_moment
-row2_arm     = type_info['row2_arm']
-row2_moment  = row2_weight * row2_arm
-total_weight += row2_weight
-total_moment += row2_moment
-baggage1_arm     = type_info['baggage1_arm']
-baggage1_moment  = baggage1_weight * baggage1_arm
-total_weight += baggage1_weight
-total_moment += baggage1_moment
-baggage2_arm     = type_info['baggage2_arm']
-baggage2_moment  = baggage2_weight * baggage2_arm
-total_weight += baggage2_weight
-total_moment += baggage2_moment
-total_arm = total_moment / total_weight
-print( f'Item                      Weight    Arm     Moment' )
-print( f'--------------------------------------------------' )
-print( f'Empty Aircraft:           {empty_weight:6.1f} {empty_arm:6.2f}  {empty_moment:9.2f}' )
-print( f'Main Fuel ({fuel_gal:2.0f} Gallons):   {fuel_weight:6.1f} {fuel_arm:6.2f}  {fuel_moment:9.2f}' )
-print( f'Seating Row 1:            {row1_weight:6.1f} {row1_arm:6.2f}  {row1_moment:9.2f}' )
-print( f'Seating Row 2:            {row2_weight:6.1f} {row2_arm:6.2f}  {row2_moment:9.2f}' )
-print( f'Area 1 Baggage:           {baggage1_weight:6.1f} {baggage1_arm:6.2f}  {baggage1_moment:9.2f}' )
-print( f'Area 2 Baggage:           {baggage2_weight:6.1f} {baggage2_arm:6.2f}  {baggage2_moment:9.2f}' )
-print( f'--------------------------------------------------' )
-print( f'Total:                    {total_weight:6.1f} {total_arm:6.2f}  {total_moment:9.2f}' )
-
-#total_weight = 
-#        'fuel_gal_max':         53,             # unusable already counted in empty_weight
-#        'fuel_arm':             48,
-#        'row1_arm':             37,
-#        'row2_arm':             73,
-#        'baggage1_weight_max':  120,
-#        'baggage1_arm':         95,
-#        'baggage2_weight_max':  50,
-#        'baggage2_arm':         123,
-#        'baggage_weight_max':   120,
-
-#--------------------------------------------------------------
-# Analyze Route and Compute NavLog
-#--------------------------------------------------------------
-MagVar.reinit()
-
-# next 3 functions were transcribed from http://indoavis.co.id/main/tas.html Javascript code
-# (they produce answers that are pretty close to my E6B app):
-#
-lapserate = 0.0019812		        # degrees / foot std. lapse rate C° in to K° result
-tempcorr = 273.15			# Kelvin
-stdtemp0 = 288.15			# Kelvin
-
-def calc_PA( IA, ALT ):
-    #std_ALT = 29.92
-    #xx = std_ALT / 29.92126
-    #PA = IA + 145442.2*(1 - pow(xx, 0.190261))
-    PA = IA + 1000*(29.92 - ALT)
-    return PA
-
-def calc_DA( PA, OAT ):
-    stdtemp = stdtemp0 - PA*lapserate
-    Tratio = stdtemp / lapserate
-    xx = stdtemp / (OAT + tempcorr)	
-    DA = PA + Tratio*(1 - pow(xx, 0.234969))
-    return DA
-
-def calc_TAS( CAS, DA ):
-    aa = DA * lapserate                 # Calculate DA temperature
-    bb = stdtemp0 - aa			# Correct DA temp to Kelvin
-    cc = bb / stdtemp0			# Temperature ratio
-    cc1 = 1 / 0.234969			# Used to find .235 root next
-    dd = pow(cc, cc1)			# Establishes Density Ratio
-    dd = pow(dd, .5)			# For TAS, square root of DR
-    ee = 1 / dd				# For TAS; 1 divided by above
-    TAS = ee * CAS
-    return TAS
-
-# functions for interpolating tables in Aircraft.py
-#
+#---------------------------------------------------------
+# Functions for interpolating tables in Aircraft.py
+#---------------------------------------------------------
 def lerp( f, v0, v1 ):
     return (1-f)*v0 + f*v1
 
@@ -286,6 +178,135 @@ def interpolate_closest_rows( a, table, b_col=1, a_col=0, a_modulo=0, ab_modulo=
     b1 = table[r1][b_col]
     return interpolate( a, a0, a1, b0, b1, a_modulo, ab_modulo )
 
+#--------------------------------------------------------------
+# Defaults Based on Aircraft Type
+#--------------------------------------------------------------
+if type not in Aircraft.types: die( f'unknown aircraft type: {type}' )
+type_info = Aircraft.types[type]
+if tail != "":
+    if tail not in Aircraft.tails: die( f'unknown tail number: {tail}' )
+    tail_info = Aircraft.tails[tail]
+else:
+    tail_info = None
+if fuel_gal <= 0: fuel_gal = type_info['fuel_gal_max']
+if fuel_gal_taxi <= 0: fuel_gal_taxi = type_info['fuel_gal_taxi']
+if fuel_gph <= 0: fuel_gph = type_info['fuel_gph']         # TODO: need to look at tables for this
+
+#--------------------------------------------------------------
+# Compute Weight and Balance
+#--------------------------------------------------------------
+weight_for   = tail if tail_info else type
+print()
+print( f'Weight and Balance for {weight_for}' )
+print()
+total_weight = 0
+total_moment = 0
+empty_weight = tail_info['empty_weight'] if tail_info else type_info['empty_weight'] 
+empty_arm    = tail_info['empty_arm']    if tail_info else type_info['empty_arm'] 
+empty_moment = empty_weight * empty_arm
+total_weight += empty_weight
+total_moment += empty_moment
+fuel_weight  = fuel_gal * type_info['fuel_gal_weight']
+fuel_arm     = type_info['fuel_arm']
+fuel_moment  = fuel_weight * fuel_arm
+total_weight += fuel_weight
+total_moment += fuel_moment
+row1_arm     = type_info['row1_arm']
+row1_moment  = row1_weight * row1_arm
+total_weight += row1_weight
+total_moment += row1_moment
+row2_arm     = type_info['row2_arm']
+row2_moment  = row2_weight * row2_arm
+total_weight += row2_weight
+total_moment += row2_moment
+baggage1_arm     = type_info['baggage1_arm']
+baggage1_moment  = baggage1_weight * baggage1_arm
+baggage1_weight_max = type_info['baggage1_weight_max']
+total_weight += baggage1_weight
+total_moment += baggage1_moment
+baggage2_arm     = type_info['baggage2_arm']
+baggage2_moment  = baggage2_weight * baggage2_arm
+baggage2_weight_max = type_info['baggage2_weight_max']
+baggage_weight = baggage1_weight + baggage2_weight
+baggage_weight_max = type_info['baggage_weight_max']
+takeoff_weight_max = type_info['takeoff_weight_max']
+total_weight += baggage2_weight
+total_moment += baggage2_moment
+total_arm = total_moment / total_weight
+print( f'Item                      Weight    Arm     Moment' )
+print( f'--------------------------------------------------' )
+print( f'Empty Aircraft:           {empty_weight:6.1f} {empty_arm:6.2f}  {empty_moment:9.2f}' )
+print( f'Main Fuel ({fuel_gal:2.0f} Gallons):   {fuel_weight:6.1f} {fuel_arm:6.2f}  {fuel_moment:9.2f}' )
+print( f'Seating Row 1:            {row1_weight:6.1f} {row1_arm:6.2f}  {row1_moment:9.2f}' )
+print( f'Seating Row 2:            {row2_weight:6.1f} {row2_arm:6.2f}  {row2_moment:9.2f}' )
+print( f'Area 1 Baggage:           {baggage1_weight:6.1f} {baggage1_arm:6.2f}  {baggage1_moment:9.2f}' )
+print( f'Area 2 Baggage:           {baggage2_weight:6.1f} {baggage2_arm:6.2f}  {baggage2_moment:9.2f}' )
+print( f'--------------------------------------------------' )
+print( f'Total:                    {total_weight:6.1f} {total_arm:6.2f}  {total_moment:9.2f}' )
+print()
+
+if baggage1_weight > baggage1_weight_max: print( f'PROBLEM: area 1 baggage weight ({baggage1_weight}) > max allowed ({baggage1_weight_max})' )
+if baggage2_weight > baggage2_weight_max: print( f'PROBLEM: area 2 baggage weight ({baggage2_weight}) > max allowed ({baggage2_weight_max})' )
+if baggage_weight  > baggage_weight_max:  print( f'PROBLEM: area 1+2 baggage weight ({baggage_weight}) > max allowed ({baggage_weight_max})' )
+if total_weight <= takeoff_weight_max: 
+    print( f'VERIFIED: takeoff weight ({total_weight}) <= max allowed ({takeoff_weight_max})' )
+else:
+    print( f'!!! PROBLEM: takeoff weight ({total_weight}) > max allowed ({takeoff_weight_max})' )
+normal_cg_min = interpolate_closest_rows( total_weight, type_info['normal_cg'], 1 )
+normal_cg_max = interpolate_closest_rows( total_weight, type_info['normal_cg'], 2 )
+if total_arm >= normal_cg_min and total_arm <= normal_cg_max:
+    pct = (total_arm-normal_cg_min) * 100.0 / (normal_cg_max - normal_cg_min)
+    print( f'VERIFIED: takeoff CG ({total_arm:0.2f}) is {pct:.1f}% within normal range ({normal_cg_min:.2f} .. {normal_cg_max:.2f})' )
+else:
+    print( f'!!! PROBLEM: takeoff CG ({total_arm:0.2f}) is OUTSIDE normal range ({normal_cg_min:.2f} .. {normal_cg_max:.2f})' )
+no_fuel_weight = total_weight - fuel_weight
+no_fuel_moment = total_moment - fuel_moment
+no_fuel_arm    = no_fuel_moment / no_fuel_weight
+no_fuel_cg_min = interpolate_closest_rows( no_fuel_weight, type_info['normal_cg'], 1 )
+no_fuel_cg_max = interpolate_closest_rows( no_fuel_weight, type_info['normal_cg'], 2 )
+if no_fuel_arm >= no_fuel_cg_min and no_fuel_arm <= no_fuel_cg_max:
+    pct = (no_fuel_arm-no_fuel_cg_min) * 100.0 / (no_fuel_cg_max - no_fuel_cg_min)
+    print( f'VERIFIED: empty-fuel CG ({no_fuel_arm:0.2f}) is {pct:.1f}% within normal range ({no_fuel_cg_min:.2f} .. {no_fuel_cg_max:.2f})' )
+else:
+    print( f'!!! PROBLEM: empty-fuel CG ({no_fuel_arm:0.2f}) is OUTSIDE normal range ({no_fuel_cg_min:.2f} .. {no_fuel_cg_max:.2f})' )
+
+#--------------------------------------------------------------
+# Analyze Route and Compute NavLog
+#--------------------------------------------------------------
+MagVar.reinit()
+
+# next 3 functions were transcribed from http://indoavis.co.id/main/tas.html Javascript code
+# (they produce answers that are pretty close to my E6B app):
+#
+lapserate = 0.0019812		        # degrees / foot std. lapse rate C° in to K° result
+tempcorr = 273.15			# Kelvin
+stdtemp0 = 288.15			# Kelvin
+
+def calc_PA( IA, ALT ):
+    #std_ALT = 29.92
+    #xx = std_ALT / 29.92126
+    #PA = IA + 145442.2*(1 - pow(xx, 0.190261))
+    PA = IA + 1000*(29.92 - ALT)
+    return PA
+
+def calc_DA( PA, OAT ):
+    stdtemp = stdtemp0 - PA*lapserate
+    Tratio = stdtemp / lapserate
+    xx = stdtemp / (OAT + tempcorr)	
+    DA = PA + Tratio*(1 - pow(xx, 0.234969))
+    return DA
+
+def calc_TAS( CAS, DA ):
+    aa = DA * lapserate                 # Calculate DA temperature
+    bb = stdtemp0 - aa			# Correct DA temp to Kelvin
+    cc = bb / stdtemp0			# Temperature ratio
+    cc1 = 1 / 0.234969			# Used to find .235 root next
+    dd = pow(cc, cc1)			# Establishes Density Ratio
+    dd = pow(dd, .5)			# For TAS, square root of DR
+    ee = 1 / dd				# For TAS; 1 divided by above
+    TAS = ee * CAS
+    return TAS
+
 def calc_CAS( IAS, FLAPS, table ):
     for i in range(len(table)>>1):
         if table[i*2+0] >= FLAPS:
@@ -295,7 +316,6 @@ def calc_CAS( IAS, FLAPS, table ):
 def calc_DEV( MH, table ):
     return interpolate_closest_rows( MH, table, 1, 0, 360, 360 ) - MH
 
-print()
 print()
 print()
 print( f'CHECKPOINT         LAT    LON  TC   IA   ALT  WD WS OAT   IAS CAS TAS   WCA  TH MV  MH DEV  CH       D  DTOT    GS   ETE   ETA   GPH  GAL  REM' )
