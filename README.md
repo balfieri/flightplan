@@ -6,12 +6,12 @@ CURRENT FEATURES<br>
 
 The textual flight plan is compact and can be printed on a single sheet of paper in a navlog format that should be familiar to most pilots.  It performs table lookups for CAS, MV, and DEV.  The flight plan is still somewhat manual. The user must provide average IAS, IA (indicated altitude), WD (wind direction), WS (wind speed), etc. values for each leg. 
 
+The script prints out a weight-and-balance check for the specific tail number and type.
+
 The script prints out elevations for all airports mentioned in the route.
 
 FUTURE FEATURES<br>
 ---------------
-
-The script will compute a weight-and-balance for the specific tail number and type.
 
 The script will look up and show other information such as radio frequencies, runways, FBOs, nearest airports along the route and whether they are within gliding distance from midpoints.
 
