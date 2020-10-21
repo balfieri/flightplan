@@ -256,7 +256,7 @@ normal_cg_min = interpolate_closest_rows( total_weight, type_info['normal_cg'], 
 normal_cg_max = interpolate_closest_rows( total_weight, type_info['normal_cg'], 2 )
 if total_arm >= normal_cg_min and total_arm <= normal_cg_max:
     pct = (total_arm-normal_cg_min) * 100.0 / (normal_cg_max - normal_cg_min)
-    print( f'VERIFIED: takeoff CG ({total_arm:0.2f}) is {pct:.1f}% within normal range ({normal_cg_min:.2f} .. {normal_cg_max:.2f})' )
+    print( f'VERIFIED: takeoff CG ({total_arm:0.2f}) is {pct:.1f}% of normal range ({normal_cg_min:.2f} .. {normal_cg_max:.2f})' )
 else:
     print( f'!!! PROBLEM: takeoff CG ({total_arm:0.2f}) is OUTSIDE normal range ({normal_cg_min:.2f} .. {normal_cg_max:.2f})' )
 no_fuel_weight = total_weight - fuel_weight
@@ -266,7 +266,7 @@ no_fuel_cg_min = interpolate_closest_rows( no_fuel_weight, type_info['normal_cg'
 no_fuel_cg_max = interpolate_closest_rows( no_fuel_weight, type_info['normal_cg'], 2 )
 if no_fuel_arm >= no_fuel_cg_min and no_fuel_arm <= no_fuel_cg_max:
     pct = (no_fuel_arm-no_fuel_cg_min) * 100.0 / (no_fuel_cg_max - no_fuel_cg_min)
-    print( f'VERIFIED: empty-fuel CG ({no_fuel_arm:0.2f}) is {pct:.1f}% within normal range ({no_fuel_cg_min:.2f} .. {no_fuel_cg_max:.2f})' )
+    print( f'VERIFIED: empty-fuel CG ({no_fuel_arm:0.2f}) is {pct:.1f}% of normal range ({no_fuel_cg_min:.2f} .. {no_fuel_cg_max:.2f})' )
 else:
     print( f'!!! PROBLEM: empty-fuel CG ({no_fuel_arm:0.2f}) is OUTSIDE normal range ({no_fuel_cg_min:.2f} .. {no_fuel_cg_max:.2f})' )
 
