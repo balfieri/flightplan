@@ -14,6 +14,7 @@ types = {
         'empty_weight':         1680,
         'empty_arm':            40.5,
         'fuel_gal_max':         53,             # unusable already counted in empty_weight
+        'fuel_gal_weight':      6,
         'fuel_arm':             48,
         'row1_arm':             37,
         'row2_arm':             73,

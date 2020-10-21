@@ -39,6 +39,10 @@ fuel_gal   = 0                  # 0 = use fuel_gal_max for type
 fuel_gal_taxi = 0               # 0 = use default fuel for startup+taxi
 fuel_gph   = 0                  # 0 = use default GPH
 runway     = 36                 # takeoff runway heading
+row1_weight= 190                # assume 190lb pilot only
+row2_weight= 0                  # assume no passengers
+baggage1_weight = 0             # assume nothing in baggage area 1
+baggage2_weight = 0             # assume nothing in baggage area 2
 route      = []
 
 i = 1
@@ -109,6 +113,18 @@ while i < len( sys.argv ):
     elif arg == '-runway':
         runway = int(sys.argv[i])
         i += 1
+    elif arg == '-row1_weight':
+        row1_weight = int(sys.argv[i])
+        i += 1
+    elif arg == '-row2_weight':
+        row2_weight = int(sys.argv[i])
+        i += 1
+    elif arg == '-baggage1_weight':
+        baggage1_weight = int(sys.argv[i])
+        i += 1
+    elif arg == '-baggage2_weight':
+        baggage2_weight = int(sys.argv[i])
+        i += 1
     else:
         die( f'unknown option: {sys.argv[i]}' )
 
@@ -125,6 +141,64 @@ else:
 if fuel_gal <= 0: fuel_gal = type_info['fuel_gal_max']
 if fuel_gal_taxi <= 0: fuel_gal_taxi = type_info['fuel_gal_taxi']
 if fuel_gph <= 0: fuel_gph = type_info['fuel_gph']         # TODO: need to look at tables for this
+
+#--------------------------------------------------------------
+# Compute Weight and Balance
+#--------------------------------------------------------------
+weight_for   = tail if tail_info else type
+print()
+print( f'Weight and Balance for {weight_for}' )
+print()
+total_weight = 0
+total_moment = 0
+empty_weight = tail_info['empty_weight'] if tail_info else type_info['empty_weight'] 
+empty_arm    = tail_info['empty_arm']    if tail_info else type_info['empty_arm'] 
+empty_moment = empty_weight * empty_arm
+total_weight += empty_weight
+total_moment += empty_moment
+fuel_weight  = fuel_gal * type_info['fuel_gal_weight']
+fuel_arm     = type_info['fuel_arm']
+fuel_moment  = fuel_weight * fuel_arm
+total_weight += fuel_weight
+total_moment += fuel_moment
+row1_arm     = type_info['row1_arm']
+row1_moment  = row1_weight * row1_arm
+total_weight += row1_weight
+total_moment += row1_moment
+row2_arm     = type_info['row2_arm']
+row2_moment  = row2_weight * row2_arm
+total_weight += row2_weight
+total_moment += row2_moment
+baggage1_arm     = type_info['baggage1_arm']
+baggage1_moment  = baggage1_weight * baggage1_arm
+total_weight += baggage1_weight
+total_moment += baggage1_moment
+baggage2_arm     = type_info['baggage2_arm']
+baggage2_moment  = baggage2_weight * baggage2_arm
+total_weight += baggage2_weight
+total_moment += baggage2_moment
+total_arm = total_moment / total_weight
+print( f'Item                      Weight    Arm     Moment' )
+print( f'--------------------------------------------------' )
+print( f'Empty Aircraft:           {empty_weight:6.1f} {empty_arm:6.2f}  {empty_moment:9.2f}' )
+print( f'Main Fuel ({fuel_gal:2.0f} Gallons):   {fuel_weight:6.1f} {fuel_arm:6.2f}  {fuel_moment:9.2f}' )
+print( f'Seating Row 1:            {row1_weight:6.1f} {row1_arm:6.2f}  {row1_moment:9.2f}' )
+print( f'Seating Row 2:            {row2_weight:6.1f} {row2_arm:6.2f}  {row2_moment:9.2f}' )
+print( f'Area 1 Baggage:           {baggage1_weight:6.1f} {baggage1_arm:6.2f}  {baggage1_moment:9.2f}' )
+print( f'Area 2 Baggage:           {baggage2_weight:6.1f} {baggage2_arm:6.2f}  {baggage2_moment:9.2f}' )
+print( f'--------------------------------------------------' )
+print( f'Total:                    {total_weight:6.1f} {total_arm:6.2f}  {total_moment:9.2f}' )
+
+#total_weight = 
+#        'fuel_gal_max':         53,             # unusable already counted in empty_weight
+#        'fuel_arm':             48,
+#        'row1_arm':             37,
+#        'row2_arm':             73,
+#        'baggage1_weight_max':  120,
+#        'baggage1_arm':         95,
+#        'baggage2_weight_max':  50,
+#        'baggage2_arm':         123,
+#        'baggage_weight_max':   120,
 
 #--------------------------------------------------------------
 # Analyze Route and Compute NavLog
@@ -221,6 +295,9 @@ def calc_CAS( IAS, FLAPS, table ):
 def calc_DEV( MH, table ):
     return interpolate_closest_rows( MH, table, 1, 0, 360, 360 ) - MH
 
+print()
+print()
+print()
 print( f'CHECKPOINT         LAT    LON  TC   IA   ALT  WD WS OAT   IAS CAS TAS   WCA  TH MV  MH DEV  CH       D  DTOT    GS   ETE   ETA   GPH  GAL  REM' )
 print( f'----------------------------------------------------------------------------------------------------------------------------------------------' )
 DTOT = 0

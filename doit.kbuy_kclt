@@ -1,4 +1,4 @@
-./fp.py -tail N53587 -alt 30.11 \
+./fp.py -tail N53587 -row1_weight 420 -row2_weight 20 -baggage1_weight 10 -alt 30.11 \
         -ias 80  -fuel_gph 12 -runway 24 -wd 338 -ws 1 -oat 18 -p kbuy \
         -name Lake            -ia 2000   -wd 338 -ws 1 -oat 14 -p 36.02,-79.504 \
         -name "Drag Strip"    -ia 3000   -wd 300 -ws 3 -oat 12 -p 35.975,-79.550 \
