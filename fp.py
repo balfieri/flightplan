@@ -126,7 +126,7 @@ while i < len( sys.argv ):
         baggage2_weight = int(sys.argv[i])
         i += 1
     else:
-        die( f'unknown option: {sys.argv[i]}' )
+        die( f'unknown option: {arg}' )
 
 #---------------------------------------------------------
 # Functions for interpolating tables in Aircraft.py
