@@ -1,0 +1,3 @@
+./fp.py -tail N53587 -row1_weight 420 -row2_weight 20 -baggage1_weight 10 -alt 30.05 \
+        -ias 80  -fuel_gph 12 -runway 21         -wd 250 -ws  5 -oat 26 -p ktta \
+        -ias 100                      -ia 3000   -wd 260 -ws 10 -oat 20 -p kbuy \

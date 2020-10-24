@@ -1,4 +1,4 @@
-./fp.py -tail N53587 -row1_weight 420 -row2_weight 20 -baggage1_weight 10 -alt 30.11 \
+./fp.py -tail N53587 -row1_weight 420 -row2_weight 20 -baggage1_weight 10 -alt 30.05 \
         -ias 80  -fuel_gph 12 -runway 24 -wd 240 -ws  3 -oat 26 -p kbuy \
         -name "Lake Mackintosh" -ia 2000 -wd 260 -ws  8 -oat 22 -p 36.02,-79.504 \
         -name "Drag Strip"      -ia 3000 -wd 260 -ws 10 -oat 20 -p 35.975,-79.550 \
