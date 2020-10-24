@@ -13,6 +13,8 @@ It prints out elevations for all airports mentioned in the route.
 FUTURE FEATURES<br>
 ---------------
 
+It will print out a wind card for use in diverting to an alternate airport during a VFR checkride.
+
 It will look up and show other information such as radio frequencies, runways, FBOs, nearest airports along the route and whether they are within gliding distance from midpoints.
 
 It will look up winds aloft information from online weather databases.
