@@ -15,9 +15,11 @@ FUTURE FEATURES<br>
 
 It will print out a wind card for use in diverting to an alternate airport during a VFR checkride.
 
+It will look up METARs, TAFs, winds aloft, etc. from online weather databases.
+
 It will look up and show other information such as radio frequencies, runways, FBOs, nearest airports along the route and whether they are within gliding distance from midpoints.
 
-It will look up winds aloft information from online weather databases.
+It will consult obstacle and terrain-elevation databases and print out closest hazards along the route.
 
 It will compute a near-perfect piecewise integration of each leg. In other words, do minute-by-minute computations and derive integrated GS and fuel consumption along the way.  It will also attempt to emulate takeoff, descent, and landing more accurately, including time departing the pattern and getting back onto the proper course (and opposite for landing).
 

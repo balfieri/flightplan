@@ -1,6 +1,6 @@
 Airports:
 
-https://www.faa.gov/airports/airport_safety/airportdata_5010/menu/                      - airport facilities, runways, remarks files
+https://www.faa.gov/airports/airport_safety/airportdata_5010/menu/                      - airport facilities, runways, remarks files - I grok using rawdata/make_rawdata.py
 https://www.faa.gov/air_traffic/flight_info/aeronav/aero_data/Airport_Data/             - seems easiest to parse, has a lot of info
 https://airnav.com                                                                      - ditto
 https://openflights.org/data.html                                                       - not useful, just major airports
@@ -13,14 +13,14 @@ https://www.faa.gov/air_traffic/flight_info/aeronav/aero_data/Loc_ID_Search/Fixe
 
 Get obstacles from FAA (download):
 
-https://www.faa.gov/air_traffic/flight_info/aeronav/digital_products/dailydof/          - DDOF.csv
+https://www.faa.gov/air_traffic/flight_info/aeronav/digital_products/dailydof/          - DDOF.csv - I will add these to rawdata/make_rawdata.py
 https://www.faa.gov/air_traffic/flight_info/aeronav/digital_products/dof/               - different format, ignore
 
 
 
 Elevation Finders:
 
-http://geospatialtraining.com/using-the-google-maps-elevation-service/       (javascript)
+http://geospatialtraining.com/using-the-google-maps-elevation-service/                  - javascript
 https://www.randymajors.com/p/elevation-on-google-maps.html
 https://www.advancedconverter.com/map-tools/find-altitude-by-coordinates
 https://www.freemaptools.com/elevation-finder.htm
@@ -28,24 +28,24 @@ https://www.freemaptools.com/elevation-finder.htm
 
 GPS points, great-circle distance, initial bearing:
 
-http://www.movable-type.co.uk/scripts/latlong.html - shows formulas
+http://www.movable-type.co.uk/scripts/latlong.html - shows formulas                     - I converted this to Geodesic.py
 https://www.gpsvisualizer.com/calculators
 https://www.fcc.gov/media/radio/find-terminal-coordinates
 
 
 Magnetic Variation:
 
-https://github.com/dpyeates/magvar                                                      - JS code in ../magvar
+https://github.com/dpyeates/magvar                                                      - I converted this to MagVar.py
 https://www.ngdc.noaa.gov/geomag/WMM/
 https://github.com/space-physics/WMM2015
 
 
-How to get winds/temps aloft:
+METARs, TAFs, PIREPs, SIGMETs, AIRMETs:
 
-wget https://www.aviationweather.gov/windtemp/data?region=mia
+https://www.aviationweather.gov/dataserver                                              - text data server returns info in XML format (looks promising)
+https://www.aviationweather.gov/adds/dataserver_current/httpparam?dataSource=metars&requestType=retrieve&format=xml&stationString=PHTO&hoursBeforeNow=4         - example
 
 
-How to get METARs, TAFs, etc.
+Winds/Temps Aloft:
 
-https://www.aviationweather.gov/dataserver
-https://www.aviationweather.gov/adds/dataserver_current/httpparam?dataSource=metars&requestType=retrieve&format=xml&stationString=PHTO&hoursBeforeNow=4
+https://www.aviationweather.gov/windtemp/data?region=mia                                - definitely want to query this too
