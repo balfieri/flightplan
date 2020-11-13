@@ -409,13 +409,17 @@ for i in range(len(route)):
 #--------------------------------------------------------------
 # Print Closest Diversions
 #--------------------------------------------------------------
+def runway_longest( runways ):
+    best = None
+    for runway in runways:
+        if best == None or runway['length'] > best['length']: best = runway
+    return best
+
 print()
 print()
 print( 'Airport Information' )
 print( '-------------------' )
 print()
-print( f'CHECKPOINT         AIRPORT DIST   TC  ELEV PUBLIC?' )
-print( f'--------------------------------------------------' )
 checkpoints = []
 checkpoints.append(route[0].copy())
 checkpoints[0]['id'] = ''
@@ -434,6 +438,7 @@ for did in rawdata:
     dlon = rawdata[did]['lon']
     delev = rawdata[did]['elevation']
     duse  = rawdata[did]['use']
+    drunways = rawdata[did]['runways']
     for i in range(len(checkpoints)):
         id = checkpoints[i]['id']
         if did != id:
@@ -442,8 +447,10 @@ for did in rawdata:
             dist = Geodesic.distance( lat, lon, dlat, dlon )
             if dist < diversions[i]['dist']:
                 tc   = Geodesic.initial_bearing( lat, lon, dlat, dlon )
-                diversions[i] = { 'id': did, 'dist': dist, 'tc': tc, 'elevation': delev, 'use': duse }
+                diversions[i] = { 'id': did, 'dist': dist, 'tc': tc, 'elevation': delev, 'use': duse, 'runways': drunways }
 
+print( f'CHECKPOINT         AIRPORT DIST   TC  ELEV PUBLIC?   LONGEST    LENGTH  WIDTH  CONDITION' )
+print( f'----------------------------------------------------------------------------------------' )
 for i in range(len(checkpoints)):
     name = checkpoints[i]['name']
     did  = diversions[i]['id']
@@ -451,4 +458,9 @@ for i in range(len(checkpoints)):
     tc   = diversions[i]['tc']
     elev = diversions[i]['elevation']
     public = 'Y' if diversions[i]['use'] == 'PU' else 'N'
-    print( f'{name:15s}    {did:7}{dist:5.1f}  {tc:3.0f}  {elev:4.0f}    {public:1s}' )
+    longest = runway_longest( diversions[i]['runways'] )
+    runwayid  = longest['id']
+    length    = longest['length']
+    width     = longest['width']
+    condition = longest['condition']
+    print( f'{name:15s}    {did:7}{dist:5.1f}  {tc:3.0f}  {elev:4.0f}    {public:1s}      {runwayid:10s}  {length:5.0f}   {width:4.0f}     {condition}' )
