@@ -44,6 +44,7 @@ row2_weight= 0                  # assume no passengers
 baggage1_weight = 0             # assume nothing in baggage area 1
 baggage2_weight = 0             # assume nothing in baggage area 2
 route      = []
+runway_length_min = 2000        # minimum runway length for diversions
 
 i = 1
 while i < len( sys.argv ):
@@ -124,6 +125,9 @@ while i < len( sys.argv ):
         i += 1
     elif arg == '-baggage2_weight':
         baggage2_weight = int(sys.argv[i])
+        i += 1
+    elif arg == '-runway_length_min':
+        runway_length_min = int(sys.argv[i])
         i += 1
     else:
         die( f'unknown option: {arg}' )
@@ -445,6 +449,8 @@ for did in rawdata:
     delev = rawdata[did]['elevation']
     duse  = rawdata[did]['use']
     drunways = rawdata[did]['runways']
+    dlongest = runway_longest( drunways )
+    if dlongest['length'] < runway_length_min: continue
     for i in range(len(checkpoints)):
         id = checkpoints[i]['id']
         if did != id:
