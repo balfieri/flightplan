@@ -318,7 +318,7 @@ def calc_DEV( MH, table ):
 
 def route_reverse( rt ):
     rev = []
-    for i in range( 0, len(rt) ):
+    for i in range(len(rt)):
         j = len(rt)-1-i
         rev.append( rt[j].copy() )
         rev[i]['ias'] = rt[i]['ias']                            # hack
@@ -335,7 +335,7 @@ def route_analyze( rt ):
     DTOT = 0
     ETA = 0
     gal_rem = fuel_gal
-    for i in range( 0, len(rt) ):
+    for i in range(len(rt)):
         fm = rt[0] if i == 0 else rt[i-1]
         to = rt[i]
         TO_NAME = to['name']
@@ -402,38 +402,39 @@ route_analyze( return_route )
 # Print Useful Airport/Runway Information
 #--------------------------------------------------------------
 airports = {}
-for i in range( 0, len(route) ):
+for i in range(len(route)):
     id = route[i]['id']
     if id != '': airports[id] = 1
-
-print()
-print( 'Airport Elevations' )
-print( '------------------' )
-for id in airports:
-    if id != '':
-        elevation = rawdata[id]['elevation']
-        print( f'{id:5s} {elevation:4.0f}' )
 
 #--------------------------------------------------------------
 # Print Closest Diversions
 #--------------------------------------------------------------
 print()
 print()
-print( 'Closest Diversions' )
-print( '------------------' )
+print( 'Airport Information' )
+print( '-------------------' )
 print()
-print( f'CHECKPOINT         CLOSEST DIST   TC  ELEV' )
-print( f'------------------------------------------' )
+print( f'CHECKPOINT         AIRPORT DIST   TC  ELEV PUBLIC?' )
+print( f'--------------------------------------------------' )
 checkpoints = []
+checkpoints.append(route[0].copy())
+checkpoints[0]['id'] = ''
+checkpoints[0]['name'] = ''
+j = len(route) - 1
 for i in range(len(route)):
     checkpoints.append(route[i].copy())
-    if i != (len(route)-1): checkpoints.append( {'id': '', 'name': '  mid', 'lat': (route[i]['lat'] + route[i+1]['lat']) / 2.0, 'lon': (route[i]['lon'] + route[i+1]['lon']) / 2.0} )
+    if i != j: checkpoints.append( {'id': '', 'name': '  mid', 'lat': (route[i]['lat'] + route[i+1]['lat']) / 2.0, 'lon': (route[i]['lon'] + route[i+1]['lon']) / 2.0} )
+checkpoints.append(route[j].copy())
+j = len(checkpoints) - 1
+checkpoints[j]['id'] = ''
+checkpoints[j]['name'] = ''
 diversions = [ {'id': '', 'dist': 1e20, 'tc': 0} for i in range(len(checkpoints)) ]
 for did in rawdata:
     dlat = rawdata[did]['lat']
     dlon = rawdata[did]['lon']
     delev = rawdata[did]['elevation']
-    for i in range( 0, len(checkpoints) ):
+    duse  = rawdata[did]['use']
+    for i in range(len(checkpoints)):
         id = checkpoints[i]['id']
         if did != id:
             lat  = checkpoints[i]['lat']
@@ -441,12 +442,13 @@ for did in rawdata:
             dist = Geodesic.distance( lat, lon, dlat, dlon )
             if dist < diversions[i]['dist']:
                 tc   = Geodesic.initial_bearing( lat, lon, dlat, dlon )
-                diversions[i] = { 'id': did, 'dist': dist, 'tc': tc, 'elevation': delev }
+                diversions[i] = { 'id': did, 'dist': dist, 'tc': tc, 'elevation': delev, 'use': duse }
 
-for i in range( 0, len(checkpoints) ):
+for i in range(len(checkpoints)):
     name = checkpoints[i]['name']
     did  = diversions[i]['id']
     dist = diversions[i]['dist']
     tc   = diversions[i]['tc']
     elev = diversions[i]['elevation']
-    print( f'{name:15s}    {did:7}{dist:5.1f}  {tc:3.0f}  {elev:4.0f}' )
+    public = 'Y' if diversions[i]['use'] == 'PU' else 'N'
+    print( f'{name:15s}    {did:7}{dist:5.1f}  {tc:3.0f}  {elev:4.0f}    {public:1s}' )
