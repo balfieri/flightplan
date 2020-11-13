@@ -316,70 +316,87 @@ def calc_CAS( IAS, FLAPS, table ):
 def calc_DEV( MH, table ):
     return interpolate_closest_rows( MH, table, 1, 0, 360, 360 ) - MH
 
-print()
-print()
-print( f'CHECKPOINT         LAT    LON  TC   IA   ALT  WD WS OAT   IAS CAS TAS   WCA  TH MV  MH DEV  CH       D  DTOT    GS   ETE   ETA      GPH  GAL  REM' )
-print( f'-------------------------------------------------------------------------------------------------------------------------------------------------' )
-DTOT = 0
-ETA = 0
-for i in range( 0, len(route) ):
-    fm = route[0] if i == 0 else route[i-1]
-    to = route[i]
-    TO_NAME = to['name']
+def route_reverse( rt ):
+    rev = []
+    for i in range( 0, len(rt) ):
+        j = len(rt)-1-i
+        rev.append( rt[j].copy() )
+        rev[i]['ias'] = rt[i]['ias']                            # hack
+        rev[i]['ia'] = rt[i]['ia']                              # hack  
+    id = rev[0]['id']
+    if id in rawdata: rev[0]['ia'] = rawdata[id]['elevation']   # hack, but usually correct
+    return rev
 
-    FM_LAT = fm['lat']
-    FM_LON = fm['lon']
-    TO_LAT = to['lat']
-    TO_LON = to['lon']
-    FM_IAS = fm['ias']
-    TO_IAS = to['ias']
-    FM_WS  = fm['wind_speed']
-    TO_WS  = to['wind_speed']
-    FM_WD  = fm['wind_dir']
-    TO_WD  = to['wind_dir']
-    FM_IA  = fm['ia']
-    TO_IA  = to['ia']
-    FM_ALT = fm['alt']
-    TO_ALT = to['alt']
-    FM_FLAPS = fm['flaps']
-    TO_FLAPS = to['flaps']
-    FM_OAT = fm['oat']
-    TO_OAT = to['oat']
-    FM_GPH = fm['fuel_gph'] if fm['fuel_gph'] > 0 else fuel_gph
-    TO_GPH = to['fuel_gph'] if to['fuel_gph'] > 0 else fuel_gph
+def route_analyze( rt ):
+    print()
+    print()
+    print( f'CHECKPOINT         LAT    LON  TC   IA   ALT  WD WS OAT   IAS CAS TAS   WCA  TH MV  MH DEV  CH       D  DTOT    GS   ETE   ETA      GPH  GAL  REM' )
+    print( f'-------------------------------------------------------------------------------------------------------------------------------------------------' )
+    DTOT = 0
+    ETA = 0
+    gal_rem = fuel_gal
+    for i in range( 0, len(rt) ):
+        fm = rt[0] if i == 0 else rt[i-1]
+        to = rt[i]
+        TO_NAME = to['name']
 
-    D    = Geodesic.distance( FM_LAT, FM_LON, TO_LAT, TO_LON )
-    DTOT+= D
-    TC   = (runway * 10) if i == 0 else Geodesic.initial_bearing( FM_LAT, FM_LON, TO_LAT, TO_LON )
-    IAS  = TO_IAS 
-    FLAPS= TO_FLAPS
-    CAS  = calc_CAS( IAS, FLAPS, type_info['airspeed_calibration'] )
-    WS   = TO_WS
-    WD   = TO_WD
-    WA   = WD + 180
-    while WA > 360: WA -= 360
-    WTA  = TC - WA
-    DIA  = TO_IA
-    IA   = TO_IA
-    ALT  = TO_ALT
-    OAT  = TO_OAT
-    PA   = calc_PA( IA, ALT )
-    DA   = calc_DA( PA, OAT )
-    TAS  = calc_TAS( CAS, DA )
-    WCA  = RAD_TO_DEG*asin( WS * sin( DEG_TO_RAD*WTA ) / TAS )
-    TH   = TC + WCA
-    MV   = (-MagVar.today_magvar( FM_LAT, FM_LON ) + -MagVar.today_magvar( TO_LAT, TO_LON )) / 2.0
-    MH   = TH + MV
-    DEV  = calc_DEV( MH, tail_info['magnetic_deviation'] ) if tail_info else 0
-    CH   = MH + DEV
-    GS   = TAS*cos( DEG_TO_RAD*WCA ) + WS*cos( DEG_TO_RAD*WTA )
-    ETE  = D/GS * 60.0
-    ETA += ETE
-    GPH  = TO_GPH
-    GAL  = (ETE / 60.0 * GPH) if i != 0 else fuel_gal_taxi
-    fuel_gal -= GAL
+        FM_LAT = fm['lat']
+        FM_LON = fm['lon']
+        TO_LAT = to['lat']
+        TO_LON = to['lon']
+        FM_IAS = fm['ias']
+        TO_IAS = to['ias']
+        FM_WS  = fm['wind_speed']
+        TO_WS  = to['wind_speed']
+        FM_WD  = fm['wind_dir']
+        TO_WD  = to['wind_dir']
+        FM_IA  = fm['ia']
+        TO_IA  = to['ia']
+        FM_ALT = fm['alt']
+        TO_ALT = to['alt']
+        FM_FLAPS = fm['flaps']
+        TO_FLAPS = to['flaps']
+        FM_OAT = fm['oat']
+        TO_OAT = to['oat']
+        FM_GPH = fm['fuel_gph'] if fm['fuel_gph'] > 0 else fuel_gph
+        TO_GPH = to['fuel_gph'] if to['fuel_gph'] > 0 else fuel_gph
 
-    print( f'{TO_NAME:15s} {TO_LAT:6.2f} {TO_LON:6.2f} {TC:3.0f} {IA:4.0f} {ALT:5.2f} {WD:3.0f} {WS:2.0f} {OAT:3.0f}   {IAS:3.0f} {CAS:3.0f} {TAS:3.0f}   {WCA:3.0f} {TH:3.0f} {MV:2.0f} {MH:3.0f} {DEV:3.0f} {CH:3.0f}   {D:5.1f} {DTOT:5.1f} {GS:5.1f} {ETE:5.1f} {ETA:5.1f}     {GPH:4.1f} {GAL:4.1f} {fuel_gal:4.1f}' )
+        D    = Geodesic.distance( FM_LAT, FM_LON, TO_LAT, TO_LON )
+        DTOT+= D
+        TC   = (runway * 10) if i == 0 else Geodesic.initial_bearing( FM_LAT, FM_LON, TO_LAT, TO_LON )
+        IAS  = TO_IAS 
+        FLAPS= TO_FLAPS
+        CAS  = calc_CAS( IAS, FLAPS, type_info['airspeed_calibration'] )
+        WS   = TO_WS
+        WD   = TO_WD
+        WA   = WD + 180
+        while WA > 360: WA -= 360
+        WTA  = TC - WA
+        DIA  = TO_IA
+        IA   = TO_IA
+        ALT  = TO_ALT
+        OAT  = TO_OAT
+        PA   = calc_PA( IA, ALT )
+        DA   = calc_DA( PA, OAT )
+        TAS  = calc_TAS( CAS, DA )
+        WCA  = RAD_TO_DEG*asin( WS * sin( DEG_TO_RAD*WTA ) / TAS )
+        TH   = TC + WCA
+        MV   = (-MagVar.today_magvar( FM_LAT, FM_LON ) + -MagVar.today_magvar( TO_LAT, TO_LON )) / 2.0
+        MH   = TH + MV
+        DEV  = calc_DEV( MH, tail_info['magnetic_deviation'] ) if tail_info else 0
+        CH   = MH + DEV
+        GS   = TAS*cos( DEG_TO_RAD*WCA ) + WS*cos( DEG_TO_RAD*WTA )
+        ETE  = D/GS * 60.0
+        ETA += ETE
+        GPH  = TO_GPH
+        GAL  = (ETE / 60.0 * GPH) if i != 0 else fuel_gal_taxi
+        gal_rem -= GAL
+
+        print( f'{TO_NAME:15s} {TO_LAT:6.2f} {TO_LON:6.2f} {TC:3.0f} {IA:4.0f} {ALT:5.2f} {WD:3.0f} {WS:2.0f} {OAT:3.0f}   {IAS:3.0f} {CAS:3.0f} {TAS:3.0f}   {WCA:3.0f} {TH:3.0f} {MV:2.0f} {MH:3.0f} {DEV:3.0f} {CH:3.0f}   {D:5.1f} {DTOT:5.1f} {GS:5.1f} {ETE:5.1f} {ETA:5.1f}     {GPH:4.1f} {GAL:4.1f} {gal_rem:4.1f}' )
+
+route_analyze( route )
+return_route = route_reverse( route )
+route_analyze( return_route )
 
 #--------------------------------------------------------------
 # Print Useful Airport/Runway Information
