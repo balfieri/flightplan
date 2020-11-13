@@ -427,7 +427,11 @@ checkpoints[0]['name'] = ''
 j = len(route) - 1
 for i in range(len(route)):
     checkpoints.append(route[i].copy())
-    if i != j: checkpoints.append( {'id': '', 'name': '  mid', 'lat': (route[i]['lat'] + route[i+1]['lat']) / 2.0, 'lon': (route[i]['lon'] + route[i+1]['lon']) / 2.0} )
+    if i != j: 
+        for pct in [25, 50, 75]:
+            name = f'  {pct}%'
+            f = pct/100.0
+            checkpoints.append( { 'id': '', 'name': name, 'lat': lerp( f, route[i]['lat'], route[i+1]['lat'] ), 'lon': lerp( f, route[i]['lon'], route[i+1]['lon'] ) } )
 checkpoints.append(route[j].copy())
 j = len(checkpoints) - 1
 checkpoints[j]['id'] = ''
