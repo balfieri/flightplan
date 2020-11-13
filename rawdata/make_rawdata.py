@@ -21,6 +21,25 @@ def latlon_to_decimal( latlon ):
     return latlon
 
 def read():
+    print( f'Reading NfdcRunways.csv...' )
+    runways = {}                
+    with open( 'NfdcRunways.csv', 'r' ) as csv_file:
+        reader = csv.reader( csv_file )
+        have_one = False
+        for row in reader:
+            if not have_one:
+                # skip first line
+                have_one = True
+                continue
+            site = row[0]
+            runway = { 'id':            row[2],
+                       'length':        int(row[3]),
+                       'width':         int(row[4]),
+                       'condition':     row[5] }
+            if site not in runways: runways[site] = []
+            runways[site].append( runway )
+        csv_file.close()
+
     print( f'Reading NfdcFacilities.csv...' )
     with open( 'NfdcFacilities.csv', 'r' ) as csv_file:
         reader = csv.reader( csv_file )
@@ -37,10 +56,13 @@ def read():
                             'state':     row[6],
                             'city':      row[10],
                             'name':      row[11],
+                            'use':       row[13],
                             'lat':       latlon_to_decimal( row[23] ),
                             'lon':       latlon_to_decimal( row[25] ),
-                            'elevation': int(row[27]) }
-            
+                            'elevation': int(row[27]),
+                            'unicom_freq': row[73],
+                            'ctaf_freq': row[74],
+                            'runways':   runways[row[0]] if row[0] in runways else [] }
         csv_file.close()
 
 def write():
