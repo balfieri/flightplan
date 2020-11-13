@@ -47,6 +47,8 @@ types = {
             [ 20,   85 ],
             [ 30,   85 ]
         ],
+        'Vg':   68,
+        'best_glide_ratio':     1.5,        # nm for each 1000 ft above terrain, Vg, prop windmilling, flaps up, zero wind
 
         # Performance 
         #
