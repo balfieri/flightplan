@@ -7,6 +7,7 @@
 #
 import csv
 import pickle
+import re
 
 rawdata = {}
 
@@ -32,7 +33,7 @@ def read():
                 have_one = True
                 continue
             site = row[0]
-            runway = { 'id':            row[2],
+            runway = { 'id':            re.sub( r'\'', '', row[2] ),
                        'length':        int(row[3]),
                        'width':         int(row[4]),
                        'condition':     row[5] }
