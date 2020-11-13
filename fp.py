@@ -434,6 +434,8 @@ checkpoints[j]['id'] = ''
 checkpoints[j]['name'] = ''
 diversions = [ {'id': '', 'dist': 1e20, 'tc': 0} for i in range(len(checkpoints)) ]
 for did in rawdata:
+    dtype = rawdata[did]['type']
+    if dtype != 'AIRPORT': continue
     dlat = rawdata[did]['lat']
     dlon = rawdata[did]['lon']
     delev = rawdata[did]['elevation']
@@ -449,8 +451,8 @@ for did in rawdata:
                 tc   = Geodesic.initial_bearing( lat, lon, dlat, dlon )
                 diversions[i] = { 'id': did, 'dist': dist, 'tc': tc, 'elevation': delev, 'use': duse, 'runways': drunways }
 
-print( f'CHECKPOINT         AIRPORT DIST   TC  ELEV PUBLIC?   LONGEST    LENGTH  WIDTH  CONDITION' )
-print( f'----------------------------------------------------------------------------------------' )
+print( f'CHECKPOINT         AIRPORT DIST   TC  ELEV PUBLIC?   LONGEST    LENGTH  WIDTH  PATTERN CONDITION' )
+print( f'------------------------------------------------------------------------------------------------' )
 for i in range(len(checkpoints)):
     name = checkpoints[i]['name']
     did  = diversions[i]['id']
@@ -462,5 +464,8 @@ for i in range(len(checkpoints)):
     runwayid  = longest['id']
     length    = longest['length']
     width     = longest['width']
+    pattern   = 'R' if longest['pattern'] == 'Y' else 'L'
+    pattern_rcp = 'R' if longest['pattern_rcp'] == 'Y' else 'L'
+    pattern   = f'{pattern}/{pattern_rcp}'
     condition = longest['condition']
-    print( f'{name:15s}    {did:7}{dist:5.1f}  {tc:3.0f}  {elev:4.0f}    {public:1s}      {runwayid:10s}  {length:5.0f}   {width:4.0f}     {condition}' )
+    print( f'{name:15s}    {did:7}{dist:5.1f}  {tc:3.0f}  {elev:4.0f}    {public:1s}      {runwayid:10s}  {length:5.0f}   {width:4.0f}      {pattern}    {condition}' )

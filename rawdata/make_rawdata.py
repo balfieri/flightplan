@@ -33,10 +33,13 @@ def read():
                 have_one = True
                 continue
             site = row[0]
-            runway = { 'id':            re.sub( r'\'', '', row[2] ),
+            runway = { 'site':          site,
+                       'id':            re.sub( r'\'', '', row[2] ),
                        'length':        int(row[3]),
                        'width':         int(row[4]),
-                       'condition':     row[5] }
+                       'condition':     row[5],
+                       'pattern':       row[12],
+                       'pattern_rcp':   row[46]}
             if site not in runways: runways[site] = []
             runways[site].append( runway )
         csv_file.close()
@@ -53,7 +56,7 @@ def read():
             id = row[len(row)-2]
             if id == '': id = row[2].replace( "'", "" )
             rawdata[id] = { 'site':      row[0],
-                            'type ':     row[1],
+                            'type':      row[1],
                             'state':     row[6],
                             'city':      row[10],
                             'name':      row[11],
