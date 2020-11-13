@@ -427,7 +427,7 @@ print( f'------------------------------------------' )
 checkpoints = []
 for i in range(len(route)):
     checkpoints.append(route[i].copy())
-    if i != (len(route)-1): checkpoints.append( {'id': '', 'name': '  midpoint', 'lat': (route[i]['lat'] + route[i+1]['lat']) / 2.0, 'lon': (route[i]['lon'] + route[i+1]['lon']) / 2.0} )
+    if i != (len(route)-1): checkpoints.append( {'id': '', 'name': '  mid', 'lat': (route[i]['lat'] + route[i+1]['lat']) / 2.0, 'lon': (route[i]['lon'] + route[i+1]['lon']) / 2.0} )
 diversions = [ {'id': '', 'dist': 1e20, 'tc': 0} for i in range(len(checkpoints)) ]
 for did in rawdata:
     dlat = rawdata[did]['lat']
