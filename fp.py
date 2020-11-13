@@ -401,11 +401,52 @@ route_analyze( return_route )
 #--------------------------------------------------------------
 # Print Useful Airport/Runway Information
 #--------------------------------------------------------------
+airports = {}
+for i in range( 0, len(route) ):
+    id = route[i]['id']
+    if id != '': airports[id] = 1
+
 print()
 print( 'Airport Elevations' )
 print( '------------------' )
-for i in range( 0, len(route) ):
-    id = route[i]['id']
+for id in airports:
     if id != '':
         elevation = rawdata[id]['elevation']
         print( f'{id:5s} {elevation:4.0f}' )
+
+#--------------------------------------------------------------
+# Print Closest Diversions
+#--------------------------------------------------------------
+print()
+print()
+print( 'Closest Diversions' )
+print( '------------------' )
+print()
+print( f'CHECKPOINT         CLOSEST DIST   TC  ELEV' )
+print( f'------------------------------------------' )
+checkpoints = []
+for i in range(len(route)):
+    checkpoints.append(route[i].copy())
+    if i != (len(route)-1): checkpoints.append( {'id': '', 'name': '  midpoint', 'lat': (route[i]['lat'] + route[i+1]['lat']) / 2.0, 'lon': (route[i]['lon'] + route[i+1]['lon']) / 2.0} )
+diversions = [ {'id': '', 'dist': 1e20, 'tc': 0} for i in range(len(checkpoints)) ]
+for did in rawdata:
+    dlat = rawdata[did]['lat']
+    dlon = rawdata[did]['lon']
+    delev = rawdata[did]['elevation']
+    for i in range( 0, len(checkpoints) ):
+        id = checkpoints[i]['id']
+        if did != id:
+            lat  = checkpoints[i]['lat']
+            lon  = checkpoints[i]['lon']
+            dist = Geodesic.distance( lat, lon, dlat, dlon )
+            if dist < diversions[i]['dist']:
+                tc   = Geodesic.initial_bearing( lat, lon, dlat, dlon )
+                diversions[i] = { 'id': did, 'dist': dist, 'tc': tc, 'elevation': delev }
+
+for i in range( 0, len(checkpoints) ):
+    name = checkpoints[i]['name']
+    did  = diversions[i]['id']
+    dist = diversions[i]['dist']
+    tc   = diversions[i]['tc']
+    elev = diversions[i]['elevation']
+    print( f'{name:15s}    {did:7}{dist:5.1f}  {tc:3.0f}  {elev:4.0f}' )
