@@ -466,7 +466,7 @@ checkpoints.append(route[j].copy())
 j = len(checkpoints) - 1
 checkpoints[j]['id'] = ''
 checkpoints[j]['name'] = ''
-diversions = [ {'id': '', 'D': 1e20} for i in range(len(checkpoints)) ]
+diversions = [ {'id': '', 'D': 1e20, 'ETE': 1e20} for i in range(len(checkpoints)) ]
 for did in rawdata:
     dtype = rawdata[did]['type']
     if dtype != 'AIRPORT': continue
@@ -483,14 +483,13 @@ for did in rawdata:
             lat  = checkpoints[i]['lat']
             lon  = checkpoints[i]['lon']
             dist = Geodesic.distance( lat, lon, dlat, dlon )
-            old_D = diversions[i]['D']
-            if dist < 200.0 and dist < (2*old_D):
+            if dist < 200.0 and dist < (2*diversions[i]['D']):
                 to = checkpoints[i].copy()
                 to['lat'] = dlat
                 to['lon'] = dlon
                 c = calc_segment( checkpoints[i], to )
                 D = c['D']
-                if c['D'] < old_D:
+                if c['ETE'] < diversions[i]['ETE']:
                     c['id'] = did
                     c['lat'] = dlat
                     c['lon'] = dlon
