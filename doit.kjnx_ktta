@@ -1,0 +1,7 @@
+./fp.py -tail N53587 -row1_weight 232 -row2_weight 5 -baggage1_weight 10 -alt 30.38 \
+        -ias 80  -fuel_gph 12 -runway 21         -wd 210 -ws  0 -oat 11 -p kjnx \
+                 -name "I-40"         -ia 2000   -wd 210 -ws  8 -oat  8 -p 35.552,-78.577 \
+        -ias 110 -name "Fuquay"       -ia 4500   -wd 210 -ws  7 -oat  7 -p 35.564,-78.806 \
+                 -name "Harris Lake"                                    -p 35.574,-78.966 \
+        -ias 100                      -ia 2000   -wd 210 -ws  8 -oat  8 -p ktta \
+        -show_return_route 0
