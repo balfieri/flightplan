@@ -320,7 +320,7 @@ def calc_CAS( IAS, FLAPS, table ):
 def calc_DEV( MH, table ):
     return interpolate_closest_rows( MH, table, 1, 0, 360, 360 ) - MH
 
-def route_reverse( rt ):
+def reverse_route( rt ):
     rev = []
     for i in range(len(rt)):
         j = len(rt)-1-i
@@ -330,6 +330,51 @@ def route_reverse( rt ):
     id = rev[0]['id']
     if id in rawdata: rev[0]['ia'] = rawdata[id]['elevation']   # hack, but usually correct
     return rev
+
+def calc_segment( fm, to ):
+    FM_LAT = fm['lat']
+    FM_LON = fm['lon']
+    TO_LAT = to['lat']
+    TO_LON = to['lon']
+    FM_IAS = fm['ias']
+    TO_IAS = to['ias']
+    FM_WS  = fm['wind_speed']
+    TO_WS  = to['wind_speed']
+    FM_WD  = fm['wind_dir']
+    TO_WD  = to['wind_dir']
+    FM_IA  = fm['ia']
+    TO_IA  = to['ia']
+    FM_ALT = fm['alt']
+    TO_ALT = to['alt']
+    FM_FLAPS = fm['flaps']
+    TO_FLAPS = to['flaps']
+    FM_OAT = fm['oat']
+    TO_OAT = to['oat']
+    FM_GPH = fm['fuel_gph'] if fm['fuel_gph'] > 0 else fuel_gph
+    TO_GPH = to['fuel_gph'] if to['fuel_gph'] > 0 else fuel_gph
+
+    D    = Geodesic.distance( FM_LAT, FM_LON, TO_LAT, TO_LON )
+    TC   = (runway * 10) if i == 0 else Geodesic.initial_bearing( FM_LAT, FM_LON, TO_LAT, TO_LON )
+    CAS  = calc_CAS( TO_IAS, TO_FLAPS, type_info['airspeed_calibration'] )
+    WA   = TO_WD + 180
+    while WA > 360: WA -= 360
+    WTA  = TC - WA
+    DIA  = TO_IA
+    PA   = calc_PA( TO_IA, TO_ALT )
+    DA   = calc_DA( PA, TO_OAT )
+    TAS  = calc_TAS( CAS, DA )
+    WCA  = RAD_TO_DEG*asin( TO_WS * sin( DEG_TO_RAD*WTA ) / TAS )
+    TH   = TC + WCA
+    MV   = (-MagVar.today_magvar( FM_LAT, FM_LON ) + -MagVar.today_magvar( TO_LAT, TO_LON )) / 2.0
+    MH   = TH + MV
+    DEV  = calc_DEV( MH, tail_info['magnetic_deviation'] ) if tail_info else 0
+    CH   = MH + DEV
+    GS   = TAS*cos( DEG_TO_RAD*WCA ) + TO_WS*cos( DEG_TO_RAD*WTA )
+    ETE  = D/GS * 60.0
+    GPH  = TO_GPH
+    GAL  = (ETE / 60.0 * GPH) if i != 0 else fuel_gal_taxi
+
+    return { 'TC': TC, 'CAS': CAS, 'TAS': TAS, 'WCA': WCA, 'TH': TH, 'MV': MV, 'MH': MH, 'DEV': DEV, 'CH': CH, 'D': D, 'GS': GS, 'ETE': ETE, 'GPH': GPH, 'GAL': GAL }
 
 def route_analyze( rt ):
     print()
@@ -342,64 +387,40 @@ def route_analyze( rt ):
     for i in range(len(rt)):
         fm = rt[0] if i == 0 else rt[i-1]
         to = rt[i]
-        TO_NAME = to['name']
+        c = calc_segment( fm, to )
 
-        FM_LAT = fm['lat']
-        FM_LON = fm['lon']
+        TO_NAME = to['name']
         TO_LAT = to['lat']
         TO_LON = to['lon']
-        FM_IAS = fm['ias']
         TO_IAS = to['ias']
-        FM_WS  = fm['wind_speed']
         TO_WS  = to['wind_speed']
-        FM_WD  = fm['wind_dir']
         TO_WD  = to['wind_dir']
-        FM_IA  = fm['ia']
         TO_IA  = to['ia']
-        FM_ALT = fm['alt']
         TO_ALT = to['alt']
-        FM_FLAPS = fm['flaps']
-        TO_FLAPS = to['flaps']
-        FM_OAT = fm['oat']
         TO_OAT = to['oat']
-        FM_GPH = fm['fuel_gph'] if fm['fuel_gph'] > 0 else fuel_gph
-        TO_GPH = to['fuel_gph'] if to['fuel_gph'] > 0 else fuel_gph
+        TC     = c['TC']
+        CAS    = c['CAS']
+        TAS    = c['TAS']
+        WCA    = c['WCA']
+        TH     = c['TH']
+        MV     = c['MV']
+        MH     = c['MH']
+        DEV    = c['DEV']
+        CH     = c['CH']
+        D      = c['D']
+        GS     = c['GS']
+        ETE    = c['ETE']
+        GPH    = c['GPH']
+        GAL    = c['GAL']
 
-        D    = Geodesic.distance( FM_LAT, FM_LON, TO_LAT, TO_LON )
-        DTOT+= D
-        TC   = (runway * 10) if i == 0 else Geodesic.initial_bearing( FM_LAT, FM_LON, TO_LAT, TO_LON )
-        IAS  = TO_IAS 
-        FLAPS= TO_FLAPS
-        CAS  = calc_CAS( IAS, FLAPS, type_info['airspeed_calibration'] )
-        WS   = TO_WS
-        WD   = TO_WD
-        WA   = WD + 180
-        while WA > 360: WA -= 360
-        WTA  = TC - WA
-        DIA  = TO_IA
-        IA   = TO_IA
-        ALT  = TO_ALT
-        OAT  = TO_OAT
-        PA   = calc_PA( IA, ALT )
-        DA   = calc_DA( PA, OAT )
-        TAS  = calc_TAS( CAS, DA )
-        WCA  = RAD_TO_DEG*asin( WS * sin( DEG_TO_RAD*WTA ) / TAS )
-        TH   = TC + WCA
-        MV   = (-MagVar.today_magvar( FM_LAT, FM_LON ) + -MagVar.today_magvar( TO_LAT, TO_LON )) / 2.0
-        MH   = TH + MV
-        DEV  = calc_DEV( MH, tail_info['magnetic_deviation'] ) if tail_info else 0
-        CH   = MH + DEV
-        GS   = TAS*cos( DEG_TO_RAD*WCA ) + WS*cos( DEG_TO_RAD*WTA )
-        ETE  = D/GS * 60.0
+        DTOT += D
         ETA += ETE
-        GPH  = TO_GPH
-        GAL  = (ETE / 60.0 * GPH) if i != 0 else fuel_gal_taxi
         gal_rem -= GAL
 
-        print( f'{TO_NAME:15s} {TO_LAT:6.2f} {TO_LON:6.2f} {TC:3.0f} {IA:4.0f} {ALT:5.2f} {WD:3.0f} {WS:2.0f} {OAT:3.0f}   {IAS:3.0f} {CAS:3.0f} {TAS:3.0f}   {WCA:3.0f} {TH:3.0f} {MV:2.0f} {MH:3.0f} {DEV:3.0f} {CH:3.0f}   {D:5.1f} {DTOT:5.1f} {GS:5.1f} {ETE:5.1f} {ETA:5.1f}     {GPH:4.1f} {GAL:4.1f} {gal_rem:4.1f}' )
+        print( f'{TO_NAME:15s} {TO_LAT:6.2f} {TO_LON:6.2f} {TC:3.0f} {TO_IA:4.0f} {TO_ALT:5.2f} {TO_WD:3.0f} {TO_WS:2.0f} {TO_OAT:3.0f}   {TO_IAS:3.0f} {CAS:3.0f} {TAS:3.0f}   {WCA:3.0f} {TH:3.0f} {MV:2.0f} {MH:3.0f} {DEV:3.0f} {CH:3.0f}   {D:5.1f} {DTOT:5.1f} {GS:5.1f} {ETE:5.1f} {ETA:5.1f}     {GPH:4.1f} {GAL:4.1f} {gal_rem:4.1f}' )
 
 route_analyze( route )
-return_route = route_reverse( route )
+return_route = reverse_route( route )
 route_analyze( return_route )
 
 #--------------------------------------------------------------
@@ -435,7 +456,12 @@ for i in range(len(route)):
         for pct in [25, 50, 75]:
             name = f'  {pct}%'
             f = pct/100.0
-            checkpoints.append( { 'id': '', 'name': name, 'lat': lerp( f, route[i]['lat'], route[i+1]['lat'] ), 'lon': lerp( f, route[i]['lon'], route[i+1]['lon'] ) } )
+            cp = route[i].copy()
+            cp['id']  = ''
+            cp['name'] = name
+            cp['lat'] = lerp( f, route[i]['lat'], route[i+1]['lat'] )
+            cp['lon'] = lerp( f, route[i]['lon'], route[i+1]['lon'] )
+            checkpoints.append( cp )
 checkpoints.append(route[j].copy())
 j = len(checkpoints) - 1
 checkpoints[j]['id'] = ''
