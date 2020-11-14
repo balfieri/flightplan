@@ -466,7 +466,7 @@ checkpoints.append(route[j].copy())
 j = len(checkpoints) - 1
 checkpoints[j]['id'] = ''
 checkpoints[j]['name'] = ''
-diversions = [ {'id': '', 'dist': 1e20, 'tc': 0} for i in range(len(checkpoints)) ]
+diversions = [ {'id': '', 'D': 1e20} for i in range(len(checkpoints)) ]
 for did in rawdata:
     dtype = rawdata[did]['type']
     if dtype != 'AIRPORT': continue
@@ -483,17 +483,30 @@ for did in rawdata:
             lat  = checkpoints[i]['lat']
             lon  = checkpoints[i]['lon']
             dist = Geodesic.distance( lat, lon, dlat, dlon )
-            if dist < diversions[i]['dist']:
-                tc   = Geodesic.initial_bearing( lat, lon, dlat, dlon )
-                diversions[i] = { 'id': did, 'dist': dist, 'tc': tc, 'elevation': delev, 'use': duse, 'runways': drunways }
+            old_D = diversions[i]['D']
+            if dist < 200.0 and dist < (2*old_D):
+                to = checkpoints[i].copy()
+                to['lat'] = dlat
+                to['lon'] = dlon
+                c = calc_segment( checkpoints[i], to )
+                D = c['D']
+                if c['D'] < old_D:
+                    c['id'] = did
+                    c['lat'] = dlat
+                    c['lon'] = dlon
+                    c['elevation'] = delev
+                    c['use'] = duse
+                    c['runways'] = drunways
+                    diversions[i] = c
 
-print( f'CHECKPOINT         AIRPORT DIST   TC  ELEV PUBLIC?   LONGEST    LENGTH  WIDTH  PATTERN CONDITION' )
-print( f'------------------------------------------------------------------------------------------------' )
+print( f'CHECKPOINT         AIRPORT    CH     D   ETE  ELEV PUBLIC?   LONGEST    LENGTH  WIDTH  PATTERN CONDITION' )
+print( f'--------------------------------------------------------------------------------------------------------' )
 for i in range(len(checkpoints)):
     name = checkpoints[i]['name']
     did  = diversions[i]['id']
-    dist = diversions[i]['dist']
-    tc   = diversions[i]['tc']
+    CH   = diversions[i]['CH']
+    D    = diversions[i]['D']
+    ETE  = diversions[i]['ETE']
     elev = diversions[i]['elevation']
     public = 'Y' if diversions[i]['use'] == 'PU' else 'N'
     longest = runway_longest( diversions[i]['runways'] )
@@ -504,4 +517,4 @@ for i in range(len(checkpoints)):
     pattern_rcp = 'R' if longest['pattern_rcp'] == 'Y' else 'L'
     pattern   = f'{pattern}/{pattern_rcp}'
     condition = longest['condition']
-    print( f'{name:15s}    {did:7}{dist:5.1f}  {tc:3.0f}  {elev:4.0f}    {public:1s}      {runwayid:10s}  {length:5.0f}   {width:4.0f}      {pattern}    {condition}' )
+    print( f'{name:15s}    {did:7}   {CH:3.0f}  {D:4.1f}  {ETE:4.1f}  {elev:4.0f}    {public:1s}      {runwayid:10s}  {length:5.0f}   {width:4.0f}      {pattern}    {condition}' )
