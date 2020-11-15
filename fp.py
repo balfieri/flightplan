@@ -475,6 +475,7 @@ diversions = [ {'id': '', 'D': 1e20, 'ETE': 1e20} for i in range(len(checkpoints
 for did in rawdata:
     dtype = rawdata[did]['type']
     if dtype != 'AIRPORT': continue
+    dname = rawdata[did]['name']
     dlat = rawdata[did]['lat']
     dlon = rawdata[did]['lon']
     delev = rawdata[did]['elevation']
@@ -498,6 +499,7 @@ for did in rawdata:
                 D = c['D']
                 if c['ETE'] < diversions[i]['ETE']:
                     c['id'] = did
+                    c['name'] = dname
                     c['lat'] = dlat
                     c['lon'] = dlon
                     c['elevation'] = delev
@@ -507,11 +509,12 @@ for did in rawdata:
                     c['runways'] = drunways
                     diversions[i] = c
 
-print( f'CHECKPOINT         ICAO   CH    D  ETE ELEV PUBL    CTAF  LONGEST LENGTH WIDTH PATT   COND' )
-print( f'------------------------------------------------------------------------------------------' )
+print( f'CHECKPOINT         ICAO   CH    D  ETE ELEV PUBL    CTAF  LONGEST LENGTH WIDTH PATT   COND  NAME' )
+print( f'--------------------------------------------------------------------------------------------------------------------------------' )
 for i in range(len(checkpoints)):
     name = checkpoints[i]['name']
     did  = diversions[i]['id']
+    dname= diversions[i]['name']
     CH   = diversions[i]['CH']
     D    = diversions[i]['D']
     ETE  = diversions[i]['ETE']
@@ -527,4 +530,4 @@ for i in range(len(checkpoints)):
     pattern_rcp = 'R' if longest['pattern_rcp'] == 'Y' else 'L'
     pattern   = f'{pattern}/{pattern_rcp}'
     condition = longest['condition']
-    print( f'{name:15s}    {did:4}  {CH:3.0f} {D:4.1f} {ETE:4.1f} {elev:4.0f}  {public:1s}   {ctaf_freq:7s}  {runwayid:7s}  {length:5.0f}  {width:4.0f}  {pattern} {condition:6s}' )
+    print( f'{name:15s}    {did:4}  {CH:3.0f} {D:4.1f} {ETE:4.1f} {elev:4.0f}  {public:1s}   {ctaf_freq:7s}  {runwayid:7s}  {length:5.0f}  {width:4.0f}  {pattern} {condition:6s}  {dname}' )
