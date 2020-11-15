@@ -447,8 +447,8 @@ def runway_longest( runways ):
 
 print()
 print()
-print( 'Airport Information' )
-print( '-------------------' )
+print( 'Closest Diversions' )
+print( '------------------' )
 print()
 checkpoints = []
 checkpoints.append(route[0].copy())
