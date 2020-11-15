@@ -130,8 +130,8 @@ while i < len( sys.argv ):
     elif arg == '-runway_length_min':
         runway_length_min = int(sys.argv[i])
         i += 1
-    elif arg == '-show_return_route':
-        show_return_route = int(sys.argv[i])
+    elif arg == '-show_return':
+        show_return = int(sys.argv[i])
         i += 1
     else:
         die( f'unknown option: {arg}' )
@@ -424,7 +424,7 @@ def route_analyze( rt ):
         print( f'{TO_NAME:15s} {TO_LAT:6.2f} {TO_LON:6.2f} {TC:3.0f} {TO_IA:4.0f} {TO_ALT:5.2f} {TO_WD:3.0f} {TO_WS:2.0f} {TO_OAT:3.0f}   {TO_IAS:3.0f} {CAS:3.0f} {TAS:3.0f}   {WCA:3.0f} {TH:3.0f} {MV:2.0f} {MH:3.0f} {DEV:3.0f} {CH:3.0f}   {D:5.1f} {DTOT:5.1f} {GS:5.1f} {ETE:5.1f} {ETA:5.1f}     {GPH:4.1f} {GAL:4.1f} {gal_rem:4.1f}' )
 
 route_analyze( route )
-if show_return_route:
+if show_return:
     return_route = reverse_route( route )
     route_analyze( return_route )
 
