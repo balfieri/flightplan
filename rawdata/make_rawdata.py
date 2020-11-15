@@ -5,14 +5,39 @@
 # Downloads various interesting data files from the internet and extracts information needed by ../fp.py and stores
 # it into a file called rawdata.dat which is saved in the repository occasionally.   
 #
+import os
+import subprocess
+import time
 import csv
 import pickle
 import re
+
+def die( msg ):
+    print( f'ERROR: {msg}' )
+    sys.exit( 1 )
+
+cmd_en = True
+
+def cmd( c ):  
+    print( c )
+    if cmd_en:
+        info = subprocess.run( c, shell=True, text=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT )
+        if info.returncode != 0: die( f'command failed: {c}' )
+        return info.stdout
+    else:
+        return ''
+
+def match( s, pattern ): 
+    return re.compile( pattern ).match( s )
+
+def subst( s, pattern, subst ):
+    return re.sub( pattern, subst, s )
 
 rawdata = {}
 
 def download():
     # TODO: we currently manually download the files
+    cmd( 'mkdir -p airports' )
     pass
 
 def latlon_to_decimal( latlon ):
@@ -55,6 +80,17 @@ def read():
                 continue
             id = row[len(row)-2]
             if id == '': id = row[2].replace( "'", "" )
+
+            if not os.path.exists( f'airports/{id}.faa.out' ):
+                for t in range(10):
+                    time.sleep( 1 )
+                    c = f'wget -O - https://nfdc.faa.gov/nfdcApps/services/ajv5/airportDisplay.jsp?airportId={id} > airports/{id}.faa.out'
+                    print( c )
+                    info = subprocess.run( c, shell=True, text=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT )
+                    if info.returncode == 0: break
+                    cmd( f'rm -f airports/{id}.faa.out' )
+                    if t == 9: print( f'could not get FAA airport data for {id}' )
+                
             rawdata[id] = { 'site':      row[0],
                             'type':      row[1],
                             'state':     row[6],
