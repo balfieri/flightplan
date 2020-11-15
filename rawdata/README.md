@@ -12,3 +12,7 @@ web pages from faa.gov for things like radio frequencies and nearest VORs.  That
 and only try to re-download those that it hasn't yet.
 
 Anyway, most people will be happy just using the consolidated rawdata.data that is checked in.
+
+Dependencies:
+    - wget command
+    - html2text command on PATH - pip install html2text, then put bin dir on path
