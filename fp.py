@@ -479,6 +479,8 @@ for did in rawdata:
     dlon = rawdata[did]['lon']
     delev = rawdata[did]['elevation']
     duse  = rawdata[did]['use']
+    dunicom_freq = rawdata[did]['unicom_freq']
+    dctaf_freq = rawdata[did]['ctaf_freq']
     drunways = rawdata[did]['runways']
     dlongest = runway_longest( drunways )
     if dlongest['length'] < runway_length_min: continue
@@ -500,11 +502,13 @@ for did in rawdata:
                     c['lon'] = dlon
                     c['elevation'] = delev
                     c['use'] = duse
+                    c['unicom_freq'] = dunicom_freq
+                    c['ctaf_freq'] = dctaf_freq
                     c['runways'] = drunways
                     diversions[i] = c
 
-print( f'CHECKPOINT         AIRPORT    CH     D   ETE  ELEV PUBLIC?   LONGEST    LENGTH  WIDTH  PATTERN CONDITION' )
-print( f'--------------------------------------------------------------------------------------------------------' )
+print( f'CHECKPOINT         ICAO   CH    D  ETE ELEV PUBL    CTAF  LONGEST LENGTH WIDTH PATT   COND' )
+print( f'------------------------------------------------------------------------------------------' )
 for i in range(len(checkpoints)):
     name = checkpoints[i]['name']
     did  = diversions[i]['id']
@@ -513,6 +517,8 @@ for i in range(len(checkpoints)):
     ETE  = diversions[i]['ETE']
     elev = diversions[i]['elevation']
     public = 'Y' if diversions[i]['use'] == 'PU' else 'N'
+    ctaf_freq = diversions[i]['ctaf_freq']
+    unicom_freq = diversions[i]['unicom_freq']
     longest = runway_longest( diversions[i]['runways'] )
     runwayid  = longest['id']
     length    = longest['length']
@@ -521,4 +527,4 @@ for i in range(len(checkpoints)):
     pattern_rcp = 'R' if longest['pattern_rcp'] == 'Y' else 'L'
     pattern   = f'{pattern}/{pattern_rcp}'
     condition = longest['condition']
-    print( f'{name:15s}    {did:7}   {CH:3.0f}  {D:4.1f}  {ETE:4.1f}  {elev:4.0f}    {public:1s}      {runwayid:10s}  {length:5.0f}   {width:4.0f}      {pattern}    {condition}' )
+    print( f'{name:15s}    {did:4}  {CH:3.0f} {D:4.1f} {ETE:4.1f} {elev:4.0f}  {public:1s}   {ctaf_freq:7s}  {runwayid:7s}  {length:5.0f}  {width:4.0f}  {pattern} {condition:6s}' )
