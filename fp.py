@@ -557,6 +557,31 @@ def add_airport( id ):
         if id == aid: return    # already there
     airports.append( id )
 
+morse_code_chars = { 'A':'.-', 'B':'-...',
+                     'C':'-.-.', 'D':'-..', 'E':'.',
+                     'F':'..-.', 'G':'--.', 'H':'....',
+                     'I':'..', 'J':'.---', 'K':'-.-',
+                     'L':'.-..', 'M':'--', 'N':'-.',
+                     'O':'---', 'P':'.--.', 'Q':'--.-',
+                     'R':'.-.', 'S':'...', 'T':'-',
+                     'U':'..-', 'V':'...-', 'W':'.--',
+                     'X':'-..-', 'Y':'-.--', 'Z':'--..',
+                     '1':'.----', '2':'..---', '3':'...--',
+                     '4':'....-', '5':'.....', '6':'-....',
+                     '7':'--...', '8':'---..', '9':'----.',
+                     '0':'-----', ', ':'--..--', '.':'.-.-.-',
+                     '?':'..--..', '/':'-..-.', '-':'-....-',
+                     '(':'-.--.', ')':'-.--.-'}
+
+def get_morse_code( s ):
+    su = s.upper()
+    mc = ''
+    for i in range(len(su)):
+        if mc != '': mc += ' ' 
+        c = su[i] 
+        mc += morse_code_chars[c] if c in morse_code_chars else f'[{c}]' 
+    return mc
+
 for cp in checkpoints: add_airport( cp['id'] )
 for al in alternate_airports: add_airport( al )
 if show_diversion_detail: 
@@ -596,4 +621,5 @@ for id in airports:
         dist = n['distance']
         bearing = n['bearing']
         remarks = n['remarks']
-        print( f'    {kind:10s} {nid:4} {name:20s} {freq:15s} {dist:10s} FROM {bearing:5s} {remarks}' )
+        mc = get_morse_code( nid )
+        print( f'    {kind:10s} {nid:4} {name:20s} {freq:15s} {dist:10s} FROM {bearing:8s} {mc:15s} {remarks}' )
