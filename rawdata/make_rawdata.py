@@ -108,14 +108,18 @@ def parse_faa_text( id ):
             while True:
                 line = T.readline()
                 if line == '': break
+                if match( line, r'^\s*$' ): continue
                 if match( line, r'^ID' ): continue
                 if match( line, r'^\-\-' ): continue
-                if match( line, r'^(\S+)\s*\|\s*(\S.*\S)\s*\|\s*(\S.*\S)\s*\|\s*(\S+)?\s*\|\s*(\S.*\S)?\|\s*(\S.*\S)?\s*' ):
+                if match( line, r'^(\w+)\s*\|\s*(\S.*\S)\s*\|\s*(\S.*\S)\s*\|\s*(\S.*\S)?\s*\|\s*(\S.*\S)?\s*\|\s*(\S.*\S)?' ):
                     telephone = m.group(4)
                     if not telephone: telephone = ''
-                    remarks = m.group(5)
+                    distance = m.group(5)
+                    if not distance: distance = ''
+                    remarks = m.group(6)
                     if not remarks: remarks = ''
-                    info['freqs'].append( { 'id': m.group(1), 'kind': m.group(2), 'freq': m.group(3), 'telephone': telephone, 'remarks': remarks } )
+                    info['freqs'].append( { 'id': m.group(1), 'kind': m.group(2), 'freq': m.group(3), 'telephone': telephone, 
+                                            'distance': distance, 'remarks': remarks } )
                 break   
 
     T.close()
