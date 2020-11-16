@@ -447,8 +447,8 @@ def runway_longest( runways ):
 
 print()
 print()
-print( 'Closest Diversions' )
-print( '------------------' )
+print( f'Closest Diversions (with runway >= {runway_length_min} ft)' )
+print( '-------------------------------------------' )
 print()
 checkpoints = []
 #checkpoints.append(route[0].copy())
