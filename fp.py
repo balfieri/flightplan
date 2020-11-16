@@ -46,6 +46,7 @@ baggage2_weight = 0             # assume nothing in baggage area 2
 route      = []
 runway_length_min = 2000        # minimum runway length for diversions
 show_return= True               # show return route
+alternate_airports = []
 
 i = 1
 while i < len( sys.argv ):
@@ -132,6 +133,11 @@ while i < len( sys.argv ):
         i += 1
     elif arg == '-show_return':
         show_return = int(sys.argv[i])
+        i += 1
+    elif arg == '-alternate':
+        id = sys.argv[i].upper()
+        if id not in rawdata: die( f'unknown alternate airport: {id}' )
+        alternate_airports.append( id )
         i += 1
     else:
         die( f'unknown option: {arg}' )
@@ -531,3 +537,44 @@ for i in range(len(checkpoints)):
     pattern   = f'{pattern}/{pattern_rcp}'
     condition = longest['condition']
     print( f'{name:15s}    {did:4}  {CH:3.0f} {D:4.1f} {ETE:4.1f} {elev:4.0f}  {public:1s}   {ctaf_freq:7s}  {runwayid:7s}  {length:5.0f}  {width:4.0f}  {pattern} {condition:6s}  {dname}' )
+
+#--------------------------------------------------------------
+# Print Airport Information
+#--------------------------------------------------------------
+print()
+print()
+print( 'Airport Information' )
+print( '-------------------' )
+print()
+airports = []
+def add_airport( id ):
+    if id == '': return
+    for aid in airports:
+        if id == aid: return    # already there
+    airports.append( id )
+
+for cp in checkpoints: add_airport( cp['id'] )
+for al in alternate_airports: add_airport( al )
+for dv in diversions:  add_airport( dv['id'] )
+
+for id in airports:
+    print( f'{id}:' )
+    for f in rawdata[id]['freqs']:
+        freq = f['freq']
+        if freq == '': continue
+        kind = f['kind']
+        remarks = f['remarks']
+        if 'telephone' in f: remarks = f['telephone'] + '  ' + remarks
+        print( f'    {kind:36s} {freq:15s} {remarks}' )
+    for n in rawdata[id]['navaids']:
+        freq = n['freq']
+        if freq == '': continue
+        kind = n['kind']
+        if kind != 'VOR' and kind != 'VORTAC' and kind != 'VOR/DME' and kind != 'TACAN': continue
+        id = n['id']
+        name = n['name']
+        hours = n['hours']
+        dist = n['distance']
+        bearing = n['bearing']
+        remarks = n['remarks']
+        print( f'    {kind:10s} {id:4} {name:20s} {freq:15s} {hours:10s} {dist:10s} FROM {bearing:5s} {remarks}' )

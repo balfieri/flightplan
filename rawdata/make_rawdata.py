@@ -84,7 +84,9 @@ def parse_faa_text( id ):
         if line == '': break
 
         if multi_freqs_kind != '' and match( line, r'^\s+\|\s*(\S.*\S)\s*\|\s*(\S.*\S)\s*\|\s*(\S.*\S)?' ):
-            info['freqs'].append( { 'kind': multi_freqs_kind, 'freq': m.group(1), 'subkind': m.group(2), 'remark': m.group(3) } )
+            remarks = m.group(3)
+            if not remarks: remarks = ''
+            info['freqs'].append( { 'kind': multi_freqs_kind, 'freq': m.group(1), 'subkind': m.group(2), 'remarks': remarks } )
             continue
         multi_freqs_kind = ''
 

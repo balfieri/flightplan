@@ -1,4 +1,5 @@
 ./fp.py -tail N53587 -row1_weight 232 -row2_weight 5 -baggage1_weight 10 -alt 30.38 \
+        -alternate kbuy \
         -ias 80  -fuel_gph 12 -runway 21         -wd 210 -ws 0 -oat 11 -p ktta \
                  -name River          -ia 2000   -wd 170 -ws 8 -oat  8 -p 35.60,-79.15 -fuel_gph 10 \
         -ias 100 -name "Siler City"   -ia 4500   -wd 190 -ws 9 -oat  7 -p 35.73,-79.43 \
