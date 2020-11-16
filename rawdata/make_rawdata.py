@@ -115,9 +115,9 @@ def read():
                 cmd( f'html2text airports/{id}.faa.out > airports/{id}.faa.text.out' )
 
             #--------------------------------------------------------------
-            # Parse the more detailed faa.text.data information and insert it back into 
+            # Parse the more detailed faa.text.data information that is not
+            # available in the .csv files and insert it back into 
             # the rawdata for this airport.  
-            # TODO: skip the .csv files and just use the .faa.text.out info.
             #--------------------------------------------------------------
             #if os.path.exists( f'airports/{id}.faa.text.out' ):
 
