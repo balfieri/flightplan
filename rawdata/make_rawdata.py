@@ -67,17 +67,17 @@ def parse_faa_text( id ):
     if os.path.exists( f'airports/{id}.faa.out' ) and not os.path.exists( f'airports/{id}.faa.text.out' ):
         cmd( f'html2text airports/{id}.faa.out > airports/{id}.faa.text.out' )
 
-    if not os.path.exists( f'airports/{id}.faa.text.out' ): return
-
     #--------------------------------------------------------------
     # Parse the more detailed faa.text.data information that is not
     # available in the .csv files and insert it back into 
     # the rawdata for this airport.  
     #--------------------------------------------------------------
-    T = open( f'airports/{id}.faa.text.out' )
     info = rawdata[id]
     info['freqs'] = []
     info['navaids'] = []
+    if not os.path.exists( f'airports/{id}.faa.text.out' ): return
+
+    T = open( f'airports/{id}.faa.text.out' )
     multi_freqs_kind = ''
     while True:
         line = T.readline()
