@@ -519,12 +519,13 @@ for did in rawdata:
                     c['runways'] = drunways
                     diversions[i] = c
 
-print( f'CHECKPOINT         ICAO   CH    D  ETE ELEV PUBL    CTAF  LONGEST LENGTH WIDTH PATT   COND  NAME' )
-print( f'--------------------------------------------------------------------------------------------------------------------------------' )
+print( f'CHECKPOINT         ICAO   CH    D  ETE ELEV PUBL    CTAF  LONGEST LENGTH WIDTH PATT   COND  NAME                           FROM_CITY' )
+print( f'---------------------------------------------------------------------------------------------------------------------------------------------------------------' )
 for i in range(len(checkpoints)):
     name = checkpoints[i]['name']
     did  = diversions[i]['id']
     dname= diversions[i]['name']
+    dfrom_city = rawdata[did]['from_city'] if 'from_city' in rawdata[did] else ''
     CH   = diversions[i]['CH']
     D    = diversions[i]['D']
     ETE  = diversions[i]['ETE']
@@ -540,7 +541,7 @@ for i in range(len(checkpoints)):
     pattern_rcp = 'R' if longest['pattern_rcp'] == 'Y' else 'L'
     pattern   = f'{pattern}/{pattern_rcp}'
     condition = longest['condition']
-    print( f'{name:15s}    {did:4}  {CH:3.0f} {D:4.1f} {ETE:4.1f} {elev:4.0f}  {public:1s}   {ctaf_freq:7s}  {runwayid:7s}  {length:5.0f}  {width:4.0f}  {pattern} {condition:6s}  {dname}' )
+    print( f'{name:15s}    {did:4}  {CH:3.0f} {D:4.1f} {ETE:4.1f} {elev:4.0f}  {public:1s}   {ctaf_freq:7s}  {runwayid:7s}  {length:5.0f}  {width:4.0f}  {pattern} {condition:6s}  {dname:30s} {dfrom_city}' )
 
 #--------------------------------------------------------------
 # Print Airport Information
