@@ -90,7 +90,9 @@ def read():
                     if info.returncode == 0: break
                     cmd( f'rm -f airports/{id}.faa.out' )
                     if t == 9: print( f'could not get FAA airport data for {id}' )
-                
+            if os.path.exists( f'airports/{id}.faa.out' ) and not os.path.exists( f'airports/{id}.faa.text.out' ):
+                cmd( f'html2text airports/{id}.faa.out > airports/{id}.faa.text.out' )
+
             rawdata[id] = { 'site':      row[0],
                             'type':      row[1],
                             'state':     row[6],
