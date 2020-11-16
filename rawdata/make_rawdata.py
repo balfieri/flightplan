@@ -99,11 +99,24 @@ def parse_faa_text( id ):
             remarks = m.group(5)
             if not remarks: remarks = ''
             info['freqs'].append( { 'kind': multi_freqs_kind, 'freq': m.group(3), 'subkind': m.group(4), 'remarks': remarks } )
-        elif match( line, r'^(DME|NDB|VOR/DME|VORTAC|TACAN)\s*\|\s*(\w+)\s*\|\s*(\S.*\S)\s*\|\s*(\S.*\S)\s*\|\s*(\S.*\S)\s*\|\s*(\S.*\S)\s*\|\s*(\S.*\S)\s*\|\s*(\S.*\S)?' ):
+        elif match( line, r'^(DME|NDB|VOR/DME|VORTAC|TACAN|VOR)\s*\|\s*(\w+)\s*\|\s*(\S.*\S)\s*\|\s*(\S.*\S)\s*\|\s*(\S.*\S)\s*\|\s*(\S.*\S)\s*\|\s*(\S.*\S)\s*\|\s*(\S.*\S)?' ):
             remarks = m.group(8)
             if not remarks: remarks = ''
             info['navaids'].append( { 'kind': m.group(1), 'id': m.group(2), 'name': m.group(3), 'freq': m.group(4), 'hours': m.group(5), 
                                       'distance': m.group(6), 'bearing': m.group(7), 'remarks': remarks } )
+        elif match( line, r'^WEATHER' ):
+            while True:
+                line = T.readline()
+                if line == '': break
+                if match( line, r'^ID' ): continue
+                if match( line, r'^\-\-' ): continue
+                if match( line, r'^(\S+)\s*\|\s*(\S.*\S)\s*\|\s*(\S.*\S)\s*\|\s*(\S+)?\s*\|\s*(\S.*\S)?\|\s*(\S.*\S)?\s*' ):
+                    telephone = m.group(4)
+                    if not telephone: telephone = ''
+                    remarks = m.group(5)
+                    if not remarks: remarks = ''
+                    info['freqs'].append( { 'id': m.group(1), 'kind': m.group(2), 'freq': m.group(3), 'telephone': telephone, 'remarks': remarks } )
+                break   
 
     T.close()
 
