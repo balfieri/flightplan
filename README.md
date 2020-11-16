@@ -11,7 +11,7 @@ It prints out a weight-and-balance check for the specific tail number and type.
 It prints out the closest diversion airport information (default: with a runway >= 2000 ft) for each checkpoint 
 as well as for 25%, 50%, and 75% midpoints between checkpoints.
 
-It prints out information for all airports such as runways, radio frequencies, and navaids.
+It prints out information for all airports such as runways, comm frequencies, and navaids.
 
 FUTURE FEATURES<br>
 ---------------
