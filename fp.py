@@ -564,6 +564,9 @@ if show_diversion_detail:
 
 for id in airports:
     print()
+    #from_city = rawdata[id]['from_city'] if 'from_city' in rawdata[id] else ''
+    #if from_city != '': from_city = f' ({from_city})' 
+    #print( f'{id}{from_city}:' )
     print( f'{id}:' )
     for r in rawdata[id]['runways']:
         # {'site': '16756.3*A', 'id': '09/27', 'length': 2400, 'width': 30, 'condition': 'ASPH-F', 'pattern': '', 'pattern_rcp': 'N'}

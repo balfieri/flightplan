@@ -123,6 +123,8 @@ def parse_faa_text( id ):
                     info['freqs'].append( { 'id': m.group(1), 'kind': m.group(2), 'freq': m.group(3), 'telephone': telephone, 
                                             'distance': distance, 'remarks': remarks } )
                 break   
+        elif match( line, r'^From city\s*\|\s*(\S.*\S)' ):
+            info['from_city'] = m.group(1)
 
     T.close()
 
