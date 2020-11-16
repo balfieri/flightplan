@@ -451,9 +451,9 @@ print( 'Closest Diversions' )
 print( '------------------' )
 print()
 checkpoints = []
-checkpoints.append(route[0].copy())
-checkpoints[0]['id'] = ''
-checkpoints[0]['name'] = ''
+#checkpoints.append(route[0].copy())
+#checkpoints[0]['id'] = ''
+#checkpoints[0]['name'] = ''
 j = len(route) - 1
 for i in range(len(route)):
     checkpoints.append(route[i].copy())
@@ -467,10 +467,10 @@ for i in range(len(route)):
             cp['lat'] = lerp( f, route[i]['lat'], route[i+1]['lat'] )
             cp['lon'] = lerp( f, route[i]['lon'], route[i+1]['lon'] )
             checkpoints.append( cp )
-checkpoints.append(route[j].copy())
-j = len(checkpoints) - 1
-checkpoints[j]['id'] = ''
-checkpoints[j]['name'] = ''
+#checkpoints.append(route[j].copy())
+#j = len(checkpoints) - 1
+#checkpoints[j]['id'] = ''
+#checkpoints[j]['name'] = ''
 diversions = [ {'id': '', 'D': 1e20, 'ETE': 1e20} for i in range(len(checkpoints)) ]
 for did in rawdata:
     dtype = rawdata[did]['type']
