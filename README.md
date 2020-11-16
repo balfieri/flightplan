@@ -13,11 +13,11 @@ It prints out elevations for all airports mentioned in the route.
 FUTURE FEATURES<br>
 ---------------
 
-It will print out a wind card for use in diverting to an alternate airport during a VFR checkride.
-
-It will look up METARs, TAFs, winds aloft, etc. from online weather databases.
-
 It will look up and show other information such as radio frequencies, runways, FBOs, nearest airports along the route and whether they are within gliding distance from midpoints.
+
+It will look up METARs, TAFs, winds aloft, PIREPs, SIGMETs, AIRMETs, etc. from online weather databases.
+
+It will print out a wind card for use in diverting to an alternate airport during a VFR checkride.
 
 It will consult obstacle and terrain-elevation databases and print out closest hazards along the route.
 
