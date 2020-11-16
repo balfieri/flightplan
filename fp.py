@@ -581,20 +581,19 @@ for id in airports:
         print( f'    RUNWAY     {rid:10s}                {lxw:12}    {pattern:3}        {cond:10s}' )
     for f in rawdata[id]['freqs']:
         freq = f['freq']
-        if freq == '': continue
+        if freq == '' or freq[0] != '1': continue
         kind = f['kind']
         remarks = f['remarks']
         if 'telephone' in f: remarks = f['telephone'] + '  ' + remarks
         print( f'    {kind:36s} {freq:15s} {remarks}' )
     for n in rawdata[id]['navaids']:
         freq = n['freq']
-        if freq == '': continue
+        if freq == '' or freq[0] != '1': continue
         kind = n['kind']
         if kind != 'VOR' and kind != 'VORTAC' and kind != 'VOR/DME' and kind != 'TACAN': continue
         nid = n['id']
         name = n['name']
-        hours = n['hours']
         dist = n['distance']
         bearing = n['bearing']
         remarks = n['remarks']
-        print( f'    {kind:10s} {nid:4} {name:20s} {freq:15s} {hours:10s} {dist:10s} FROM {bearing:5s} {remarks}' )
+        print( f'    {kind:10s} {nid:4} {name:20s} {freq:15s} {dist:10s} FROM {bearing:5s} {remarks}' )
