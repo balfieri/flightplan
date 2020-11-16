@@ -11,7 +11,7 @@ It prints out a weight-and-balance check for the specific tail number and type.
 It prints out the closest diversion airport information (default: with a runway >= 2000 ft) for each checkpoint 
 as well as for 25%, 50%, and 75% midpoints between checkpoints.
 
-It prints out information for all airports such as radio frequencies and runways.
+It prints out information for all airports such as runways, radio frequencies, and navaids.
 
 FUTURE FEATURES<br>
 ---------------
@@ -20,7 +20,7 @@ It will look up METARs, TAFs, winds aloft, PIREPs, SIGMETs, AIRMETs, etc. from a
 
 It will consult obstacle and terrain-elevation databases and print out closest hazards along the route.
 
-It will compute a near-perfect piecewise integration of each leg. In other words, do minute-by-minute computations and derive integrated GS and fuel consumption along the way.  It will also attempt to emulate takeoff, descent, and landing more accurately, including time departing the pattern and getting back onto the proper course (and opposite for landing).
+It will compute a more accurate piecewise integration of each leg. In other words, do minute-by-minute computations and derive integrated GS and fuel consumption along the way.  It will also attempt to emulate takeoff, descent, and landing more accurately, including time departing the pattern and getting back onto the proper course (and opposite for landing).
 
 It will run in-flight on a phone/iPad (using the Pyto app) and monitor the phone/iPad's GPS location. This allows it to give you simple alerts when you are reaching checkpoints, deviating from them, deviating from planned altitude, exceeding planned fuel burn, needing to start descending, or getting close to terrain or obstacles.  Further, it will show the heading and distance to the nearest airport and whether you are within gliding distance. 
 

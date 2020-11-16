@@ -549,6 +549,7 @@ print()
 airports = []
 def add_airport( id ):
     if id == '': return
+    if id not in rawdata: return
     for aid in airports:
         if id == aid: return    # already there
     airports.append( id )
@@ -559,6 +560,17 @@ for dv in diversions:  add_airport( dv['id'] )
 
 for id in airports:
     print( f'{id}:' )
+    for r in rawdata[id]['runways']:
+        # {'site': '16756.3*A', 'id': '09/27', 'length': 2400, 'width': 30, 'condition': 'ASPH-F', 'pattern': '', 'pattern_rcp': 'N'}
+        rid = r['id']
+        l = r['length']
+        w = r['width']
+        lxw = f'{l} x {w}'
+        cond = r['condition']
+        pattern   = 'R' if longest['pattern'] == 'Y' else 'L'
+        pattern_rcp = 'R' if longest['pattern_rcp'] == 'Y' else 'L'
+        pattern   = f'{pattern}/{pattern_rcp}'
+        print( f'    RUNWAY     {rid:10s}                {lxw:12}    {pattern:3}        {cond:10s}' )
     for f in rawdata[id]['freqs']:
         freq = f['freq']
         if freq == '': continue
@@ -571,10 +583,10 @@ for id in airports:
         if freq == '': continue
         kind = n['kind']
         if kind != 'VOR' and kind != 'VORTAC' and kind != 'VOR/DME' and kind != 'TACAN': continue
-        id = n['id']
+        nid = n['id']
         name = n['name']
         hours = n['hours']
         dist = n['distance']
         bearing = n['bearing']
         remarks = n['remarks']
-        print( f'    {kind:10s} {id:4} {name:20s} {freq:15s} {hours:10s} {dist:10s} FROM {bearing:5s} {remarks}' )
+        print( f'    {kind:10s} {nid:4} {name:20s} {freq:15s} {hours:10s} {dist:10s} FROM {bearing:5s} {remarks}' )
