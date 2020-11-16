@@ -47,6 +47,7 @@ route      = []
 runway_length_min = 2000        # minimum runway length for diversions
 show_return= True               # show return route
 alternate_airports = []
+show_diversion_detail = False   # whether to include diversion airports in the airport information section
 
 i = 1
 while i < len( sys.argv ):
@@ -138,6 +139,9 @@ while i < len( sys.argv ):
         id = sys.argv[i].upper()
         if id not in rawdata: die( f'unknown alternate airport: {id}' )
         alternate_airports.append( id )
+        i += 1
+    elif arg == '-show_diversion_detail':
+        show_diversion_detail = int(sys.argv[i])
         i += 1
     else:
         die( f'unknown option: {arg}' )
@@ -545,7 +549,6 @@ print()
 print()
 print( 'Airport Information' )
 print( '-------------------' )
-print()
 airports = []
 def add_airport( id ):
     if id == '': return
@@ -556,9 +559,11 @@ def add_airport( id ):
 
 for cp in checkpoints: add_airport( cp['id'] )
 for al in alternate_airports: add_airport( al )
-for dv in diversions:  add_airport( dv['id'] )
+if show_diversion_detail: 
+    for dv in diversions:  add_airport( dv['id'] )
 
 for id in airports:
+    print()
     print( f'{id}:' )
     for r in rawdata[id]['runways']:
         # {'site': '16756.3*A', 'id': '09/27', 'length': 2400, 'width': 30, 'condition': 'ASPH-F', 'pattern': '', 'pattern_rcp': 'N'}
