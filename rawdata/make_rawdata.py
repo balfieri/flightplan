@@ -74,24 +74,15 @@ def read():
         reader = csv.reader( csv_file )
         have_one = False
         for row in reader:
+            #--------------------------------------------------------------
+            # Get airport information that's available from these .csv files.
+            #--------------------------------------------------------------
             if not have_one:
                 # skip first line
                 have_one = True
                 continue
             id = row[len(row)-2]
             if id == '': id = row[2].replace( "'", "" )
-
-            if not os.path.exists( f'airports/{id}.faa.out' ):
-                for t in range(10):
-                    time.sleep( 1 )
-                    c = f'wget -O - https://nfdc.faa.gov/nfdcApps/services/ajv5/airportDisplay.jsp?airportId={id} > airports/{id}.faa.out'
-                    print( c )
-                    info = subprocess.run( c, shell=True, text=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT )
-                    if info.returncode == 0: break
-                    cmd( f'rm -f airports/{id}.faa.out' )
-                    if t == 9: print( f'could not get FAA airport data for {id}' )
-            if os.path.exists( f'airports/{id}.faa.out' ) and not os.path.exists( f'airports/{id}.faa.text.out' ):
-                cmd( f'html2text airports/{id}.faa.out > airports/{id}.faa.text.out' )
 
             rawdata[id] = { 'site':      row[0],
                             'type':      row[1],
@@ -105,6 +96,31 @@ def read():
                             'unicom_freq': row[73],
                             'ctaf_freq': row[74],
                             'runways':   runways[row[0]] if row[0] in runways else [] }
+
+            #--------------------------------------------------------------
+            # Download more detailed information from faa.gov, but don't 
+            # do this if we have alread done it for a particular airport.
+            # Convert html to text and write to the .faa.text.out file.
+            #--------------------------------------------------------------
+            if not os.path.exists( f'airports/{id}.faa.out' ):
+                for t in range(10):
+                    time.sleep( 1 )
+                    c = f'wget -O - https://nfdc.faa.gov/nfdcApps/services/ajv5/airportDisplay.jsp?airportId={id} > airports/{id}.faa.out'
+                    print( c )
+                    info = subprocess.run( c, shell=True, text=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT )
+                    if info.returncode == 0: break
+                    cmd( f'rm -f airports/{id}.faa.out' )
+                    if t == 9: print( f'could not get FAA airport data for {id}' )
+            if os.path.exists( f'airports/{id}.faa.out' ) and not os.path.exists( f'airports/{id}.faa.text.out' ):
+                cmd( f'html2text airports/{id}.faa.out > airports/{id}.faa.text.out' )
+
+            #--------------------------------------------------------------
+            # Parse the more detailed faa.text.data information and insert it back into 
+            # the rawdata for this airport.  
+            # TODO: skip the .csv files and just use the .faa.text.out info.
+            #--------------------------------------------------------------
+            #if os.path.exists( f'airports/{id}.faa.text.out' ):
+
         csv_file.close()
 
 def write():
