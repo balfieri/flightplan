@@ -594,6 +594,9 @@ for id in airports:
     #if from_city != '': from_city = f' ({from_city})' 
     #print( f'{id}{from_city}:' )
     print( f'{id}:' )
+    name= rawdata[id]['name']
+    from_city = rawdata[id]['from_city'] if 'from_city' in rawdata[id] else ''
+    print( f'    NAME       {name:25s} {from_city}' )
     elev = rawdata[id]['elevation']
     print( f'    ELEVATION                            {elev}' )
     for r in rawdata[id]['runways']:
