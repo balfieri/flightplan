@@ -594,6 +594,8 @@ for id in airports:
     #if from_city != '': from_city = f' ({from_city})' 
     #print( f'{id}{from_city}:' )
     print( f'{id}:' )
+    elev = rawdata[id]['elevation']
+    print( f'    ELEVATION                            {elev}' )
     for r in rawdata[id]['runways']:
         # {'site': '16756.3*A', 'id': '09/27', 'length': 2400, 'width': 30, 'condition': 'ASPH-F', 'pattern': '', 'pattern_rcp': 'N'}
         rid = r['id']
