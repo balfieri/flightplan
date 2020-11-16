@@ -8,16 +8,15 @@ It shows the textual flight plan in a compact navlog format that should be famil
 
 It prints out a weight-and-balance check for the specific tail number and type.
 
-It prints out elevations for all airports mentioned in the route.
+It prints out the closest diversion airport information (default: with a runway >= 2000 ft) for each checkpoint 
+as well as for 25%, 50%, and 75% midpoints between checkpoints.
 
 FUTURE FEATURES<br>
 ---------------
 
-It will look up and show other information such as radio frequencies, runways, FBOs, nearest airports along the route and whether they are within gliding distance from midpoints.
+It will look up and show other information for all airports such as radio frequencies, and runways.
 
-It will look up METARs, TAFs, winds aloft, PIREPs, SIGMETs, AIRMETs, etc. from online weather databases.
-
-It will print out a wind card for use in diverting to an alternate airport during a VFR checkride.
+It will look up METARs, TAFs, winds aloft, PIREPs, SIGMETs, AIRMETs, etc. from aviationweather.gov.
 
 It will consult obstacle and terrain-elevation databases and print out closest hazards along the route.
 
