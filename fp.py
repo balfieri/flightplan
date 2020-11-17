@@ -38,6 +38,7 @@ oat        = 15
 fuel_gal   = 0                  # 0 = use fuel_gal_max for type
 fuel_gal_taxi = 0               # 0 = use default fuel for startup+taxi
 fuel_gph   = 0                  # 0 = use default GPH
+fuel_refill = False             # whether to refill before return flight
 runway     = 36                 # takeoff runway heading
 row1_weight= 190                # assume 190lb pilot only
 row2_weight= 0                  # assume no passengers
@@ -113,6 +114,9 @@ while i < len( sys.argv ):
         i += 1
     elif arg == '-fuel_gph':
         fuel_gph = float(sys.argv[i])
+        i += 1
+    elif arg == '-fuel_refill':
+        fuel_refill = int(sys.argv[i])
         i += 1
     elif arg == '-runway':
         runway = int(sys.argv[i])
@@ -391,6 +395,7 @@ def calc_segment( fm, to ):
     return { 'TC': TC, 'CAS': CAS, 'TAS': TAS, 'WCA': WCA, 'TH': TH, 'MV': MV, 'MH': MH, 'DEV': DEV, 'CH': CH, 'D': D, 'GS': GS, 'ETE': ETE, 'GPH': GPH, 'GAL': GAL }
 
 def route_analyze( rt ):
+    global fuel_gal
     print()
     print()
     print( f'CHECKPOINT         LAT    LON  TC   IA   ALT  WD WS OAT   IAS CAS TAS   WCA  TH MV  MH DEV  CH       D  DTOT    GS   ETE   ETA      GPH  GAL  REM' )
@@ -432,6 +437,8 @@ def route_analyze( rt ):
         gal_rem -= GAL
 
         print( f'{TO_NAME:15s} {TO_LAT:6.2f} {TO_LON:6.2f} {TC:3.0f} {TO_IA:4.0f} {TO_ALT:5.2f} {TO_WD:3.0f} {TO_WS:2.0f} {TO_OAT:3.0f}   {TO_IAS:3.0f} {CAS:3.0f} {TAS:3.0f}   {WCA:3.0f} {TH:3.0f} {MV:2.0f} {MH:3.0f} {DEV:3.0f} {CH:3.0f}   {D:5.1f} {DTOT:5.1f} {GS:5.1f} {ETE:5.1f} {ETA:5.1f}     {GPH:4.1f} {GAL:4.1f} {gal_rem:4.1f}' )
+
+    if not fuel_refill: fuel_gal = gal_rem
 
 route_analyze( route )
 if show_return:
