@@ -345,6 +345,10 @@ def reverse_route( rt ):
         rev.append( rt[j].copy() )
         rev[i]['ias'] = rt[i]['ias']                            # hack
         rev[i]['ia'] = rt[i]['ia']                              # hack  
+        rev[i]['wind_dir'] = rt[i]['wind_dir']                  # hack  
+        rev[i]['wind_speed'] = rt[i]['wind_speed']              # hack  
+        rev[i]['oat'] = rt[i]['oat']                            # hack  
+        rev[i]['fuel_gph'] = rt[i]['fuel_gph']                  # hack  
     id = rev[0]['id']
     if id in rawdata: rev[0]['ia'] = rawdata[id]['elevation']   # hack, but usually correct
     return rev
