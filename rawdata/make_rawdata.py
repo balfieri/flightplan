@@ -96,7 +96,7 @@ def parse_faa_text( id ):
             remarks = m.group(3)
             if not remarks: remarks = ''
             info['freqs'].append( { 'kind': m.group(1), 'freq': freq, 'remarks': remarks } )
-        elif match( line, r'^(\S.*\S) (APPROACH|DEPARTURE|DELIVERY|GROUND|TOWER):\s*\|\s*(\S.*\S)\s*\|\s*(\S.*\S)\s*\|\s*(\S.*\S)?' ):
+        elif match( line, r'^(\S.*\S) (APPROACH/DEPARTURE|APPROACH|DEPARTURE|DELIVERY|GROUND|TOWER):\s*\|\s*(\S.*\S)\s*\|\s*(\S.*\S)\s*\|\s*(\S.*\S)?' ):
             multi_freqs_kind = m.group( 1 ) + ' ' + m.group( 2 )
             remarks = m.group(5)
             if not remarks: remarks = ''
