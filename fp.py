@@ -530,6 +530,8 @@ for did in rawdata:
                     c['runways'] = drunways
                     diversions[i] = c
 
+print( f'Note: these diversions do not yet account for time required to turn to the diversion\'s compass heading (CH)' )
+print()
 print( f'CHECKPOINT         ICAO   CH    D  ETE ELEV PUBL    CTAF  LONGEST LENGTH WIDTH PATT   COND  NAME                           NEAR CITY' )
 print( f'---------------------------------------------------------------------------------------------------------------------------------------------------------------' )
 for i in range(len(checkpoints)):
