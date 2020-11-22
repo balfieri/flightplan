@@ -65,9 +65,18 @@ while i < len( sys.argv ):
         else:
             # might be lat,lon 
             matches = re.match( r'^(-?\d+\.\d+),(-?\d+\.\d+)$', id );
-            if not matches: die( f'unknown airport/waypoint and not a proper lat/lon: {id}' )
-            lat = float(matches.group(1))
-            lon = float(matches.group(2))
+            if matches: 
+                lat = float(matches.group(1))
+                lon = float(matches.group(2))
+            else:
+                matches = re.match( r'^(\d\d)(\d\d)(N|S)(\d\d\d)(\d\d)(E|W)$', id );
+                if not matches: die( f'unknown airport/waypoint and not a proper lat/lon: {id}' )
+                lat = float(matches.group(1)) + float(matches.group(2))/60.0
+                NS  = matches.group(3)
+                if NS == 'S': lat = -lat
+                lon = float(matches.group(4)) + float(matches.group(5))/60.0
+                EW = matches.group(6)
+                if EW == 'W': lon = -lon
             id = ''
         route.append( { 'id': id, 'name': name, 'lat': lat, 'lon': lon, 'ias': ias, 'ia': ia, 'alt': alt, 'flaps': flaps,
                         'wind_dir': wind_dir, 'wind_speed': wind_speed, 'oat': oat,

@@ -1,9 +1,10 @@
-./fp.py -tail N53587 -row1_weight 232 -row2_weight 5 -baggage1_weight 10 -alt 30.38 \
-        -ias 80  -fuel_gph 12 -runway 21         -wd 210 -ws  0 -oat 11 -p ktta \
-                 -name "US 1"         -ia 2000   -wd 210 -ws  8 -oat  8 -p 35.577,-79.135 -fuel_gph 10 \
-        -ias 100 -name "HW 421"       -ia 4500   -wd 210 -ws  9 -oat  7 -p 35.554,-79.286 \
+./fp.py -tail N53587 -row1_weight 232 -row2_weight 5 -baggage1_weight 10 -alt 30.65 \
+        -alternate khbi -alternate ksop \
+        -ias 80  -fuel_gph 12 -runway 3          -wd 230 -ws  4 -oat  7 -p ktta \
+                 -name "US 1"         -ia 2000   -wd 227 -ws 20 -oat  3 -p 35.577,-79.135 -fuel_gph 10 \
+        -ias 100 -name "HW 421"       -ia 4500   -wd 238 -ws  7 -oat -2 -p 35.554,-79.286 \
         -ias 110 -name "road x river"                                   -p 35.507,-79.583 \
                  -name "I-74"                                           -p 35.475,-79.782 \
                  -name "river"                                          -p 35.439,-80.012 \
-        -ias 100                      -ia 3000   -wd 210 -ws  8 -oat  8 -p kvuj \
+        -ias 100                      -ia 3000   -wd 227 -ws 24 -oat  1 -p kvuj \
         -show_return 0

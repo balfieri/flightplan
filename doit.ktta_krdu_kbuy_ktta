@@ -1,0 +1,15 @@
+# KTTA 3538N07902W NC11 KRDU 3556N07903W 5NC5 3602N07926W KBUY 3552N07920W 3543N07913W 3537N07908W KTTA
+#
+./fp.py -tail N972WW -row1_weight 232 -row2_weight 5 -baggage1_weight 10 -alt 30.38 \
+        -alternate kscr \
+        -ias 80  -fuel_gph 12 -runway 3          -wd  30 -ws 0 -oat  3 -p ktta \
+                 -name "US-1 NE"      -ia 2000   -wd 170 -ws 8 -oat -1 -p 3538N07902W -fuel_gph 10 \
+        -ias 100                      -ia 3000   -wd 190 -ws 9 -oat -7 -p NC11 \
+        -ias 110                                                       -p KRDU \
+                 -name "Horrace"                                       -p 3556N07903W \
+                                                                       -p 5NC5 \
+                                                                       -p KBUY \
+                 -name "Rivers meet"                                   -p 3552N07920W \
+                 -name "HW64 W of Pitts"                               -p 3543N07913W \
+        -ias 100                      -ia 2000   -wd  30 -ws 0 -oat -3 -p ktta \
+        -show_return 0

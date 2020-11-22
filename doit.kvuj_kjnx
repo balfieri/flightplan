@@ -1,14 +1,15 @@
 # 35.552,-78.577 
 # 35.564,-78.806 
 # 35.574,-78.966
-./fp.py -tail N53587 -row1_weight 232 -row2_weight 5 -baggage1_weight 10 -alt 30.38 \
-        -ias 80  -fuel_gph 12 -runway 22         -wd 210 -ws  0 -oat 11 -p kvuj \
-                 -name "road x river" -ia 2000   -wd 210 -ws  8 -oat  8 -p 35.426,-80.019 -fuel_gph 10 \
-        -ias 100 -name "I-74"         -ia 3500   -wd 210 -ws  9 -oat  7 -p 35.445,-79.777 \
+./fp.py -tail N53587 -row1_weight 232 -row2_weight 5 -baggage1_weight 10 -alt 30.65 \
+        -alternate 43a -alternate ksop -alternate khrj \
+        -ias 80  -fuel_gph 12 -runway 22         -wd 230 -ws  4 -oat  9 -p kvuj \
+                 -name "road x river" -ia 2000   -wd 227 -ws 20 -oat  5 -p 35.426,-80.019 -fuel_gph 10 \
+        -ias 100 -name "I-74"         -ia 3500   -wd 238 -ws  7 -oat  0 -p 35.445,-79.777 \
         -ias 110 -name "river + town"                                   -p 35.459,-79.58 \
                  -name "Sanford"                                        -p 35.487,-79.199 \
                  -name "tower + river"                                  -p 35.503,-78.959 \
                  -name "Angier"                                         -p 35.518,-78.741 \
                  -name "I-40"                                           -p 35.53,-78.567 \
-        -ias 100                      -ia 2000   -wd 210 -ws  8 -oat  8 -p kjnx \
+        -ias 100                      -ia 2000   -wd 219 -ws 23 -oat  3 -p kjnx \
         -show_return 0
