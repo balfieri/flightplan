@@ -4,7 +4,7 @@ This repository contains a Python3 script that can create a textual flight plan 
 CURRENT FEATURES<br>
 ----------------
 
-It shows the textual flight plan in a compact navlog format that should be familiar to most pilots.  It performs table lookups for CAS, MV, and DEV.  The flight plan is still somewhat manual. The user must provide average IAS, IA (indicated altitude), WD (wind direction), WS (wind speed), etc. values for each leg. 
+It shows the textual flight plan in a compact navlog format that should be familiar to most pilots.  It performs table lookups for CAS, MV, and DEV.  The flight plan is still somewhat manual. The user must provide average IAS, IA (indicated altitude), WD (wind direction), WS (wind speed), etc. values for each leg.  It verifies that fuel time left is more than allowed (default: one hour).
 
 It prints out a weight-and-balance check for the specific tail number and type.
 
@@ -16,9 +16,13 @@ It prints out information for all airports such as runways, comm frequencies, an
 FUTURE FEATURES<br>
 ---------------
 
+It will compute required takeoff roll and verify that the takeoff runway supports it.  Similar for landing.
+
 It will look up METARs, TAFs, winds aloft, PIREPs, SIGMETs, AIRMETs, etc. from aviationweather.gov.
 
 It will consult obstacle and terrain-elevation databases and print out closest hazards along the route.
+
+It will compute optimal cruising altitude for each leg of the flight.
 
 It will compute a more accurate piecewise integration of each leg. In other words, do minute-by-minute computations and derive integrated GS and fuel consumption along the way.  It will also attempt to emulate takeoff, descent, and landing more accurately, including time departing the pattern and getting back onto the proper course (and opposite for landing).
 
