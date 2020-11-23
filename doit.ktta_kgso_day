@@ -1,9 +1,0 @@
-./fp.py -tail N53587 -row1_weight 232 -row2_weight 5 -baggage1_weight 10 -alt 30.65 \
-        -alternate khbi -alternate ksop \
-        -ias 80  -fuel_gph 12 -runway 21               -wd 210 -ws  4 -oat  7 -p ktta \
-                 -name River                -ia 2000   -wd 350 -ws  8 -oat  3 -p 35.6120926,-79.1516876 -fuel_gph 10 \
-        -ias 100 -name "HW64/Siler@10am"    -ia 4500   -wd 350 -ws  5 -oat -3  -p 35.7348084,-79.3494415 \
-        -ias 110 -name "Liberty on L"                                         -p 35.8651261,-79.5636749 \
-                 -name "I-40 (220 on L)"                                      -p 36.0199476,-79.8115540 \
-        -ias 100                            -ia 3000   -wd 230 -ws 24 -oat  1 -p kgso \
-        -show_return 0

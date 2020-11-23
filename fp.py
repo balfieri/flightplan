@@ -39,6 +39,7 @@ fuel_gal   = 0                  # 0 = use fuel_gal_max for type
 fuel_gal_taxi = 0               # 0 = use default fuel for startup+taxi
 fuel_gph   = 0                  # 0 = use default GPH
 fuel_refill = False             # whether to refill before return flight
+fuel_time_left_min = 60         # minimum fuel time left after landing (one hour)
 runway     = 36                 # takeoff runway heading
 row1_weight= 190                # assume 190lb pilot only
 row2_weight= 0                  # assume no passengers
@@ -64,7 +65,7 @@ while i < len( sys.argv ):
             name = id
         else:
             # might be lat,lon 
-            matches = re.match( r'^(-?\d+\.\d+),(-?\d+\.\d+)$', id );
+            matches = re.match( r'^(-?\d+\.\d+)[,\/](-?\d+\.\d+)$', id );
             if matches: 
                 lat = float(matches.group(1))
                 lon = float(matches.group(2))
@@ -126,6 +127,9 @@ while i < len( sys.argv ):
         i += 1
     elif arg == '-fuel_refill':
         fuel_refill = int(sys.argv[i])
+        i += 1
+    elif arg == '-fuel_time_left_min':
+        fuel_time_left_min = int(sys.argv[i])
         i += 1
     elif arg == '-runway':
         runway = int(sys.argv[i])
@@ -450,6 +454,14 @@ def route_analyze( rt ):
         gal_rem -= GAL
 
         print( f'{TO_NAME:15s} {TO_LAT:6.2f} {TO_LON:6.2f} {TC:3.0f} {TO_IA:4.0f} {TO_ALT:5.2f} {TO_WD:3.0f} {TO_WS:2.0f} {TO_OAT:3.0f}   {TO_IAS:3.0f} {CAS:3.0f} {TAS:3.0f}   {WCA:3.0f} {TH:3.0f} {MV:2.0f} {MH:3.0f} {DEV:3.0f} {CH:3.0f}   {D:5.1f} {DTOT:5.1f} {GS:5.1f} {ETE:5.1f} {ETA:5.1f}     {GPH:4.1f} {GAL:4.1f} {gal_rem:4.1f}' )
+
+    print()
+    fuel_time_left_hr = gal_rem / fuel_gph
+    fuel_time_left_min_hr = fuel_time_left_min / 60.0
+    if fuel_time_left_hr >= fuel_time_left_min_hr:
+        print( f'VERIFIED: fuel time left ({fuel_time_left_hr:0.2f} hr) >= minimum allowed ({fuel_time_left_min_hr:0.2f} hr)' )
+    else:
+        print( f'!!! PROBLEM: fuel time_left ({fuel_time_left_hr:0.2f} hr) < minimum allowed ({fuel_time_left_min_hr:0.2f} hr)' )
 
     if not fuel_refill: fuel_gal = gal_rem
 

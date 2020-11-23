@@ -1,0 +1,8 @@
+./fp.py -tail N53587 -row1_weight 232 -row2_weight 5 -baggage1_weight 10 -alt 30.30 \
+        -alternate kscr -alternate krdu \
+        -ias 80  -fuel_gph 12 -runway 6                -wd  50 -ws  4 -oat  7 -p kbuy \
+        -ias 100 -name "Rivers crossing"    -ia 3000   -wd 350 -ws  8 -oat  3 -p 35.881/-79.339 \
+                 -fuel_gph 10 \
+        -ias 110 -name "64 W of Pitts"      -ia 3500   -wd 350 -ws  8 -oat  3 -p 35.725/-79.22 \
+        -ias 100                            -ia 3000   -wd 350 -ws  8 -oat  5 -p ktta \
+        -show_return 0
