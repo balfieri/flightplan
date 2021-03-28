@@ -96,6 +96,15 @@ types = {
                 ],
         ],
 
+        'short_field_takeoff_pct_decrease_per_knot_headwind': 10.0/9.0,
+        'short_field_takeoff_pct_increase_per_knot_tailwind': 10.0/2.0,
+        'short_field_takeoff_pct_increase_for_dry_grass':     15.0,     # ground roll only
+
+        'short_field_landing_pct_decrease_per_knot_headwind': 10.0/9.0,
+        'short_field_landing_pct_increase_per_knot_tailwind': 10.0/2.0,
+        'short_field_landing_pct_increase_for_dry_grass':     45.0,     # ground roll only
+        'short_field_landing_pct_increase_for_flaps_up':      35.0,     # assuming 9 KIAS faster approach speed
+
         'short_field_takeoff': [
             # weight
             2550, [
