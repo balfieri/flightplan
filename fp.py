@@ -498,21 +498,27 @@ print( f'-----------------------------------------' )
 print()
 fm = route[0]
 FM_NAME = fm['name']
-FM_PA   = 250
+FM_ELE  = rawdata[FM_NAME]['elevation']
+FM_ALT  = fm['alt']
+FM_PA   = calc_PA( FM_ELE, FM_ALT )
 FM_OAT  = fm['oat']
 FM_ROLL    = interpolate_closest_rows3( total_weight, FM_OAT, FM_PA, type_info['short_field_takeoff'], b_col=1 )
 FM_CLEAR50 = interpolate_closest_rows3( total_weight, FM_OAT, FM_PA, type_info['short_field_takeoff'], b_col=2 )
-print( f'{FM_NAME} required runway ground roll with {total_weight} lb, {FM_PA} ft pressure altitude, and {FM_OAT}C: {FM_ROLL:.0f} ft' )
-print( f'{FM_NAME} required runway length required to clear 50 ft obstacle: {FM_CLEAR50:.0f} ft' )
+print( f'{FM_NAME} short-field TAKEOFF with {total_weight:.0f} lb, {FM_PA:.0f} ft pressure altitude (elevation={FM_ELE}, altimeter={FM_ALT}), and {FM_OAT}C' )
+print( f'        ground roll:                           {FM_ROLL:5.0f} ft' )
+print( f'        length to clear 50 ft obstacle:        {FM_CLEAR50:5.0f} ft' )
 print()
 to = route[len(route)-1]
 TO_NAME = to['name']
-TO_PA   = 250
+TO_ELE  = rawdata[TO_NAME]['elevation']
+TO_ALT  = to['alt']
+TO_PA   = calc_PA( TO_ELE, TO_ALT )
 TO_OAT  = to['oat']
-TO_ROLL    = interpolate_closest_rows3( total_weight, TO_OAT, TO_PA, type_info['short_field_takeoff'], b_col=1 )
-TO_CLEAR50 = interpolate_closest_rows3( total_weight, TO_OAT, TO_PA, type_info['short_field_takeoff'], b_col=2 )
-print( f'{TO_NAME} required runway ground roll with {total_weight} lb, {TO_PA} ft pressure altitude, and {TO_OAT}C: {TO_ROLL:.0f} ft' )
-print( f'{TO_NAME} required runway length required to clear 50 ft obstacle: {TO_CLEAR50:.0f} ft' )
+TO_ROLL    = interpolate_closest_rows3( total_weight, TO_OAT, TO_PA, type_info['short_field_landing'], b_col=1 )
+TO_CLEAR50 = interpolate_closest_rows3( total_weight, TO_OAT, TO_PA, type_info['short_field_landing'], b_col=2 )
+print( f'{TO_NAME} short-field LANDING with {total_weight:.0f} lb, {TO_PA:.0f} ft pressure altitude (elevation={TO_ELE}, altimeter={TO_ALT}), and {TO_OAT}C' )
+print( f'        ground roll:                           {TO_ROLL:5.0f} ft' )
+print( f'        length to clear 50 ft obstacle:        {TO_CLEAR50:5.0f} ft' )
 
 #--------------------------------------------------------------
 # Print Useful Airport/Runway Information
