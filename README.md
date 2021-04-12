@@ -13,10 +13,11 @@ as well as for 25%, 50%, and 75% midpoints between checkpoints.
 
 It prints out information for all airports such as runways, comm frequencies, and navaids.
 
+It prints out the required short-field takeoff and landing distances.
+
+
 FUTURE FEATURES<br>
 ---------------
-
-It will compute required takeoff roll and verify that the takeoff runway supports it.  Similar for landing.
 
 It will look up METARs, TAFs, winds aloft, PIREPs, SIGMETs, AIRMETs, etc. from aviationweather.gov.
 

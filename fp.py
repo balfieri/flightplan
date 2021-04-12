@@ -213,6 +213,24 @@ def interpolate_closest_rows( a, table, b_col=1, a_col=0, a_modulo=0, ab_modulo=
     b1 = table[r1][b_col]
     return interpolate( a, a0, a1, b0, b1, a_modulo, ab_modulo )
 
+def interpolate_closest_rows2( aa, a, table, b_col=1, a_col=0, a_modulo=0, ab_modulo=0 ):
+    rr0 = find_closest_row( aa, table, -1 )
+    rr1 = find_closest_row( aa, table, rr0 )
+    aa0 = table[rr0][0]
+    aa1 = table[rr1][0]
+    bb0 = interpolate_closest_rows( a, table[rr0][1], b_col, a_col, a_modulo, ab_modulo )
+    bb1 = interpolate_closest_rows( a, table[rr1][1], b_col, a_col, a_modulo, ab_modulo )
+    return interpolate( aa, aa0, aa1, bb0, bb1, a_modulo, ab_modulo )
+
+def interpolate_closest_rows3( aaa, aa, a, table, b_col=1, a_col=0, a_modulo=0, ab_modulo=0 ):
+    rrr0 = find_closest_row( aaa, table, -1 )
+    rrr1 = find_closest_row( aaa, table, rrr0 )
+    aaa0 = table[rrr0][0]
+    aaa1 = table[rrr1][0]
+    bbb0 = interpolate_closest_rows2( aa, a, table[rrr0][1], b_col, a_col, a_modulo, ab_modulo )
+    bbb1 = interpolate_closest_rows2( aa, a, table[rrr1][1], b_col, a_col, a_modulo, ab_modulo )
+    return interpolate( aaa, aaa0, aaa1, bbb0, bbb1, a_modulo, ab_modulo )
+
 #--------------------------------------------------------------
 # Defaults Based on Aircraft Type
 #--------------------------------------------------------------
@@ -469,6 +487,32 @@ route_analyze( route )
 if show_return:
     return_route = reverse_route( route )
     route_analyze( return_route )
+
+#--------------------------------------------------------------
+# Print Short-Field Takeoff and Landing Distances
+#--------------------------------------------------------------
+print()
+print()
+print( f'Short-Field Takeoff and Landing Distances' )
+print( f'-----------------------------------------' )
+print()
+fm = route[0]
+FM_NAME = fm['name']
+FM_PA   = 250
+FM_OAT  = fm['oat']
+FM_ROLL    = interpolate_closest_rows3( total_weight, FM_OAT, FM_PA, type_info['short_field_takeoff'], b_col=1 )
+FM_CLEAR50 = interpolate_closest_rows3( total_weight, FM_OAT, FM_PA, type_info['short_field_takeoff'], b_col=2 )
+print( f'{FM_NAME} required runway ground roll with {total_weight} lb, {FM_PA} ft pressure altitude, and {FM_OAT}C: {FM_ROLL:.0f} ft' )
+print( f'{FM_NAME} required runway length required to clear 50 ft obstacle: {FM_CLEAR50:.0f} ft' )
+print()
+to = route[len(route)-1]
+TO_NAME = to['name']
+TO_PA   = 250
+TO_OAT  = to['oat']
+TO_ROLL    = interpolate_closest_rows3( total_weight, TO_OAT, TO_PA, type_info['short_field_takeoff'], b_col=1 )
+TO_CLEAR50 = interpolate_closest_rows3( total_weight, TO_OAT, TO_PA, type_info['short_field_takeoff'], b_col=2 )
+print( f'{TO_NAME} required runway ground roll with {total_weight} lb, {TO_PA} ft pressure altitude, and {TO_OAT}C: {TO_ROLL:.0f} ft' )
+print( f'{TO_NAME} required runway length required to clear 50 ft obstacle: {TO_CLEAR50:.0f} ft' )
 
 #--------------------------------------------------------------
 # Print Useful Airport/Runway Information

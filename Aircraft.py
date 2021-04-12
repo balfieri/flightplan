@@ -107,9 +107,9 @@ types = {
 
         'short_field_takeoff': [
             # weight
-            2550, [
+            [ 2550, [
                 # temp (C)
-                0,  [
+                [ 0,  [
                     # press   ground  feet to clear
                     # alt     roll    50ft obstacle
                     [ 0,      860,    1465 ],
@@ -122,8 +122,9 @@ types = {
                     [ 7000,   1645,   2910 ],        
                     [ 8000,   1820,   3265 ],        
                     ],
+                ],
 
-                10, [
+                [ 10, [
                     # press   ground  feet to clear
                     # alt     roll    50ft obstacle
                     [ 0,      925,    1575 ],
@@ -136,8 +137,9 @@ types = {
                     [ 7000,   1785,   3170 ],
                     [ 8000,   1970,   3575 ],
                     ],
+                ],
 
-                20, [
+                [ 20, [
                     # press   ground  feet to clear
                     # alt     roll    50ft obstacle
                     [ 0,      995,    1690 ],
@@ -150,8 +152,9 @@ types = {
                     [ 7000,   1920,   3440 ],
                     [ 8000,   2120,   3880 ],
                     ],
+                ],
 
-                30, [
+                [ 30, [
                     # press   ground  feet to clear
                     # alt     roll    50ft obstacle
                     [ 0,      1070,   1810 ],
@@ -164,8 +167,9 @@ types = {
                     [ 7000,   2065,   3730 ],
                     [ 8000,   2280,   4225 ],
                     ],
+                ],
 
-                40, [
+                [ 40, [
                     # press   ground  feet to clear
                     # alt     roll    50ft obstacle
                     [ 0,      1150,   1945 ],
@@ -178,11 +182,13 @@ types = {
                     [ 7000,   2215,   4045 ],
                     [ 8000,   2450,   4615 ],
                     ],
+                ],
+            ],
             ],
 
-            2400, [
+            [ 2400, [
                 # temp (C)
-                0,  [
+                [ 0,  [
                     # press   ground  feet to clear
                     # alt     roll    50ft obstacle
                     [ 0,      745,    1275 ],
@@ -195,8 +201,9 @@ types = {
                     [ 7000,   1415,   2470 ],
                     [ 8000,   1560,   2755 ],
                     ],
+                ],
 
-                10, [
+                [ 10, [
                     # press   ground  feet to clear
                     # alt     roll    50ft obstacle
                     [ 0,      800,    1370 ],
@@ -209,8 +216,9 @@ types = {
                     [ 7000,   1530,   2685 ],
                     [ 8000,   1690,   3000 ],
                     ],
+                ],
 
-                20, [
+                [ 20, [
                     # press   ground  feet to clear
                     # alt     roll    50ft obstacle
                     [ 0,      860,    1470 ],
@@ -223,8 +231,9 @@ types = {
                     [ 7000,   1650,   2900 ],
                     [ 8000,   1815,   3240 ],
                     ],
+                ],
 
-                30, [
+                [ 30, [
                     # press   ground  feet to clear
                     # alt     roll    50ft obstacle
                     [ 0,      925,    1570 ],
@@ -237,8 +246,9 @@ types = {
                     [ 7000,   1770,   3125 ],
                     [ 8000,   1950,   3500 ],
                     ],
+                ],
 
-                40, [
+                [ 40, [
                     # press   ground  feet to clear
                     # alt     roll    50ft obstacle
                     [ 0,      995,    1685 ],
@@ -251,11 +261,13 @@ types = {
                     [ 7000,   1900,   3370 ],
                     [ 8000,   2095,   3790 ],
                     ],
+                ],
+            ],
             ],
 
-            2200, [
+            [ 2200, [
                 # temp (C)
-                0,  [
+                [ 0,  [
                     # press   ground  feet to clear
                     # alt     roll    50ft obstacle
                     [ 0,      610,    1055 ],
@@ -268,8 +280,9 @@ types = {
                     [ 7000,   1150,   1985 ],
                     [ 8000,   1270,   2195 ],
                     ],
+                ],
 
-                10, [
+                [ 10, [
                     # press   ground  feet to clear
                     # alt     roll    50ft obstacle
                     [ 0,      655,    1130 ],
@@ -282,8 +295,9 @@ types = {
                     [ 7000,   1245,   2145 ],
                     [ 8000,   1370,   2375 ],
                     ],
+                ],
 
-                20, [
+                [ 20, [
                     # press   ground  feet to clear
                     # alt     roll    50ft obstacle
                     [ 0,      705,    1205 ],
@@ -296,8 +310,9 @@ types = {
                     [ 7000,   1340,   2305 ],
                     [ 8000,   1475,   2555 ],
                     ],
+                ],
 
-                30, [
+                [ 30, [
                     # press   ground  feet to clear
                     # alt     roll    50ft obstacle
                     [ 0,      760,    1290 ],
@@ -310,8 +325,9 @@ types = {
                     [ 7000,   1435,   2475 ],
                     [ 8000,   1580,   2745 ],
                     ],
+                ],
 
-                40, [
+                [ 40, [
                     # press   ground  feet to clear
                     # alt     roll    50ft obstacle
                     [ 0,      815,    1380 ],
@@ -324,14 +340,16 @@ types = {
                     [ 7000,   1540,   2650 ],
                     [ 8000,   1695,   2950 ],
                     ],
+                ]
+            ],
             ],
         ],
 
         'short_field_landing': [
             # weight
-            2550, [
+            [ 2550, [
                 # temp (C)
-                0,  [
+                [ 0,  [
                     # press   ground  feet to clear
                     # alt     roll    50ft obstacle
                     [ 0,      545,    1290 ],
@@ -344,8 +362,9 @@ types = {
                     [ 7000,   705,    1545 ],
                     [ 8000,   735,    1585 ],
                     ],
+                ],
 
-                10, [
+                [ 10, [
                     # press   ground  feet to clear
                     # alt     roll    50ft obstacle
                     [ 0,      565,    1320 ],
@@ -358,8 +377,9 @@ types = {
                     [ 7000,   730,    1585 ],
                     [ 8000,   760,    1630 ],
                     ],
+                ],
 
-                20, [
+                [ 20, [
                     # press   ground  feet to clear
                     # alt     roll    50ft obstacle
                     [ 0,      585,    1350 ],
@@ -372,8 +392,9 @@ types = {
                     [ 7000,   760,    1625 ],
                     [ 8000,   790,    1670 ],
                     ],
+                ],
 
-                30, [
+                [ 30, [
                     # press   ground  feet to clear
                     # alt     roll    50ft obstacle
                     [ 0,      605,    1380 ],
@@ -386,8 +407,9 @@ types = {
                     [ 7000,   785,    1665 ],
                     [ 8000,   815,    1715 ],
                     ],
+                ],
 
-                40, [
+                [ 40, [
                     # press   ground  feet to clear
                     # alt     roll    50ft obstacle
                     [ 0,      625,    1415 ],
@@ -400,7 +422,9 @@ types = {
                     [ 7000,   810,    1705 ],
                     [ 8000,   840,    1755 ],
                     ],
+                ],
             ],
+        ],
         ],
     }
 }
