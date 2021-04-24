@@ -19,6 +19,10 @@ It prints out the required short-field takeoff and landing distances.
 FUTURE FEATURES<br>
 ---------------
 
+Short-field takeoff/landing should adjust for wind direction.
+
+It will calculate optimal cruise performance for 75% power: GPH, KTAS, RPM.
+
 It will look up METARs, TAFs, winds aloft, PIREPs, SIGMETs, AIRMETs, etc. from aviationweather.gov.
 
 It will consult obstacle and terrain-elevation databases and print out closest hazards along the route.
