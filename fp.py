@@ -196,11 +196,11 @@ def interpolate( a, a0, a1, b0, b1, a_modulo=0, ab_modulo=0 ):
             b1 -= ab_modulo 
     if a0 == a1: return b0
     if a0 < a1:
-        if a < a0: die( f'interpolate() a={a} < a0={a0}' )
+        if a < a0: a = a0 # die( f'interpolate() a={a} < a0={a0}' )
         f = (a - a0) / (a1 - a0)
         return lerp( f, b0, b1 )
     else:
-        if a < a1: die( f'interpolate() a={a} < a0={a0}' )
+        if a < a1: a = a1 # die( f'interpolate() a={a} < a0={a0}' )
         f = (a - a1) / (a0 - a1)
         return lerp( f, b1, b0 )
 
