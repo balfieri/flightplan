@@ -1,0 +1,10 @@
+./fp.py -tail N53587 -row1_weight 450 -row2_weight 20 -baggage1_weight 10 -alt 30.05 \
+        -alternate khrj \
+        -ias 80  -fuel_gph 12 -runway 21 -wd 240 -ws  3 -oat 26 -p ktta \
+        -name "Farm"            -ia 2000 -wd 260 -ws  8 -oat 22 -p 35.529,-79.126 \
+        -name "Lake #1"         -ia 3000 -wd 260 -ws  8 -oat 22 -p 35.416,-79.071 \
+        -name "Lake #2"         -ia 4000 -wd 260 -ws  8 -oat 22 -p 35.293,-79.013 \
+        -ias 110 -fuel_gph 0    -ia 5500 -wd 260 -ws 10 -oat 14 -p kfbg \
+        -name "abeam KFAY"      -ia 4500                        -p 34.999,-78.968 \
+        -name "towers+field"    -ia 4500         -ws 9  -oat 22 -p 34.797,-79.015 \
+        -ias 100                -ia 3000 -wd 260 -ws  8 -oat 22 -p klbt \
