@@ -1,4 +1,4 @@
-./fp.py -tail N53587 -row1_weight 450 -row2_weight 20 -baggage1_weight 10 -alt 30.05 \
+./fp.py -tail N53587 -row1_weight 480 -row2_weight 20 -baggage1_weight 10 -alt 30.05 \
         -alternate khrj \
         -alternate kpob \
         -alternate kfbg \
