@@ -563,7 +563,7 @@ for i in range(len(route)):
 #j = len(checkpoints) - 1
 #checkpoints[j]['id'] = ''
 #checkpoints[j]['name'] = ''
-diversions = [ {'id': '', 'D': 1e20, 'ETE': 1e20} for i in range(len(checkpoints)) ]
+diversions = [ {'id': '', 'name': '', 'D': 1e20, 'ETE': 1e20} for i in range(len(checkpoints)) ]
 for did in rawdata:
     dtype = rawdata[did]['type']
     if dtype != 'AIRPORT': continue
@@ -609,6 +609,7 @@ for i in range(len(checkpoints)):
     name = checkpoints[i]['name']
     did  = diversions[i]['id']
     dname= diversions[i]['name']
+    if dname == '': continue
     dfrom_city = rawdata[did]['from_city'] if 'from_city' in rawdata[did] else ''
     CH   = diversions[i]['CH']
     D    = diversions[i]['D']
