@@ -384,7 +384,7 @@ def reverse_route( rt ):
     if id in rawdata: rev[0]['ia'] = rawdata[id]['elevation']   # hack, but usually correct
     return rev
 
-def calc_segment( fm, to ):
+def calc_segment( fm, to, i ):
     FM_LAT = fm['lat']
     FM_LON = fm['lon']
     TO_LAT = to['lat']
@@ -419,6 +419,9 @@ def calc_segment( fm, to ):
     WCA  = RAD_TO_DEG*asin( TO_WS * sin( DEG_TO_RAD*WTA ) / TAS )
     TH   = TC + WCA
     MV   = (-MagVar.today_magvar( FM_LAT, FM_LON ) + -MagVar.today_magvar( TO_LAT, TO_LON )) / 2.0
+    if i == 0:
+        TC -= MV
+        TH  = TC
     MH   = TH + MV
     DEV  = calc_DEV( MH, tail_info['magnetic_deviation'] ) if tail_info else 0
     CH   = MH + DEV
@@ -428,6 +431,11 @@ def calc_segment( fm, to ):
     GAL  = (ETE / 60.0 * GPH) if i != 0 else fuel_gal_taxi
 
     return { 'TC': TC, 'CAS': CAS, 'TAS': TAS, 'WCA': WCA, 'TH': TH, 'MV': MV, 'MH': MH, 'DEV': DEV, 'CH': CH, 'D': D, 'GS': GS, 'ETE': ETE, 'GPH': GPH, 'GAL': GAL }
+
+def normalize_heading( hdg ):
+    if hdg < 0:   hdg += 360
+    if hdg > 360: hdg -= 360
+    return hdg
 
 def route_analyze( rt ):
     global fuel_gal
@@ -441,7 +449,7 @@ def route_analyze( rt ):
     for i in range(len(rt)):
         fm = rt[0] if i == 0 else rt[i-1]
         to = rt[i]
-        c = calc_segment( fm, to )
+        c = calc_segment( fm, to, i )
 
         TO_NAME = to['name']
         TO_LAT = to['lat']
@@ -452,15 +460,15 @@ def route_analyze( rt ):
         TO_IA  = to['ia']
         TO_ALT = to['alt']
         TO_OAT = to['oat']
-        TC     = c['TC']
+        TC     = normalize_heading( c['TC'] )
         CAS    = c['CAS']
         TAS    = c['TAS']
         WCA    = c['WCA']
-        TH     = c['TH']
+        TH     = normalize_heading( c['TH'] )
         MV     = c['MV']
-        MH     = c['MH']
+        MH     = normalize_heading( c['MH'] )
         DEV    = c['DEV']
-        CH     = c['CH']
+        CH     = normalize_heading( c['CH'] )
         D      = c['D']
         GS     = c['GS']
         ETE    = c['ETE']
@@ -587,7 +595,7 @@ for did in rawdata:
                 to = checkpoints[i].copy()
                 to['lat'] = dlat
                 to['lon'] = dlon
-                c = calc_segment( checkpoints[i], to )
+                c = calc_segment( checkpoints[i], to, i )
                 D = c['D']
                 if c['ETE'] < diversions[i]['ETE']:
                     c['id'] = did
