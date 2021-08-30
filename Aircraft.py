@@ -458,7 +458,7 @@ tails = {
         'home':                 'KTTA',
         'empty_weight':         1679.0,
         'empty_arm':            40.4,
-        'magnetic_deviation': [  # placeholder, don't have these numbers yet
+        'magnetic_deviation': [  
             [ 360, 360 ],
             [  30,  28 ],
             [  60,  57 ],
