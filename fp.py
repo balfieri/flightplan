@@ -529,14 +529,6 @@ print( f'        ground roll:                           {TO_ROLL:5.0f} ft' )
 print( f'        length to clear 50 ft obstacle:        {TO_CLEAR50:5.0f} ft' )
 
 #--------------------------------------------------------------
-# Print Useful Airport/Runway Information
-#--------------------------------------------------------------
-airports = {}
-for i in range(len(route)):
-    id = route[i]['id']
-    if id != '': airports[id] = 1
-
-#--------------------------------------------------------------
 # Print Closest Diversions
 #--------------------------------------------------------------
 def runway_longest( runways ):
@@ -639,6 +631,11 @@ for i in range(len(checkpoints)):
 #--------------------------------------------------------------
 # Print Airport Information
 #--------------------------------------------------------------
+airports = {}
+for i in range(len(route)):
+    id = route[i]['id']
+    if id != '': airports[id] = 1
+
 print()
 print()
 print( 'Airport Information' )
