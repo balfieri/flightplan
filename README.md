@@ -8,8 +8,8 @@ It shows the textual flight plan in a compact navlog format that should be famil
 
 It prints out a weight-and-balance check for the specific tail number and type.
 
-It prints out the closest diversion airport information (default: with a runway >= 2000 ft) for each checkpoint 
-as well as for 25%, 50%, and 75% midpoints between checkpoints.
+It prints out the closest diversion airport information (default: with a runway >= 2500 ft) for each checkpoint 
+as well as for 25%, 50%, and 75% midpoints between checkpoints. It allow turf runways (will add an option to specify asphault only).
 
 It prints out information for all airports such as runways, comm frequencies, and navaids.
 
@@ -19,7 +19,7 @@ It prints out the required short-field takeoff and landing distances.
 FUTURE FEATURES<br>
 ---------------
 
-Short-field takeoff/landing should adjust for wind direction.
+It will adjust short-field takeoff/landing distances for headwinds.
 
 It will calculate optimal cruise performance for 75% power: GPH, KTAS, RPM.
 
