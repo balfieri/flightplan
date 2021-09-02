@@ -9,7 +9,7 @@ It shows the textual flight plan in a compact navlog format that should be famil
 It prints out a weight-and-balance check for the specific tail number and type.
 
 It prints out the closest diversion airport information (default: with a runway >= 2500 ft) for each checkpoint 
-as well as for 25%, 50%, and 75% midpoints between checkpoints. It allow turf runways (will add an option to specify asphault only).
+as well as for 25%, 50%, and 75% midpoints between checkpoints. It allows turf runways (will change to show closest turf and closest asphalt runways)
 
 It prints out information for all airports such as runways, comm frequencies, and navaids.
 
