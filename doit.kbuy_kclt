@@ -1,11 +1,11 @@
 ./fp.py -tail N53587 -row1_weight 390 -row2_weight 10 -baggage1_weight 10 -alt 29.94 \
         -alternate kgso \
         -alternate kscr \
-        -ias 80  -fuel_gph 12 -runway 24 -wd 240 -ws  3 -oat 26 -p kbuy \
-        -name "Drag Strip"      -ia 3000 -wd 260 -ws 10 -oat 20 -p 35.984,-79.57 \
-        -ias 110 -fuel_gph 10   -ia 4000 -wd 260 -ws 10 -oat 18 -p 2a5 \
-                                -ia 6500 -wd 260 -ws 10 -oat 14 -p khbi \
+        -ias 80  -fuel_gph 12 -runway 24 -wd 211 -ws  4 -oat 26 -p kbuy \
+        -name "Drag Strip"      -ia 3000 -wd 206 -ws 10 -oat 21 -p 35.984,-79.57 \
+        -ias 110 -fuel_gph 10   -ia 3000 -wd 206 -ws 10 -oat 21 -p 2a5 \
+                                -ia 3000 -wd 206 -ws 10 -oat 21 -p khbi \
         -name "Reservoir"                                       -p 35.527,-80.196 \
         -name Speedway                                          -p 35.35,-80.667 \
-        -ias 100                -ia 4000 -wd 260 -ws  8 -oat 18 -p kclt \
+        -ias 100                -ia 3000 -wd 198 -ws 11 -oat 21 -p kclt \
         -show_return 0
