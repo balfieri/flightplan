@@ -5,13 +5,13 @@
         -alternate kvuj \
         -alternate kint \
         -alternate kscr \
-        -ias 80  -fuel_gph 12 -runway 6  -wd  56 -ws  6 -oat 26 -p kexx \
-        -name "I85/64"          -ia 3000 -wd  56 -ws 11 -oat 20 -p 35.8,-80.183 \
+        -ias 80  -fuel_gph 12 -runway 6  -wd  90 -ws  6 -oat 27 -p kexx \
+        -name "64/I85"          -ia 3000 -wd  90 -ws 11 -oat 21 -p 35.8,-80.183 \
         -ias 110 -fuel_gph 10 \
-        -name "Gordontown"      -ia 3000 -wd  56 -ws 11 -oat 20 -p 35.7667,-80.1 \
-                                -ia 3000 -wd  56 -ws 11 -oat 20 -p khbi \
-                                -ia 3000 -wd  56 -ws 11 -oat 20 -p 43a \
-                                -ia 3000 -wd  56 -ws 11 -oat 20 -p khff \
-                                -ia 3000 -wd  56 -ws 11 -oat 20 -p 5w4 \
-        -ias 100                -ia 3000 -wd 200 -ws 11 -oat 20 -p kfay \
+        -name "64/109"          -ia 3000 -wd  90 -ws 11 -oat 21 -p 35.7667,-80.1 \
+                                -ia 3000 -wd  90 -ws 11 -oat 21 -p khbi \
+                                -ia 3000 -wd  90 -ws 11 -oat 21 -p 43a \
+                                -ia 3000 -wd  90 -ws 11 -oat 21 -p khff \
+                                -ia 3000 -wd  90 -ws 11 -oat 21 -p 5w4 \
+        -ias 100                -ia 3000 -wd  98 -ws 11 -oat 21 -p kfay \
         -show_return 0

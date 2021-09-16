@@ -3,7 +3,7 @@
         -alternate kvuj \
         -alternate kruq \
         -ias 80  -fuel_gph 12 -runway 3                -wd  35 -ws  4 -oat 24 -p ktta \
-                 -name Rivers               -ia 2000   -wd  35 -ws  8 -oat 20 -p 35.617/-79.15 \
+                 -name '3 Rivers'           -ia 2000   -wd  35 -ws  8 -oat 20 -p 35.617/-79.15 \
         -ias 110 -fuel_gph 10 \
                                             -ia 3000   -wd  35 -ws  8 -oat 18 -p kscr \
                                                                               -p khbi \
