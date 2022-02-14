@@ -242,7 +242,7 @@ def intersection_point( lat1, lon1, a13, lat2, lon2, a23 ):
     ca1  = cos( a1 )
     ca2  = cos( a2 )
     a3   = acos( -ca1*ca2 + sa1*sa2*cd12 )
-    cad  = cos( a3 )
+    ca3  = cos( a3 )
     d13  = atan2( sd12*sa1*sa2, ca2 + ca1*ca3 )
     sd13 = sin( d13 )
     cd13 = cos( d13 )
@@ -250,7 +250,7 @@ def intersection_point( lat1, lon1, a13, lat2, lon2, a23 ):
     ca13 = cos( a13 )
     p3   = asin( sp1*cd13 + cp1*sd13*ca13 )
     sp3  = sin( p3 )
-    dl13 = atan2( s123*sd13*cp1, cd13 - sp1*sp3 )
+    dl13 = atan2( sa13*sd13*cp1, cd13 - sp1*sp3 )
     l3   = l1 + dl13
 
     lat3 = p3 * RAD_TO_DEG
