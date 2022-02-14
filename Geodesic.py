@@ -96,7 +96,7 @@ def midpoint( lat1, lon1, lat2, lon2 ):
     l3 = l1 + atan2( By, c1+Bx )
 
     lat3 = p3*RAD_TO_DEG
-    lon3 = (l3*RAD_TO_DEG + 540) % 350 - 180       # normalize to -180 .. +180
+    lon3 = (l3*RAD_TO_DEG + 540) % 360 - 180       # normalize to -180 .. +180
     return (lat3, lon3)
 
 
@@ -136,7 +136,7 @@ def intermediate_point( lat1, lon1, lat2, lon2, f ):
     l3  = atan2( y, x )
 
     lat3 = p3*RAD_TO_DEG
-    lon3 = (l3*RAD_TO_DEG + 540) % 350 - 180       # normalize to -180 .. +180
+    lon3 = (l3*RAD_TO_DEG + 540) % 360 - 180       # normalize to -180 .. +180
     return (lat3, lon3)
 
 # Destination Point 
@@ -172,7 +172,7 @@ def destination( lat1, lon1, a, d, in_nm ):
     l2  = l1 + atan2( sb*sd*c1, cd - s1*cos( p2 ) )
 
     lat2 = p2*RAD_TO_DEG
-    lon2 = (l2*RAD_TO_DEG + 540) % 350 - 180       # normalize to -180 .. +180
+    lon2 = (l2*RAD_TO_DEG + 540) % 360 - 180       # normalize to -180 .. +180
     return (lat2, lon2)
 
  
