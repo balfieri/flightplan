@@ -41,6 +41,7 @@ fuel_gph   = 0                  # 0 = use default GPH
 fuel_refill = False             # whether to refill before return flight
 fuel_time_left_min = 60         # minimum fuel time left after landing (one hour)
 runway     = 36                 # takeoff runway heading
+runway_return = 36              # takeoff runway heading for return 
 row1_weight= 190                # assume 190lb pilot only
 row2_weight= 0                  # assume no passengers
 baggage1_weight = 0             # assume nothing in baggage area 1
@@ -133,6 +134,9 @@ while i < len( sys.argv ):
         i += 1
     elif arg == '-runway':
         runway = int(sys.argv[i])
+        i += 1
+    elif arg == '-runway_return':
+        runway_return = int(sys.argv[i])
         i += 1
     elif arg == '-row1_weight':
         row1_weight = int(sys.argv[i])
@@ -384,7 +388,7 @@ def reverse_route( rt ):
     if id in rawdata: rev[0]['ia'] = rawdata[id]['elevation']   # hack, but usually correct
     return rev
 
-def calc_segment( fm, to, i ):
+def calc_segment( fm, to, i, runway ):
     FM_LAT = fm['lat']
     FM_LON = fm['lon']
     TO_LAT = to['lat']
@@ -437,7 +441,7 @@ def normalize_heading( hdg ):
     if hdg > 360: hdg -= 360
     return hdg
 
-def route_analyze( rt ):
+def route_analyze( rt, runway ):
     global fuel_gal
     print()
     print()
@@ -449,7 +453,7 @@ def route_analyze( rt ):
     for i in range(len(rt)):
         fm = rt[0] if i == 0 else rt[i-1]
         to = rt[i]
-        c = calc_segment( fm, to, i )
+        c = calc_segment( fm, to, i, runway )
 
         TO_NAME = to['name']
         TO_LAT = to['lat']
@@ -491,10 +495,10 @@ def route_analyze( rt ):
 
     if not fuel_refill: fuel_gal = gal_rem
 
-route_analyze( route )
+route_analyze( route, runway )
 if show_return:
     return_route = reverse_route( route )
-    route_analyze( return_route )
+    route_analyze( return_route, runway_return )
 
 #--------------------------------------------------------------
 # Print Short-Field Takeoff and Landing Distances
@@ -587,7 +591,7 @@ for did in rawdata:
                 to = checkpoints[i].copy()
                 to['lat'] = dlat
                 to['lon'] = dlon
-                c = calc_segment( checkpoints[i], to, i )
+                c = calc_segment( checkpoints[i], to, i, runway )
                 D = c['D']
                 if c['ETE'] < diversions[i]['ETE']:
                     c['id'] = did
